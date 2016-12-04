@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -32,12 +34,14 @@ import edu.sjsu.snappychat.util.Constant;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener /*  implementing click listener */ {
     //a constant to track the file chooser intent
     private static final int PICK_IMAGE_REQUEST = 234;
+    private static final int CAMERA_CODE = 1;
 
     //Buttons
     private Button buttonChoose;
     private Button buttonUpload;
     private Button buttonPost;
     private StorageReference mStorageRef;
+    private ImageButton imgBtn;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseReference;
     private User loggedInUser;
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //a Uri object to store file path
     private Uri filePath;
 
+    //progress dialogue
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getting views from layout
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
+        imgBtn = (ImageButton) findViewById(R.id.imageButton);
         buttonPost = (Button) findViewById(R.id.buttonPost);
 
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -62,8 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //attaching listener
         buttonChoose.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
+        imgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent,CAMERA_CODE);
+            }
+        });
+
+        imageView = (ImageView) findViewById(R.id.imageView);
         buttonPost.setOnClickListener(this);
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        progress = new ProgressDialog(this);
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mDatabase.getReference();
     }
@@ -105,9 +124,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
+
+            progress.setMessage("Uploading Image.....");
+            progress.show();
+
+            Uri uri = data.getData();
+
+            StorageReference filePath = mStorageRef.child("images").child(uri.getLastPathSegment());
+
+            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progress.dismiss();
+
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    Picasso.with(MainActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
+
+                    Toast.makeText(MainActivity.this,"Uploading file finished....",Toast.LENGTH_LONG);
+                }
+            });
         }
     }
-
     //this method will upload the file
     private void uploadFile() {
         //if there is a file to upload
@@ -157,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //you can display an error toast
         }
     }
-
     @Override
     public void onClick(View view) {
         //if the clicked button is choose
