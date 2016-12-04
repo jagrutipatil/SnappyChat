@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_user_profile"
+    android:id="@+id/activity_profile_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,32 +11,99 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.sjsu.snappychat.UserProfileActivity">
 
-    <TextView
-        android:text="TextView"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="89dp"
-        android:layout_marginTop="34dp"
-        android:id="@+id/nickNameTextView" />
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/interest"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/aboutme"
+        android:layout_alignEnd="@+id/city"
+        android:layout_alignParentStart="true" />
 
     <EditText
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nickNameTextView"
-        android:layout_alignEnd="@+id/nickNameTextView"
-        android:layout_marginTop="41dp"
-        android:id="@+id/interestsTextView" />
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/city"
+        android:layout_weight="1"
+        android:layout_alignBottom="@+id/profilePic"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/profession"
+        android:layout_weight="1"
+        android:layout_above="@+id/city"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="11dp"
+        android:layout_marginTop="11dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/nickName"
+        android:layout_above="@+id/profession"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/aboutme"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/profilePic"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_height="145dp"
+        android:id="@+id/profilePic"
+        android:layout_width="136dp"
+        android:layout_marginTop="66dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Profile Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Button"
+        android:text="Advanced"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/interestsTextView"
+        android:layout_below="@+id/interest"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="23dp"
-        android:id="@+id/submitButton" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="27dp"
+        android:id="@+id/advanced"
+        android:background="@android:color/darker_gray"
+        style="@android:style/Widget.Material.Light.Button.Inset" />
+
+    <Button
+        android:text="Done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="37dp"
+        android:id="@+id/done"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/advanced"
+        android:layout_alignTop="@+id/advanced"
+        style="@android:style/Widget.Material.Button"
+        android:background="@android:color/holo_blue_light" />
+
+
 </RelativeLayout>

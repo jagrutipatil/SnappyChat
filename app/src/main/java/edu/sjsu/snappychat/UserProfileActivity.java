@@ -1,12 +1,15 @@
 package edu.sjsu.snappychat;
 
+import android.app.Dialog;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -19,11 +22,16 @@ import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener{
+public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private TextView textViewNickName;
+    private EditText editTextNickName;
+    private EditText editTextProfession;
+    private EditText editTextCity;
+    private EditText editTextAboutMe;
     private EditText editTextInterests;
-    private Button buttonSubmit;
+    private ImageView imageViewProfilePic;
+    private Button buttonDone;
+    private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
     private User loggedInUser;
 
@@ -32,11 +40,17 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        buttonSubmit = (Button) findViewById(R.id.submitButton);
-        textViewNickName = (TextView) findViewById(R.id.nickNameTextView);
-        editTextInterests = (EditText) findViewById(R.id.interestsTextView);
+        buttonDone = (Button) findViewById(R.id.done);
+        editTextNickName = (EditText) findViewById(R.id.nickName);
+        editTextInterests = (EditText) findViewById(R.id.interest);
+        editTextProfession = (EditText) findViewById(R.id.profession);
+        editTextCity = (EditText) findViewById(R.id.city);
+        editTextAboutMe = (EditText) findViewById(R.id.aboutme);
+        imageViewProfilePic = (ImageView) findViewById(R.id.profilePic);
 
-        buttonSubmit.setOnClickListener(this);
+        imageViewProfilePic.setOnTouchListener(this);
+        buttonDone.setOnClickListener(this);
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         loggedInUser = new User("kamlendr1@gmail.com");
     }
@@ -48,8 +62,15 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);
-                textViewNickName.setText(currentUser.getNickName());
+                // conditional check here for registration or profile update
+                editTextNickName.setText(currentUser.getNickName());
+                editTextProfession.setText(currentUser.getProfession());
+                editTextCity.setText(currentUser.getLocation());
+                editTextAboutMe.setText(currentUser.getAboutMe());
                 editTextInterests.setText(currentUser.getInterests());
+
+                //Use picaso to load the profile pic. This should be async
+
             }
 
             @Override
@@ -65,18 +86,34 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
     /**
      * Save the whole object to db
+     *
      * @param view
      */
     @Override
     public void onClick(View view) {
-        if (view == buttonSubmit) {
+        if (view == buttonDone) {
             Toast.makeText(UserProfileActivity.this, "Success.",
                     Toast.LENGTH_SHORT).show();
             String loggedInUserEmailAddress = loggedInUser.getEmail();
             loggedInUser.setInterests(editTextInterests.getText().toString());
+            loggedInUser.setNickName(editTextNickName.getText().toString());
+            loggedInUser.setAboutMe(editTextAboutMe.getText().toString());
+            loggedInUser.setLocation(editTextCity.getText().toString());
+            loggedInUser.setProfession(editTextProfession.getText().toString());
 
-            //Move it to UI thread
+            //Move it to async
             mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUserEmailAddress)).setValue(loggedInUser);
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (view == imageViewProfilePic) {
+            //Provide a pop to choose edit profile pic option either via gallery or camera
+           // Dialog dialog = new Dialog();
+            Toast.makeText(UserProfileActivity.this, "TOuched.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 }
