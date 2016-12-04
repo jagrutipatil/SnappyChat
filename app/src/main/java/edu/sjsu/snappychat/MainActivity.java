@@ -16,12 +16,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
+
+import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.util.Constant;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener /*  implementing click listener */ {
     //a constant to track the file chooser intent
@@ -30,7 +36,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Buttons
     private Button buttonChoose;
     private Button buttonUpload;
+    private Button buttonPost;
     private StorageReference mStorageRef;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mDatabaseReference;
+    private User loggedInUser;
     //ImageView
     private ImageView imageView;
 
@@ -45,13 +55,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getting views from layout
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
+        buttonPost = (Button) findViewById(R.id.buttonPost);
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
         //attaching listener
         buttonChoose.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
+        buttonPost.setOnClickListener(this);
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mDatabase.getReference();
     }
 
     //method to show file chooser
@@ -60,6 +74,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    /**
+     * To submit the user profile data to database, considering after authentication User object is filled with user data
+     */
+    private void submitProfileData() {
+        String loggedInUserEmailAddress = loggedInUser.getEmail();
+        mDatabaseReference.child(Constant.USER_NODE).child(cleanEmailID(loggedInUserEmailAddress)).setValue(loggedInUser);
+
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private String cleanEmailID(String email){
+        String regex = "[^A-Za-z0-9]";
+        return email.replaceAll(regex,"");
     }
 
     //handling the image chooser activity result
@@ -77,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
     //this method will upload the file
     private void uploadFile() {
         //if there is a file to upload
@@ -126,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //you can display an error toast
         }
     }
+
     @Override
     public void onClick(View view) {
         //if the clicked button is choose
@@ -136,6 +168,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (view == buttonUpload) {
             uploadFile();
 
+        }else if(view == buttonPost){
+            populateUserData();
+            submitProfileData();
         }
+    }
+
+    private void populateUserData(){
+        loggedInUser = new User("profession", "String nickName", "kamlendr1@gmail.com", "String profilePictureLocation", "String location", "String interests", "String aboutMe");
     }
 }
