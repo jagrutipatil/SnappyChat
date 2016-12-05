@@ -37,6 +37,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
     private User loggedInUser;
+    private Button advanced;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +51,21 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         editTextCity = (EditText) findViewById(R.id.city);
         editTextAboutMe = (EditText) findViewById(R.id.aboutme);
         imageViewProfilePic = (ImageView) findViewById(R.id.profilePic);
+        advanced = (Button) findViewById(R.id.advanced);
 
         imageViewProfilePic.setOnTouchListener(this);
         buttonDone.setOnClickListener(this);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         loggedInUser = new User("kamlendr1@gmail.com");
+
+        advanced.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_settings.class);
+                startActivity(advanced_page);
+            }
+        });
     }
 
     @Override
