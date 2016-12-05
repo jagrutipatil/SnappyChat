@@ -18,7 +18,8 @@ package="edu.sjsu.snappychat">
         </intent-filter>
     </activity>
 
-    <activity android:name=".UserProfileActivity">
+    <activity android:parentActivityName=".MainActivity" android:name=".UserProfileActivity">
+
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +42,7 @@ package="edu.sjsu.snappychat">
         </intent-filter>
     </activity>
 
-    <activity android:name=".advanced_setting">
+    <activity android:parentActivityName=".UserProfileActivity" android:name=".advanced_setting">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
