@@ -12,12 +12,15 @@ public class User {
     public String interests;
     public String aboutMe;
     public String profession;
+    public AdvancedSettigs advancedSetting;
 
     public User(){
+        this.advancedSetting = new AdvancedSettigs("Friends Only", true);
     }
 
     public User(String email){
         this.email = email;
+        this.advancedSetting = new AdvancedSettigs("Friends Only", true);
     }
 
     public User(String email, String nickName, String Location, String profession){
@@ -92,4 +95,13 @@ public class User {
     public void setProfession(String profession) {
         this.profession = profession;
     }
+
+    public void setAdvancedSettings(AdvancedSettigs settings){
+        this.advancedSetting = settings;
+    }
+
+    public AdvancedSettigs getAdvancedSettings(){
+        return this.advancedSetting;
+    }
+
 }

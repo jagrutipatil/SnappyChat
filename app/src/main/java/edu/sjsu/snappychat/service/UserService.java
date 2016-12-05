@@ -1,5 +1,6 @@
 package edu.sjsu.snappychat.service;
 
+import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.User;
 
 /**
@@ -79,4 +80,12 @@ public class UserService {
         user.setProfession(profession);
     }
 
+    public void setAdvancedSettings(AdvancedSettigs settings){
+        user.setAdvancedSettings(settings);
+    }
+
+    public User getUser(){
+        User dummyUser = new User();
+        return this.user;
+    }
 }

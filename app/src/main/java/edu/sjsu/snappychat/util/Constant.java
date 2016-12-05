@@ -7,4 +7,5 @@ package edu.sjsu.snappychat.util;
 public class Constant {
 
     public static final String USER_NODE = "users";
+    public static final String Advanced_Settings = "advanced_settings";
 }

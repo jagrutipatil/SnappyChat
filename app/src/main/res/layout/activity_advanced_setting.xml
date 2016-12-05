@@ -22,7 +22,7 @@
             android:text="Friends Only"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/friends"
+            android:id="@+id/friend_only"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="30sp"
             android:paddingTop="15dp"
@@ -42,7 +42,7 @@
             android:text="Private"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton"
+            android:id="@+id/privatekey"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="30sp"
             android:paddingTop="15dp"
@@ -70,7 +70,7 @@
             android:text="ToggleButton"
             android:layout_width="77dp"
             android:layout_height="69dp"
-            android:id="@+id/toggleButton2" />
+            android:id="@+id/email_notification" />
     </LinearLayout>
 
     <Space

@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
@@ -57,7 +58,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         buttonDone.setOnClickListener(this);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         loggedInUser = new User("kamlendr1@gmail.com");
+
+        /*//Replace above line with following
+        UserService user = UserService.getInstance();
+        loggedInUser = user.getUser();*/
 
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +122,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
             //Move it to async
             mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUserEmailAddress)).setValue(loggedInUser);
+            mDatabaseReference.child(Constant.Advanced_Settings).orderByKey().equalTo(Util.cleanEmailID(loggedInUserEmailAddress)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long count = dataSnapshot.getChildrenCount();
+                    if(count==0){
+                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).setValue(loggedInUser.getAdvancedSettings());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 
