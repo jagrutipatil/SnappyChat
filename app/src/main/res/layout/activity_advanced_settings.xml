@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Profile Visibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textSize="36sp"
+        android:paddingStart="10dp"
+        android:textColor="@android:color/background_dark" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="200dp" >
+
+        <RadioButton
+            android:text="Friends Only"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/friends"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30sp"
+            android:paddingTop="15dp"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Public"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/publickey"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30sp"
+            android:paddingTop="15dp"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30sp"
+            android:paddingTop="15dp"
+            android:layout_weight="1" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Email Notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:textSize="36sp"
+            android:paddingStart="10dp"
+            android:textColor="@android:color/background_dark"
+            android:layout_weight="1"
+            android:paddingTop="15dp" />
+
+        <ToggleButton
+            android:text="ToggleButton"
+            android:layout_width="77dp"
+            android:layout_height="69dp"
+            android:id="@+id/toggleButton2" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:text="OK"
+        android:id="@+id/button3"
+        android:layout_width="150dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textSize="24sp"
+        android:layout_height="70dp" />
+
+</LinearLayout>
