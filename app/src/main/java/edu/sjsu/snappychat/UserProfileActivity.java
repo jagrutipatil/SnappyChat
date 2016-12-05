@@ -47,7 +47,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
     private User loggedInUser;
-    
+    private Button advanced;
 
     //progress dialogue
     private ProgressDialog progress;
@@ -64,6 +64,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         editTextCity = (EditText) findViewById(R.id.city);
         editTextAboutMe = (EditText) findViewById(R.id.aboutme);
         imageViewProfilePic = (ImageView) findViewById(R.id.profilePic);
+        advanced = (Button) findViewById(R.id.advanced);
 
         imageViewProfilePic.setOnTouchListener(this);
         buttonDone.setOnClickListener(this);
@@ -71,6 +72,14 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         loggedInUser = new User("kamlendr1@gmail.com");
+
+        advanced.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_setting.class);
+                startActivity(advanced_page);
+            }
+        });
     }
 
     @Override
@@ -160,6 +169,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
 
     private void actionTypeChooser(){
+          final int REQUEST_CAMERA = 1;
+          final int SELECT_FILE = 2;
 
         final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
