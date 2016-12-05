@@ -62,7 +62,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_settings.class);
+                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_setting.class);
                 startActivity(advanced_page);
             }
         });
