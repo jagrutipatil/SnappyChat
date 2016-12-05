@@ -1,8 +1,11 @@
 package edu.sjsu.snappychat;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -109,11 +112,43 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view == imageViewProfilePic) {
-            //Provide a pop to choose edit profile pic option either via gallery or camera
+            //Provide a popup to choose edit profile pic option either via gallery or camera
+            actionTypeChooser();
            // Dialog dialog = new Dialog();
             Toast.makeText(UserProfileActivity.this, "TOuched.",
                     Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+    private void actionTypeChooser(){
+          final int REQUEST_CAMERA = 1;
+          final int SELECT_FILE = 2;
+
+        final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Add Photo!");
+        builder.setIcon(R.drawable.faceicon);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals("Take Photo")) {
+                   // PROFILE_PIC_COUNT = 1;
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Choose from Library")) {
+                    //PROFILE_PIC_COUNT = 1;
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent,SELECT_FILE);
+                } else if (items[item].equals("Cancel")) {
+                    //PROFILE_PIC_COUNT = 0;
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 }
