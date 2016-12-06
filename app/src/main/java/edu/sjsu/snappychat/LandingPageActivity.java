@@ -4,15 +4,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import android.widget.TabWidget;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
-import edu.sjsu.snappychat.fragment.ChatFragment;
+import edu.sjsu.snappychat.fragment.chats.ChatFragment;
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
 import edu.sjsu.snappychat.fragment.friends.ReqeustSentFragment;
