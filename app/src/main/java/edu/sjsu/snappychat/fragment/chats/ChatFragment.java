@@ -1,5 +1,6 @@
-package edu.sjsu.snappychat.fragment;
+package edu.sjsu.snappychat.fragment.chats;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.sjsu.snappychat.ChatPage;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.DatabaseService;
@@ -31,6 +33,7 @@ public class ChatFragment extends Fragment {
 
     private DatabaseReference mDatabaseReference;
     String[] friendsEmailList = null;
+    String LoggedInUser;
 
     @Nullable
     @Override
@@ -63,11 +66,22 @@ public class ChatFragment extends Fragment {
             }
         });
 
+
+
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3) {
                 if (friendsEmailList.length > position) {
-                    String selectedAnimal = friendsEmailList[position];
-                    Toast.makeText(getApplicationContext(), "Friend Selected : "+selectedAnimal,   Toast.LENGTH_LONG).show();
+                    String selectedFriend = friendsEmailList[position];
+                    Toast.makeText(getApplicationContext(), "Friend Selected : "+selectedFriend,   Toast.LENGTH_LONG).show();
+                    String to_user = selectedFriend;
+                    String from_user = UserService.getInstance().getEmail();
+                    LoggedInUser = UserService.getInstance().getEmail();
+                    Log.v("from_user", from_user);
+                    Intent intent = new Intent(getApplicationContext(), ChatPage.class);
+                    intent.putExtra("FROM_USER", from_user);
+                    intent.putExtra("TO_USER", to_user);
+                    intent.putExtra("LOG_IN_USER", LoggedInUser);
+                    startActivity(intent);
                 }
             }
         });
@@ -80,5 +94,25 @@ public class ChatFragment extends Fragment {
         for (int i = 0; i < 5; i++) {
             DatabaseService.addFriend(UserService.getInstance().getEmail(), "timesofIndia " + i + " @sjsu.edu");
         }
+    }
+
+    private void onListItemClick() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String to_user = (String) listView.getItemAtPosition(i);
+                Intent lastintent = getIntent();
+                String from_user = lastintent.getStringExtra("FROM_USER");
+                LoggedInUser = lastintent.getStringExtra("LOG_IN_USER");
+                Log.v("from_user", from_user);
+                Intent intent = new Intent(OnlineUsers.this, ChatPage.class);
+                intent.putExtra("FROM_USER", from_user);
+                intent.putExtra("TO_USER", to_user);
+                intent.putExtra("LOG_IN_USER", LoggedInUser);
+                startActivity(intent);
+
+
+            }
+        });
     }
 }
