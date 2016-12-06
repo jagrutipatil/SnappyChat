@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
@@ -40,11 +41,11 @@ public class ChatFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_chat, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        addDummyFriends();
         //TODO get nickname of each friend from their profile
-
-        final ListView friendList = (ListView) getView().findViewById(R.id.listFriends);
+        final ListView friendList = (ListView) view.findViewById(R.id.listFriends);
 
         mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -64,6 +65,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("Chat Error", "loadPost:onCancelled", databaseError.toException());
+                Toast.makeText(getApplicationContext(), "Chat Error ", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -81,6 +83,7 @@ public class ChatFragment extends Fragment {
 
     private void addDummyFriends() {
         //Add Some for dummy friends
-
+        UserFriend userFriend = new UserFriend(UserService.getInstance().getEmail(), "timesofIndia@sjsu.edu");
+        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(userFriend);
     }
 }

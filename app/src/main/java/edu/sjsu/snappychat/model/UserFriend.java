@@ -12,6 +12,11 @@ public class UserFriend {
 
     String friends;
 
+    public UserFriend(String email, String friends) {
+        this.email = email;
+        this.friends = friends;
+    }
+
     public String getEmail() {
         return email;
     }
