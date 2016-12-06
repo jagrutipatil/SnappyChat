@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
+import edu.sjsu.snappychat.fragment.ChatFragment;
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
 
@@ -27,10 +28,14 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
                     //Home
                     HomeFragment homeFragment = new HomeFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame,homeFragment).commit();
-                }else if(menuItemId == R.id.bottombaritemtwo){
+                } else if(menuItemId == R.id.bottombaritemtwo){
                     //Friends
                     FriendsFragment friendsFragment = new FriendsFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame,friendsFragment).commit();
+                } else if (menuItemId == R.id.bottombaritemfour) {
+                    //chat
+                    ChatFragment chatFragment = new ChatFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, chatFragment).commit();
                 }
             }
 
