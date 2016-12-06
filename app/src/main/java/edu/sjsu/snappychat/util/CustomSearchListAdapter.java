@@ -26,6 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserProfileActivity;
 import edu.sjsu.snappychat.model.Invitations;
@@ -40,6 +44,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
     private final String[] nickNameArray;
     private User loggedInUser;
     private DatabaseReference mDatabaseReference;
+    private List<String> friendList;
 
     public CustomSearchListAdapter(Context context, String[] email, String[] nickName) {
         super(context, R.layout.search_listview, email);
@@ -48,6 +53,12 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
         this.context = context;
         this.emailID = email;
         this.nickNameArray = nickName;
+
+        this.loggedInUser = UserService.getInstance().getUser();
+        this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        String[] friendArray = DatabaseService.getFriendlist(loggedInUser.getEmail()).split(",");
+        this.friendList = Arrays.asList(friendArray);
+
     }
 
     @Override
@@ -66,12 +77,11 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
         email.setText(emailID[position]);
         nickName.setText(nickNameArray[position]);
-        loggedInUser = UserService.getInstance().getUser();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+
         final String receiver = emailID[position];
 
-
-        if(DatabaseService.isFriend(emailID[position])){
+        if(friendList.contains(emailID[position])){
             friendTag.setVisibility(rowView.VISIBLE);
             addFriend.setVisibility(rowView.INVISIBLE);
         }else{

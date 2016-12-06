@@ -56,7 +56,7 @@ public class DatabaseService {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
+                //Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
             }
         });
 
