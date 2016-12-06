@@ -58,15 +58,16 @@ public class search extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        CustomSearchListAdapter adapter=new CustomSearchListAdapter(getContext(), emailID, nickName);
-        list=(ListView) getView().findViewById(R.id.search_list);
-        list.setAdapter(adapter);
-
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        final ListView searchList = (ListView) getView().findViewById(R.id.search_list);
+
+        CustomSearchListAdapter adapter=new CustomSearchListAdapter(getContext(), emailID, nickName);
+        searchList.setAdapter(adapter);
+
         return view;
     }
 }
