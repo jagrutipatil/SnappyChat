@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.sjsu.snappychat.HomeActivity;
+import edu.sjsu.snappychat.UserProfileActivity;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
@@ -62,5 +63,23 @@ public class DatabaseService {
 
 
         return friendList[0];
+    }
+
+    //IMPORTANT NOTE: Following function requires "cleanedEmail"
+    public static User getUserRecord(String cleanedEmail){
+        final User[] user = new User[1];
+
+        mDatabaseReference.child(Constant.USER_NODE).child(cleanedEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user[0] = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return user[0];
     }
 }
