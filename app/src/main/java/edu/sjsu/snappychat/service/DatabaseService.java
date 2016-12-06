@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.sjsu.snappychat.HomeActivity;
 import edu.sjsu.snappychat.UserProfileActivity;
@@ -82,4 +83,11 @@ public class DatabaseService {
         });
         return user[0];
     }
+    /*
+    //IMPORTANT NOTE -- Following function returns ArrayList of all "CLEANED Email ids"
+    public static List<String> getAllPublicUsers(){
+        List<String> publicUsers = new ArrayList<String>();
+
+        mDatabaseReference.child(Constant.Advanced_Settings).orderByKey()
+    }*/
 }

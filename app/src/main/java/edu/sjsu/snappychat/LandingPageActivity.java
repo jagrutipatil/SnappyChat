@@ -2,6 +2,7 @@ package edu.sjsu.snappychat;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
 import android.widget.FrameLayout;
@@ -18,6 +19,8 @@ import edu.sjsu.snappychat.fragment.HomeFragment;
 import edu.sjsu.snappychat.fragment.friends.ReqeustSentFragment;
 import edu.sjsu.snappychat.fragment.friends.RequestReceivedFragment;
 import edu.sjsu.snappychat.fragment.search;
+import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.service.DatabaseService;
 
 public class LandingPageActivity extends FragmentActivity implements FriendsFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener, ReqeustSentFragment.OnFragmentInteractionListener , RequestReceivedFragment.OnFragmentInteractionListener{
 
@@ -29,6 +32,13 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
         setContentView(R.layout.activity_landing_page);
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
+
+
+        //For testing
+        User user = DatabaseService.getUserRecord("kamlendr1gmailcom");
+
+
+
         bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
