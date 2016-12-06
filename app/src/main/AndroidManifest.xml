@@ -55,7 +55,13 @@ package="edu.sjsu.snappychat">
         android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    <activity android:name=".LandingPageActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
 </application>
 
 </manifest>
