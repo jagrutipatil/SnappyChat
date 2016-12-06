@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "882639167497",
-    "firebase_url": "https://snappychat-bf932.firebaseio.com",
-    "project_id": "snappychat-bf932",
-    "storage_bucket": "snappychat-bf932.appspot.com"
+    "project_number": "44155487065",
+    "firebase_url": "https://snappychat-25a5a.firebaseio.com",
+    "project_id": "snappychat-25a5a",
+    "storage_bucket": "snappychat-25a5a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:882639167497:android:07bb4d32c6fd0a44",
+        "mobilesdk_app_id": "1:44155487065:android:07bb4d32c6fd0a44",
         "android_client_info": {
           "package_name": "edu.sjsu.snappychat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "882639167497-e44n5vcobtfm4m4snv25bpdl4c38tpbd.apps.googleusercontent.com",
+          "client_id": "44155487065-mg4m1ovmd1pif1s3iqqltr8ntkut89vd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "edu.sjsu.snappychat",
-            "certificate_hash": "0E179D2F73EA4B5471287485DF845307E0453D39"
+            "certificate_hash": "DFCD077E0151FC2E7AC969C18CE2B01AD4027E8C"
           }
         },
         {
-          "client_id": "882639167497-a62st6d8d03e335tud4op7gin5t1avlq.apps.googleusercontent.com",
+          "client_id": "44155487065-paeqtng2j355kdbeh9gspktj0so5tc3q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAutBgS2OugNmTDcMOEijhvjLWimWXdVDc"
+          "current_key": "AIzaSyAmpC2hDkesH-U0tmZm7F3WXAp24rf09XM"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "882639167497-a62st6d8d03e335tud4op7gin5t1avlq.apps.googleusercontent.com",
+              "client_id": "44155487065-paeqtng2j355kdbeh9gspktj0so5tc3q.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

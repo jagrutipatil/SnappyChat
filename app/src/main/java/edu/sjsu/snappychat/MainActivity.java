@@ -22,11 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.util.regex.Pattern;
+
 
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.util.Constant;
@@ -62,21 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getting views from layout
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
-        imgBtn = (ImageButton) findViewById(R.id.imageButton);
         buttonPost = (Button) findViewById(R.id.buttonPost);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.profilePic);
 
         //attaching listener
         buttonChoose.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
-        imgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,CAMERA_CODE);
-            }
-        });
 
         imageView = (ImageView) findViewById(R.id.imageView);
         buttonPost.setOnClickListener(this);
@@ -85,14 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progress = new ProgressDialog(this);
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mDatabase.getReference();
-    }
-
-    //method to show file chooser
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     /**
@@ -111,43 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return email.replaceAll(regex,"");
     }
 
-    //handling the image chooser activity result
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
-
-            progress.setMessage("Uploading Image.....");
-            progress.show();
-
-            Uri uri = data.getData();
-
-            StorageReference filePath = mStorageRef.child("images").child(uri.getLastPathSegment());
-
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progress.dismiss();
-
-                    Uri downloadUri = taskSnapshot.getDownloadUrl();
-                    Picasso.with(MainActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
-
-                    Toast.makeText(MainActivity.this,"Uploading file finished....",Toast.LENGTH_LONG);
-                }
-            });
-        }
-    }
     //this method will upload the file
-    private void uploadFile() {
+   /* private void uploadFile() {
         //if there is a file to upload
         if (filePath != null) {
             //displaying a progress dialog while upload is going on
@@ -194,18 +141,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else {
             //you can display an error toast
         }
-    }
+    }*/
+
     @Override
     public void onClick(View view) {
         //if the clicked button is choose
-        if (view == buttonChoose) {
-            showFileChooser();
-        }
+
         //if the clicked button is upload
-        else if (view == buttonUpload) {
+         /*if (view == buttonUpload) {
             uploadFile();
 
-        }else if(view == buttonPost){
+        }else*/ if(view == buttonPost){
             populateUserData();
             submitProfileData();
         }

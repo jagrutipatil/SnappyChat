@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">SnappyChat</string>
     <string name="facebook_app_id">2165537220338569</string>
-    <string name="title_activity_advanced_settings">advanced_settings</string>
+    <string name="google_client_id">44155487065-paeqtng2j355kdbeh9gspktj0so5tc3q.apps.googleusercontent.com</string>
+    <string name="title_activity_advanced_setting">advanced_setting</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

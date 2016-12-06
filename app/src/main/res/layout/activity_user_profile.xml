@@ -19,30 +19,9 @@
         android:id="@+id/interest"
         android:layout_marginTop="19dp"
         android:layout_below="@+id/aboutme"
-        android:layout_alignEnd="@+id/city"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/city"
-        android:layout_weight="1"
-        android:layout_alignBottom="@+id/profilePic"
+        android:hint="Interest"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/profession"
-        android:layout_weight="1"
-        android:layout_above="@+id/city"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="11dp"
-        android:layout_marginTop="11dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -50,8 +29,12 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/nickName"
-        android:layout_above="@+id/profession"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/profilePic"
+        android:layout_below="@+id/profileText"
+        android:layout_alignParentEnd="true"
+        android:hint="Nick name"
+        android:layout_alignStart="@+id/city"
+        android:layout_marginBottom="15dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -59,6 +42,7 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/aboutme"
+        android:hint="About me"
         android:layout_marginTop="31dp"
         android:layout_below="@+id/profilePic"
         android:layout_alignParentStart="true"
@@ -68,18 +52,22 @@
         android:layout_height="145dp"
         android:id="@+id/profilePic"
         android:layout_width="136dp"
-        android:layout_marginTop="66dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentTop="false"
+        android:layout_alignParentStart="false"
+        android:layout_marginRight="20dp"
+        android:text="Profile Pic"
+        android:layout_below="@+id/profileText"
+        android:src="@drawable/profileimg" />
 
     <TextView
         android:text="Profile Settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/profileText"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:text="Advanced"
@@ -104,6 +92,30 @@
         android:layout_alignTop="@+id/advanced"
         style="@android:style/Widget.Material.Button"
         android:background="@android:color/holo_blue_light" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/profession"
+        android:layout_weight="1"
+        android:hint="Profession"
+        android:layout_below="@+id/nickName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/nickName"
+        android:layout_marginBottom="15dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/city"
+        android:hint="City"
+        android:layout_weight="1"
+        android:layout_below="@+id/profession"
+        android:layout_toEndOf="@+id/profilePic" />
 
 
 </RelativeLayout>

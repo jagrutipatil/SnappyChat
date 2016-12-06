@@ -1,9 +1,12 @@
 package edu.sjsu.snappychat;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +24,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+
+import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.service.UploadImage;
+import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+
+    private static final int PICK_IMAGE_REQUEST = 234;
+    private static final int CAMERA_CODE = 1;
 
     private EditText editTextNickName;
     private EditText editTextProfession;
@@ -37,7 +50,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
     private User loggedInUser;
+    private AdvancedSettigs settings;
     private Button advanced;
+
+    //progress dialogue
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +72,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         imageViewProfilePic.setOnTouchListener(this);
         buttonDone.setOnClickListener(this);
+        progress = new ProgressDialog(this);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        settings = UserService.getInstance().getAdvancedSettings();
         loggedInUser = new User("kamlendr1@gmail.com");
+
+        /*//Replace above line with following
+        UserService user = UserService.getInstance();
+        loggedInUser = user.getUser();*/
 
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_settings.class);
+                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_setting.class);
                 startActivity(advanced_page);
             }
         });
@@ -116,6 +139,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
             //Move it to async
             mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUserEmailAddress)).setValue(loggedInUser);
+            mDatabaseReference.child(Constant.Advanced_Settings).orderByKey().equalTo(Util.cleanEmailID(loggedInUserEmailAddress)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long count = dataSnapshot.getChildrenCount();
+                    if(count==0){
+                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).setValue(settings);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 
@@ -130,6 +167,29 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         }
         return false;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+
+            UploadImage imageLoader = new UploadImage(UserProfileActivity.this,imageViewProfilePic,uri);
+            imageLoader.execute();
+
+        }else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
+
+            //progress.setMessage("Uploading Image.....");
+            //progress.show();
+
+            Uri uri = data.getData();
+
+            UploadImage imageLoader = new UploadImage(UserProfileActivity.this,imageViewProfilePic,uri);
+            imageLoader.execute();
+
+        }
+    }
+
 
     private void actionTypeChooser(){
           final int REQUEST_CAMERA = 1;
@@ -146,13 +206,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 if (items[item].equals("Take Photo")) {
                    // PROFILE_PIC_COUNT = 1;
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
+                    startActivityForResult(intent, CAMERA_CODE);
                 } else if (items[item].equals("Choose from Library")) {
                     //PROFILE_PIC_COUNT = 1;
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent,SELECT_FILE);
+                    startActivityForResult(intent,PICK_IMAGE_REQUEST);
                 } else if (items[item].equals("Cancel")) {
                     //PROFILE_PIC_COUNT = 0;
                     dialog.dismiss();
