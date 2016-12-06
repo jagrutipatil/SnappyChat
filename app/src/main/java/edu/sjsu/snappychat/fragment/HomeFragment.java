@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import edu.sjsu.snappychat.R;
 
 /**
- * Created by I074841 on 12/5/2016.
+ * Created by Kamlendra Chauhan on 12/5/2016.
  */
 
 public class HomeFragment extends Fragment {
