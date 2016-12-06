@@ -20,7 +20,7 @@ public class UserService {
         if (instance == null) {
             instance = new UserService();
             user = new User();
-            settings = new AdvancedSettigs("Friends Only", true);
+            settings = new AdvancedSettigs("FriendsOnly", true);
         }
         return instance;
     }
