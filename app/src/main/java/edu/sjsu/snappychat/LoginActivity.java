@@ -119,8 +119,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         UserService.getInstance().setEmail(object.getString("email"));
                                         UserService.getInstance().setNickName(object.getString("name"));
                                         Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                                        startLandingActivity();
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
+                                        Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_LONG).show();
                                     }
                                 }
                                 });
@@ -170,6 +173,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
     }
 
+    private void startLandingActivity() {
+        Intent edit_page = new Intent(LoginActivity.this, LandingPageActivity.class);
+        startActivity(edit_page);
+    }
+
     private void googleSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -206,6 +214,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Toast.makeText(LoginActivity.this, "firebaseAuthWithGoogle:" + acct.getId(), Toast.LENGTH_LONG).show();
+        UserService.getInstance().setEmail(acct.getEmail());
+        UserService.getInstance().setEmail(acct.getDisplayName());
+        Toast.makeText(LoginActivity.this, "Email: " + UserService.getInstance().getEmail(), Toast.LENGTH_LONG).show();
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -224,6 +235,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }
                     }
                 });
+        startLandingActivity();
     }
 
     @Override

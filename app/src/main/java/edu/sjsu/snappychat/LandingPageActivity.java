@@ -34,11 +34,17 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
                 if (menuItemId == R.id.bottombaritemone) {
                     //Home
                     HomeFragment homeFragment = new HomeFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame,homeFragment).commit();
+                } else if(menuItemId == R.id.bottombaritemtwo){
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
                 } else if (menuItemId == R.id.bottombaritemtwo) {
                     //Friends
                     FriendsFragment friendsFragment = new FriendsFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, friendsFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame,friendsFragment).commit();
+                } else if (menuItemId == R.id.bottombaritemfour) {
+                    //chat
+                    ChatFragment chatFragment = new ChatFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, chatFragment).commit();
                 }
             }
 
