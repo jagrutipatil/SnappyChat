@@ -87,23 +87,24 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName"
-                        android:text="nameApp"
                         android:textAlignment="inherit"
-                        android:textSize="32sp"
+                        android:textSize="30sp"
                         android:background="@null"
-                        android:paddingStart="5dp" />
+                        android:paddingStart="5dp"
+                        android:layout_weight="0.32" />
 
-                    <TextView
-                        android:id="@+id/profession"
+                    <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="0.62"
+                        android:inputType="textPersonName"
                         android:ems="10"
-                        android:text="Profession"
-                        android:textColor="@android:color/background_dark"
-                        android:textSize="24sp"
-                        android:paddingTop="20dp" />
+                        android:id="@+id/profession"
+                        android:paddingStart="5dp"
+                        android:textSize="24dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:background="@null"/>
 
                     <EditText
                         android:id="@+id/location"
@@ -114,10 +115,10 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName"
-                        android:text="Location"
                         android:textSize="24sp"
                         android:background="@null"
-                        android:paddingStart="5dp" />
+                        android:paddingStart="5dp"
+                        android:layout_weight="0.24" />
 
                 </LinearLayout>
 
@@ -131,7 +132,6 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textMultiLine"
-                android:text="Hiking, Dance, Music"
                 android:textSize="24sp"
                 android:background="@null"
                 android:paddingStart="5dp" />
@@ -142,7 +142,6 @@
                 android:layout_height="75dp"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:text="Be a goldfish, be a silverfish. But don't be a selfish."
                 android:textSize="24sp"
                 android:background="@null"
                 android:paddingStart="5dp"

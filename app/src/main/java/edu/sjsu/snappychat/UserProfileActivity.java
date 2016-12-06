@@ -28,8 +28,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 
+import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UploadImage;
+import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
@@ -48,6 +50,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
     private User loggedInUser;
+    private AdvancedSettigs settings;
     private Button advanced;
 
     //progress dialogue
@@ -72,6 +75,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         progress = new ProgressDialog(this);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        settings = UserService.getInstance().getAdvancedSettings();
         loggedInUser = new User("kamlendr1@gmail.com");
 
         /*//Replace above line with following
@@ -140,7 +144,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     long count = dataSnapshot.getChildrenCount();
                     if(count==0){
-                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).setValue(loggedInUser.getAdvancedSettings());
+                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).setValue(settings);
                     }
                 }
 

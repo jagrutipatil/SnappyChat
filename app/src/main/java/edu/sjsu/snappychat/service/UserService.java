@@ -9,6 +9,7 @@ import edu.sjsu.snappychat.model.User;
 
 public class UserService {
     private static User user = null;
+    private static AdvancedSettigs settings = null;
 
     static private UserService instance = null;
 
@@ -19,6 +20,7 @@ public class UserService {
         if (instance == null) {
             instance = new UserService();
             user = new User();
+            settings = new AdvancedSettigs("Friends Only", true);
         }
         return instance;
     }
@@ -81,11 +83,16 @@ public class UserService {
     }
 
     public void setAdvancedSettings(AdvancedSettigs settings){
-        user.setAdvancedSettings(settings);
+        settings.setVisibility(settings.visibility);
+        settings.setEmail_notification(settings.email_notification);
     }
 
     public User getUser(){
         User dummyUser = new User();
         return this.user;
+    }
+
+    public AdvancedSettigs getAdvancedSettings(){
+        return settings;
     }
 }

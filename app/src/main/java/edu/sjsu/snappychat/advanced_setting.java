@@ -32,7 +32,7 @@ import edu.sjsu.snappychat.util.Util;
 public class advanced_setting extends AppCompatActivity {
 
     private Button ok;
-    private ToggleButton emailNotification;
+    private ToggleButton emailNotificationButton;
     private RadioButton radioButton;
     private DatabaseReference mDatabaseReference;
     private RadioGroup radioGroup;
@@ -43,7 +43,7 @@ public class advanced_setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_setting);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        emailNotification = (ToggleButton) findViewById(R.id.email_notification);
+        emailNotificationButton = (ToggleButton) findViewById(R.id.email_notification);
 
         final RadioGroup radiogrp = (RadioGroup) findViewById(R.id.visibility);
 
@@ -58,7 +58,7 @@ public class advanced_setting extends AppCompatActivity {
                 radioButton = (RadioButton) findViewById(visibility_radioButtonID);
 
                 String visibility = radioButton.getText().toString();
-                Boolean emailNotificationStatus = emailNotification.isChecked();
+                Boolean emailNotificationStatus = emailNotificationButton.isChecked();
 
                 AdvancedSettigs settings = new AdvancedSettigs(visibility, emailNotificationStatus);
 
@@ -81,7 +81,6 @@ public class advanced_setting extends AppCompatActivity {
             User loggedUser = new User("kamlendr1@gmail.com");
             //User loggedUser = UserService.getInstance().getUser();
             mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedUser.getEmail())).setValue(setting[0]);
-            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedUser.getEmail())).child(Constant.Advanced_Settings).setValue(setting[0]);
             return "Executed";
         }
 
@@ -107,29 +106,35 @@ public class advanced_setting extends AppCompatActivity {
         loggedInUser = user.getUser();
         */
 
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User currentUser = dataSnapshot.getValue(User.class);
-                AdvancedSettigs settings = currentUser.getAdvancedSettings();
-                RadioButton button = (RadioButton) findViewById(R.id.friend_only);
 
-                // select radio button in the UI
-                switch(settings.visibility){
-                    case "Friends Only":
-                        button = (RadioButton) findViewById(R.id.friend_only);
-                        break;
-                    case "Public":
-                        button = (RadioButton) findViewById(R.id.publickey);
-                        break;
-                    case "Private":
-                        button = (RadioButton) findViewById(R.id.privatekey);
-                        break;
+                RadioButton button = (RadioButton) findViewById(R.id.friend_only);
+                boolean emailNotification = true;
+                long count = dataSnapshot.getChildrenCount();
+                if(count==1) {
+
+                    AdvancedSettigs currentSeetings = dataSnapshot.getValue(AdvancedSettigs.class);
+
+                    // select radio button in the UI
+                    switch (currentSeetings.visibility) {
+                        case "Friends Only":
+                            button = (RadioButton) findViewById(R.id.friend_only);
+                            break;
+                        case "Public":
+                            button = (RadioButton) findViewById(R.id.publickey);
+                            break;
+                        case "Private":
+                            button = (RadioButton) findViewById(R.id.privatekey);
+                            break;
+                    }
+
+                    emailNotification = currentSeetings.email_notification;
                 }
 
                 button.setChecked(true);
-
-                emailNotification.setChecked(settings.email_notification);
+                emailNotificationButton.setChecked(emailNotification);
 
                 //Use picaso to load the profile pic. This should be async
 

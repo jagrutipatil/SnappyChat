@@ -8,10 +8,15 @@ public class AdvancedSettigs {
     public String visibility;
     public boolean email_notification;
 
+    public AdvancedSettigs(){
+
+    }
+
     public AdvancedSettigs(String visibility, boolean email_notification){
         this.email_notification = email_notification;
         this.visibility = visibility;
     }
+
 
     public void setEmail_notification(boolean email_notification){
         this.email_notification = email_notification;
@@ -21,5 +26,11 @@ public class AdvancedSettigs {
         this.visibility = visibility;
     }
 
+    public String getVisibility() {
+        return visibility;
+    }
 
+    public boolean isEmail_notification() {
+        return email_notification;
+    }
 }
