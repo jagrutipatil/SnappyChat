@@ -162,7 +162,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             //Provide a popup to choose edit profile pic option either via gallery or camera
             actionTypeChooser();
            // Dialog dialog = new Dialog();
-            Toast.makeText(UserProfileActivity.this, "TOuched.",
+            Toast.makeText(UserProfileActivity.this, "Touched.",
                     Toast.LENGTH_SHORT).show();
         }
         return false;
