@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import edu.sjsu.snappychat.HomeActivity;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
@@ -39,5 +41,26 @@ public class DatabaseService {
                 Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    public static String getFriendlist(String userEmail){
+
+        final String[] friendList = new String[1];
+
+        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(userEmail)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
+                friendList[0] = currentUser.getFriends();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+
+
+        return friendList[0];
     }
 }
