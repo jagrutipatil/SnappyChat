@@ -42,14 +42,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".advanced_setting"
-            android:parentActivityName=".UserProfileActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+
+    <activity android:parentActivityName=".UserProfileActivity" android:name=".AdvancedSettingActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

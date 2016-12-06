@@ -1,5 +1,6 @@
 package edu.sjsu.snappychat.service;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,9 +10,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.sjsu.snappychat.model.AdvancedSettigs;
 import java.util.ArrayList;
 
 import edu.sjsu.snappychat.HomeActivity;
+import edu.sjsu.snappychat.UserProfileActivity;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
@@ -62,5 +65,51 @@ public class DatabaseService {
 
 
         return friendList[0];
+    }
+
+    public void writeAdvancedSettings(AdvancedSettigs advancedSettigs) {
+        //where String is email address.
+        new AdvancedSettingsDBWriter().execute(advancedSettigs);
+    }
+
+    private class AdvancedSettingsDBWriter extends AsyncTask<AdvancedSettigs, Void, String> {
+
+        @Override
+        protected String doInBackground(AdvancedSettigs... advancedSettigs) {
+
+            mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(advancedSettigs[0].getEmail_id())).setValue(advancedSettigs[0]);
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("TAG-AFTER EXECUTION", "Done");
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+    //IMPORTANT NOTE: Following function requires "cleanedEmail"
+    public static User getUserRecord(String cleanedEmail){
+        final User[] user = new User[1];
+
+        mDatabaseReference.child(Constant.USER_NODE).child(cleanedEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user[0] = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return user[0];
     }
 }
