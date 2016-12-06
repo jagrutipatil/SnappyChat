@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="mayuri.sapre@gmail.com"
+        android:ems="10"
+        android:id="@+id/email"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <EditText
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/nickname" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            app:srcCompat="@android:color/holo_purple"
+            android:id="@+id/go_profile"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            app:srcCompat="@android:color/holo_green_dark"
+            android:id="@+id/add_friend"
+            android:layout_weight="1"
+            android:layout_height="42dp" />
+
+        <EditText
+            android:layout_width="77dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Friend"
+            android:ems="10"
+            android:id="@+id/friend_tag"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="right"
+            android:textColor="?android:attr/colorControlNormal"
+            android:textStyle="italic" />
+    </LinearLayout>
+</LinearLayout>
