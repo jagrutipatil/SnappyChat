@@ -1,7 +1,5 @@
 package edu.sjsu.snappychat.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,13 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-
-import edu.sjsu.snappychat.HomeActivity;
 import edu.sjsu.snappychat.R;
-import edu.sjsu.snappychat.model.Friend;
-import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
+import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -51,7 +45,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
-                if (currentUser.getFriends() != null) {
+                if (currentUser != null && currentUser.getFriends() != null) {
                     friendsEmailList = currentUser.getFriends().split(",");
                     ArrayAdapter<String> arrayAdapter =
                             new ArrayAdapter<String>( getContext(), android.R.layout.simple_list_item_1, friendsEmailList);
@@ -83,7 +77,8 @@ public class ChatFragment extends Fragment {
 
     private void addDummyFriends() {
         //Add Some for dummy friends
-        UserFriend userFriend = new UserFriend(UserService.getInstance().getEmail(), "timesofIndia@sjsu.edu");
-        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(userFriend);
+        for (int i = 0; i < 5; i++) {
+            DatabaseService.addFriend(UserService.getInstance().getEmail(), "timesofIndia " + i + " @sjsu.edu");
+        }
     }
 }
