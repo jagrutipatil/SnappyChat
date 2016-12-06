@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SnappyChat</string>
     <string name="facebook_app_id">2165537220338569</string>
-
+    <string name="google_client_id">882639167497-a62st6d8d03e335tud4op7gin5t1avlq.apps.googleusercontent.com</string>
     <string name="title_activity_advanced_setting">advanced_setting</string>
 </resources>
