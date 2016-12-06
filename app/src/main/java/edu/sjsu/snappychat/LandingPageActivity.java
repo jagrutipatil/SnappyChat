@@ -10,6 +10,7 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
+import edu.sjsu.snappychat.fragment.search;
 
 public class LandingPageActivity extends AppCompatActivity implements FriendsFragment.OnFragmentInteractionListener{
 
@@ -31,6 +32,10 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
                     //Friends
                     FriendsFragment friendsFragment = new FriendsFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame,friendsFragment).commit();
+                }else if(menuItemId == R.id.bottombaritemthree){
+                    //Search
+                    search searchFragment = new search();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame,searchFragment).commit();
                 }
             }
 

@@ -5,6 +5,8 @@ package edu.sjsu.snappychat.util;
  */
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +23,12 @@ import edu.sjsu.snappychat.service.UserService;
 
 public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
-    private final Activity context;
+    private final Context context;
     private final String[] emailID;
     private final String[] nickName;
     private User loggedInUser;
 
-    public CustomSearchListAdapter(Activity context, String[] email, String[] nickName) {
+    public CustomSearchListAdapter(Context context, String[] email, String[] nickName) {
         super(context, R.layout.search_listview, email);
         // TODO Auto-generated constructor stub
 
@@ -36,7 +38,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
     }
 
     public View getView(int position,View view,ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.search_listview, null,true);
 
         EditText email = (EditText) rowView.findViewById(R.id.email);
