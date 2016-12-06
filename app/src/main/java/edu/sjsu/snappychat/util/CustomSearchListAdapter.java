@@ -25,7 +25,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
     private final Context context;
     private final String[] emailID;
-    private final String[] nickName;
+    private final String[] nickNameArray;
     private User loggedInUser;
 
     public CustomSearchListAdapter(Context context, String[] email, String[] nickName) {
@@ -34,21 +34,25 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
         this.context = context;
         this.emailID = email;
-        this.nickName = nickName;
+        this.nickNameArray = nickName;
     }
 
-    public View getView(int position,View view,ViewGroup parent) {
+    @Override
+    public int getCount() {
+        return emailID.length;
+    }
+
+    public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.search_listview, null,true);
 
         EditText email = (EditText) rowView.findViewById(R.id.email);
         EditText nickName = (EditText) rowView.findViewById(R.id.nickname);
         EditText friendTag = (EditText) rowView.findViewById(R.id.friend_tag);
-        ImageButton goToProfile = (ImageButton) rowView.findViewById(R.id.go_profile);
-        ImageButton addFriend = (ImageButton) rowView.findViewById(R.id.add_friend);
+        final ImageButton addFriend = (ImageButton) rowView.findViewById(R.id.add_friend);
 
         email.setText(emailID[position]);
-        nickName.setText(emailID[position]);
+        nickName.setText(nickNameArray[position]);
         loggedInUser = UserService.getInstance().getUser();
 
         /*
@@ -59,6 +63,14 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
             friendTag.setVisibility(rowView.INVISIBLE);
             addFriend.setVisibility(rowView.VISIBLE);
         }*/
+
+        addFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFriend.setEnabled(false);
+                addFriend.setBackgroundResource(R.drawable.check);
+            }
+        });
 
         return rowView;
 

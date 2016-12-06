@@ -9,6 +9,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import edu.sjsu.snappychat.R;
@@ -23,7 +24,7 @@ import edu.sjsu.snappychat.util.CustomSearchListAdapter;
  * Use the {@link search#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class search extends ListFragment {
+public class search extends Fragment {
 
     private ListView list;
     private String[] emailID = {
@@ -63,10 +64,17 @@ public class search extends ListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        final ListView searchList = (ListView) getView().findViewById(R.id.search_list);
+        final ListView searchList = (ListView) view.findViewById(R.id.list);
 
         CustomSearchListAdapter adapter=new CustomSearchListAdapter(getContext(), emailID, nickName);
         searchList.setAdapter(adapter);
+
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //go to that user's profile
+            }
+        });
 
         return view;
     }
