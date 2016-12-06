@@ -3,12 +3,7 @@ package edu.sjsu.snappychat;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.UserDictionary;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +24,7 @@ import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class advanced_setting extends AppCompatActivity {
+public class AdvancedSettingActivity extends AppCompatActivity {
 
     private Button ok;
     private ToggleButton emailNotificationButton;
@@ -67,7 +62,7 @@ public class advanced_setting extends AppCompatActivity {
 
                 AsyncTask write_database = new databaseWrite().execute(settings);
 
-                Intent updateProfile = new Intent(advanced_setting.this, UserProfileActivity.class);
+                Intent updateProfile = new Intent(AdvancedSettingActivity.this, UserProfileActivity.class);
                 startActivity(updateProfile);
             }
         });
@@ -144,7 +139,7 @@ public class advanced_setting extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
                 // [START_EXCLUDE]
-                Toast.makeText(advanced_setting.this, "Failed.",
+                Toast.makeText(AdvancedSettingActivity.this, "Failed.",
                         Toast.LENGTH_SHORT).show();
             }
         });

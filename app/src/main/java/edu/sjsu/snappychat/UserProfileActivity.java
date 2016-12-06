@@ -1,11 +1,8 @@
 package edu.sjsu.snappychat;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,9 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 
 import edu.sjsu.snappychat.model.AdvancedSettigs;
@@ -85,7 +79,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent advanced_page = new Intent(UserProfileActivity.this,advanced_setting.class);
+                Intent advanced_page = new Intent(UserProfileActivity.this,AdvancedSettingActivity.class);
                 startActivity(advanced_page);
             }
         });

@@ -7,30 +7,44 @@ package edu.sjsu.snappychat.model;
 public class AdvancedSettigs {
     public String visibility;
     public boolean email_notification;
+    public String email_id;
 
-    public AdvancedSettigs(){
+    public AdvancedSettigs() {
 
     }
 
-    public AdvancedSettigs(String visibility, boolean email_notification){
+    public AdvancedSettigs(String visibility, boolean email_notification) {
         this.email_notification = email_notification;
         this.visibility = visibility;
     }
 
-
-    public void setEmail_notification(boolean email_notification){
+    public AdvancedSettigs(String visibility, boolean email_notification, String email_id) {
+        this.visibility = visibility;
         this.email_notification = email_notification;
+        this.email_id = email_id;
     }
 
-    public void setVisibility(String visibility){
-        this.visibility = visibility;
+    public String getEmail_id() {
+        return email_id;
+    }
+
+    public void setEmail_id(String email_id) {
+        this.email_id = email_id;
     }
 
     public String getVisibility() {
         return visibility;
     }
 
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
+
     public boolean isEmail_notification() {
         return email_notification;
+    }
+
+    public void setEmail_notification(boolean email_notification) {
+        this.email_notification = email_notification;
     }
 }

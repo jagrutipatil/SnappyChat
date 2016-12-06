@@ -19,12 +19,12 @@ import edu.sjsu.snappychat.util.CustomSearchListAdapter;
 /*
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link search.OnFragmentInteractionListener} interface
+ * {@link SearchFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link search#newInstance} factory method to
+ * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class search extends Fragment {
+public class SearchFragment extends Fragment {
 
     private ListView list;
     private String[] emailID = {
@@ -52,7 +52,7 @@ public class search extends Fragment {
             "purva"
     };
 
-    public search() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
