@@ -114,13 +114,13 @@ public class AdvancedSettingActivity extends AppCompatActivity {
 
                     // select radio button in the UI
                     switch (currentSeetings.visibility) {
-                        case "Friends Only":
+                        case Constant.FRIENDS_ONLY_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.friend_only);
                             break;
-                        case "Public":
+                        case Constant.PUBLIC_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.publickey);
                             break;
-                        case "Private":
+                        case Constant.PRIVATE_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.privatekey);
                             break;
                     }

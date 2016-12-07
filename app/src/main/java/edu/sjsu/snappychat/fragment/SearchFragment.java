@@ -12,8 +12,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.model.UserFriend;
+import edu.sjsu.snappychat.service.UserService;
+import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.CustomSearchListAdapter;
+import edu.sjsu.snappychat.util.Util;
 
 
 /*
@@ -26,19 +41,13 @@ import edu.sjsu.snappychat.util.CustomSearchListAdapter;
  */
 public class SearchFragment extends Fragment {
 
+    private User loggedInUser;
+    private DatabaseReference mDatabaseReference;
+
     private ListView list;
-    private String[] emailID = {
-            "mayuri.sapre@gmail.com",
-            "jagruti.patil@gmail.com",
-            "madhusapre@gmail.com",
-            "akki@gmail.com",
-            "kdChauhan@gmail.com",
-            "sagar.bhoite@gmail.com",
-            "raavi.patil@gmail.com ",
-            "atitha@gmail.com",
-            "nagesh@gmail.com",
-            "purva.legacy@gmail.com"
-    };
+    private List<String> emailID;
+    private List<String> nickName;
+    /*
     private String[] nickName = {
             "mayu",
             "jagruti",
@@ -50,10 +59,68 @@ public class SearchFragment extends Fragment {
             "atitha",
             "nagya",
             "purva"
-    };
+    };*/
 
     public SearchFragment() {
-        // Required empty public constructor
+        // Get a list of all public visible users
+        this.loggedInUser = UserService.getInstance().getUser();
+        this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        emailID = new ArrayList<String>();
+        nickName = new ArrayList<String>();
+
+        //Populate emailId list
+        mDatabaseReference.child(Constant.Advanced_Settings).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AdvancedSettigs settings;
+
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+
+                    settings = snap.getValue(AdvancedSettigs.class);
+                    emailID.add(settings.email_id);
+                }
+
+                mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        UserFriend friends;
+
+                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+
+                            friends = snap.getValue(UserFriend.class);
+                            emailID.addAll(friends.getFriends());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //Populate nickName ArrayList
+        for(int i=0;i<emailID.size();i++){
+            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(emailID.get(i))).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    nickName.add(user.getNickName());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override

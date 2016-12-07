@@ -41,13 +41,13 @@ import edu.sjsu.snappychat.service.UserService;
 public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
     private final Context context;
-    private final String[] emailID;
-    private final String[] nickNameArray;
+    private final List<String> emailID;
+    private final List<String> nickNameArray;
     private User loggedInUser;
     private DatabaseReference mDatabaseReference;
     private List<String> friendList;
 
-    public CustomSearchListAdapter(Context context, String[] email, String[] nickName) {
+    public CustomSearchListAdapter(Context context, List<String> email, List<String> nickName) {
         super(context, R.layout.search_listview, email);
         // TODO Auto-generated constructor stub
 
@@ -74,7 +74,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        return emailID.length;
+        return emailID.size();
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -86,13 +86,13 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
         EditText friendTag = (EditText) rowView.findViewById(R.id.friend_tag);
         final ImageButton addFriend = (ImageButton) rowView.findViewById(R.id.add_friend);
 
-        email.setText(emailID[position]);
-        nickName.setText(nickNameArray[position]);
+        email.setText(emailID.get(position));
+        nickName.setText(nickNameArray.get(position));
 
 
-        final String receiver = emailID[position];
+        final String receiver = emailID.get(position);
 
-        if(friendList.contains(emailID[position])){
+        if(friendList.contains(emailID.get(position))){
             friendTag.setVisibility(rowView.VISIBLE);
             addFriend.setVisibility(rowView.INVISIBLE);
         }else{
