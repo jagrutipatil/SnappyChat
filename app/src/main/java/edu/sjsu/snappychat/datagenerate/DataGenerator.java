@@ -19,7 +19,7 @@ public class DataGenerator {
     private static void writeInvitations(){
 
     }
-    private static void writeAdvancedSettings(){
+    private static void writeAdvancedSettings() {
         AdvancedSettigs advancedSettigArray[] = new AdvancedSettigs[5];
         advancedSettigArray[0] = new AdvancedSettigs("Public", true, "kamlendrachauhan21@gmail.com");
         advancedSettigArray[1] = new AdvancedSettigs("Public", true, "mayurisapre@gmail.com");

@@ -88,8 +88,7 @@ public class UserService {
     }
 
     public User getUser(){
-        User dummyUser = new User();
-        return this.user;
+        return user;
     }
 
     public AdvancedSettigs getAdvancedSettings(){

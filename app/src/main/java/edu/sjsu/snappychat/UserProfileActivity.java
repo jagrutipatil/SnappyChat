@@ -43,7 +43,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Button buttonDone;
     private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
-    private User loggedInUser;
     private AdvancedSettigs settings;
     private Button advanced;
 
@@ -70,11 +69,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         settings = UserService.getInstance().getAdvancedSettings();
-        loggedInUser = new User("kamlendr1@gmail.com");
-
-        /*//Replace above line with following
-        UserService user = UserService.getInstance();
-        loggedInUser = user.getUser();*/
 
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,19 +82,21 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onStart() {
         super.onStart();
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);
-                // conditional check here for registration or profile update
-                editTextNickName.setText(currentUser.getNickName());
-                editTextProfession.setText(currentUser.getProfession());
-                editTextCity.setText(currentUser.getLocation());
-                editTextAboutMe.setText(currentUser.getAboutMe());
-                editTextInterests.setText(currentUser.getInterests());
 
-                //Use picaso to load the profile pic. This should be async
+                if (currentUser != null) {
+                    // conditional check here for registration or profile update
+                    editTextNickName.setText(currentUser.getNickName());
+                    editTextProfession.setText(currentUser.getProfession());
+                    editTextCity.setText(currentUser.getLocation());
+                    editTextAboutMe.setText(currentUser.getAboutMe());
+                    editTextInterests.setText(currentUser.getInterests());
 
+                    //Use picaso to load the profile pic. This should be async
+                }
             }
 
             @Override
@@ -124,21 +120,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         if (view == buttonDone) {
             Toast.makeText(UserProfileActivity.this, "Success.",
                     Toast.LENGTH_SHORT).show();
-            String loggedInUserEmailAddress = loggedInUser.getEmail();
-            loggedInUser.setInterests(editTextInterests.getText().toString());
-            loggedInUser.setNickName(editTextNickName.getText().toString());
-            loggedInUser.setAboutMe(editTextAboutMe.getText().toString());
-            loggedInUser.setLocation(editTextCity.getText().toString());
-            loggedInUser.setProfession(editTextProfession.getText().toString());
+            UserService.getInstance().setInterests(editTextInterests.getText().toString());
+            UserService.getInstance().setNickName(editTextNickName.getText().toString());
+            UserService.getInstance().setAboutMe(editTextAboutMe.getText().toString());
+            UserService.getInstance().setLocation(editTextCity.getText().toString());
+            UserService.getInstance().setProfession(editTextProfession.getText().toString());
 
             //Move it to async
-            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUserEmailAddress)).setValue(loggedInUser);
-            mDatabaseReference.child(Constant.Advanced_Settings).orderByKey().equalTo(Util.cleanEmailID(loggedInUserEmailAddress)).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(UserService.getInstance().getUser());
+            mDatabaseReference.child(Constant.Advanced_Settings).orderByKey().equalTo(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     long count = dataSnapshot.getChildrenCount();
-                    if(count==0){
-                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).setValue(settings);
+                    if(count == 0){
+                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(settings);
                     }
                 }
 
@@ -147,6 +142,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
                 }
             });
+
+            Intent homePage = new Intent(UserProfileActivity.this, LandingPageActivity.class);
+            startActivity(homePage);
         }
     }
 

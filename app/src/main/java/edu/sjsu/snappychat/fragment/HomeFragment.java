@@ -35,7 +35,7 @@ import edu.sjsu.snappychat.util.Util;
 public class HomeFragment extends Fragment {
 
     private DatabaseReference mDatabaseReference;
-    private User loggedInUser;
+//    private User loggedInUser;
 
     private EditText nickName;
     private EditText profession;
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         nickName = (EditText) view.findViewById(R.id.nickname);
         profession = (EditText) view.findViewById(R.id.profession);
         location = (EditText) view.findViewById(R.id.location);
@@ -56,15 +56,14 @@ public class HomeFragment extends Fragment {
         ImageButton edit = (ImageButton) view.findViewById(R.id.edit);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        //loggedInUser = new User("kamlendr1@gmail.com");
+
         ScrollView sv = (ScrollView)view.findViewById(R.id.scroller);
         sv.scrollTo(0, sv.getTop());
-        loggedInUser = UserService.getInstance().getUser();
+        //loggedInUser = UserService.getInstance().getUser();
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent edit_page = new Intent(getContext(), UserProfileActivity.class);
-
                 startActivity(edit_page);
             }
         });
@@ -74,23 +73,29 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //TODO this is fetching data from db everytime on click on home fragment
+                // TODO load all the data into userservice while editing and in home fragment if data is not present in userservice then and then only load data
                 User currentUser = dataSnapshot.getValue(User.class);
                 // conditional check here for registration or profile update
+                UserService.getInstance().setNickName(currentUser.getNickName());
+                UserService.getInstance().setProfession(currentUser.getProfession());
+                UserService.getInstance().setLocation(currentUser.getLocation());
+                UserService.getInstance().setAboutMe(currentUser.getAboutMe());
+                UserService.getInstance().setInterests(currentUser.getInterests());
+
                 nickName.setText(currentUser.getNickName());
                 profession.setText(currentUser.getProfession());
                 location.setText(currentUser.getLocation());
                 aboutMe.setText(currentUser.getAboutMe());
                 interests.setText(currentUser.getInterests());
-
             }
 
             @Override

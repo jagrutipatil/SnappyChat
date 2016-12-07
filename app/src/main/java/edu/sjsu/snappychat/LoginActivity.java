@@ -174,8 +174,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void startLandingActivity() {
-        Intent edit_page = new Intent(LoginActivity.this, LandingPageActivity.class);
-        startActivity(edit_page);
+        Intent userCheck = new Intent(LoginActivity.this, UserCheckActivity.class);
+        startActivity(userCheck);
     }
 
     private void googleSignIn() {
