@@ -26,7 +26,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
-        generateData();
+        //generateData();
 
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
@@ -65,7 +65,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
 
     }
 
-    private void generateData(){
+   /* private void generateData(){
         DataGenerator.write();
-    }
+    }*/
 }

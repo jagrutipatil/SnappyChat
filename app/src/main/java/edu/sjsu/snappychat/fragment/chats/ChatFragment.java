@@ -13,10 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.ui.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.sjsu.snappychat.R;
@@ -31,7 +33,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class ChatFragment extends Fragment {
 
     private DatabaseReference mDatabaseReference;
-    String[] friendsEmailList = null;
+    String[] friendsEmailList = new String[4];
     String LoggedInUser;
 
     @Nullable
@@ -54,6 +56,13 @@ public class ChatFragment extends Fragment {
                 } else {
                     Log.w("UserProfileActivity", "No friend");
                     Toast.makeText(getApplicationContext(), "No Friends ", Toast.LENGTH_LONG).show();
+                    friendsEmailList[0] = "kd21@gmail.com" ;
+                    friendsEmailList[1] = "mayuri@gmail.com" ;
+                    friendsEmailList[2] = "sagar@gmail.com" ;
+                    friendsEmailList[3] = "jagrutipatil33gmailcom" ;
+                    ArrayAdapter<String> arrayAdapter =
+                            new ArrayAdapter<String>( getContext(), android.R.layout.simple_list_item_1, friendsEmailList);
+                    friendList.setAdapter(arrayAdapter);
                 }
             }
 
@@ -86,5 +95,8 @@ public class ChatFragment extends Fragment {
 
         return view;
     }
+
+
+
 
 }

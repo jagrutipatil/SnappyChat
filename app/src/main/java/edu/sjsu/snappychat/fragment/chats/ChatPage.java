@@ -1,40 +1,116 @@
 package edu.sjsu.snappychat.fragment.chats;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.ui.FirebaseListAdapter;
 import com.firebase.ui.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.service.UserService;
+import edu.sjsu.snappychat.util.Util;
 
 public class ChatPage extends AppCompatActivity {
 
+    private static final int PICK_IMAGE_REQUEST = 2;
+    private static final int CAMERA_CODE = 1;
+
     EditText editText;
-    Button sendbutton;
+    ImageButton sendbutton, imagebutton;
 
     ArrayList<ChatModel> chatmsgsList = new ArrayList<ChatModel>();
-    private RecyclerView mRecyclerView;
-    private FirebaseRecyclerAdapter<ChatModel, ChatMessageViewHolder> mFirebaseAdapter1 = null;
-    private FirebaseRecyclerAdapter<ChatModel, ChatMessageViewHolder> mFirebaseAdapter2 = null;
+    ChatAdapter adapter;
+    private ListView chatList;
     Firebase firebase_chatnode ;
     Firebase ref_chatchildnode1 = null;
     Firebase ref_chatchildnode2 = null;
-    String from_user, to_user, newmsg, LoggedInUser;
+    String from_user, to_user, newmsg, LoggedInUser, ImageDecode;
+    Bitmap myBitmap;;
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri URI = data.getData();
+            String[] FILE = { MediaStore.Images.Media.DATA };
+
+
+            Cursor cursor = getContentResolver().query(URI,
+                    FILE, null, null, null);
+
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(FILE[0]);
+            ImageDecode = cursor.getString(columnIndex);
+            cursor.close();
+
+            File imgFile = new File(ImageDecode);
+            if(imgFile.exists()) {
+                myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            }
+
+            //imageViewLoad.setImageBitmap(BitmapFactory.decodeFile(ImageDecode));
+
+            /*Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");*/
+            ChatModel m = new ChatModel();
+            Intent startingintent = getIntent();
+            LoggedInUser = startingintent.getStringExtra("LOG_IN_USER");
+            m.setSender(LoggedInUser);
+            String img = Util.encodeImage(myBitmap);
+            m.setImagemessage(img);
+            ref_chatchildnode1.push().setValue(m);
+            ref_chatchildnode2.push().setValue(m);
+
+        } else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ChatModel m = new ChatModel();
+            Intent startingintent = getIntent();
+            LoggedInUser = startingintent.getStringExtra("LOG_IN_USER");
+            m.setSender(LoggedInUser);
+            String img = Util.encodeImage(imageBitmap);
+            m.setImagemessage(img);
+            ref_chatchildnode1.push().setValue(m);
+            ref_chatchildnode2.push().setValue(m);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +122,26 @@ public class ChatPage extends AppCompatActivity {
 
         editText = (EditText) findViewById(R.id.editText);
 
-        sendbutton = (Button) findViewById(R.id.button);
+        sendbutton = (ImageButton) findViewById(R.id.sendButton);
+        imagebutton = (ImageButton) findViewById(R.id.imageButton) ;
+
         Intent startingintent = getIntent();
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutmgr = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(layoutmgr);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         from_user = startingintent.getStringExtra("FROM_USER");
         to_user = startingintent.getStringExtra("TO_USER");
         LoggedInUser = startingintent.getStringExtra("LOG_IN_USER");
 
-        setTitle(to_user);
+        chatmsgsList = new ArrayList<ChatModel>();
+        chatList = (ListView) findViewById(R.id.recycler_view);
+
+        adapter = new ChatAdapter();
+        chatList.setAdapter(adapter);
+        chatList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        chatList.setStackFromBottom(true);
+
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle(to_user);
 
 
 
@@ -67,6 +151,10 @@ public class ChatPage extends AppCompatActivity {
         ref_chatchildnode1 = firebase_chatnode.child(from_user + " " + to_user);
 
         ref_chatchildnode2 = firebase_chatnode.child(to_user + " " + from_user);
+
+
+
+
         sendbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,38 +169,43 @@ public class ChatPage extends AppCompatActivity {
 
             }
         });
+
+        imagebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                    final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ChatPage.this);
+                    builder.setTitle("Add Photo!");
+                    builder.setIcon(R.drawable.faceicon);
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+
+                            if (items[item].equals("Take Photo")) {
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, CAMERA_CODE);
+                            } else if (items[item].equals("Choose from Library")) {
+                                Intent intent = new Intent(
+                                        Intent.ACTION_PICK,
+                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(intent,PICK_IMAGE_REQUEST);
+                            } else if (items[item].equals("Cancel")) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+        });
+
         ref_chatchildnode1.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ChatModel chatmsg = dataSnapshot.getValue(ChatModel.class);
-                chatmsgsList.add(chatmsg);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-        ref_chatchildnode2.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ChatModel chatmsg = dataSnapshot.getValue(ChatModel.class);
-                chatmsgsList.add(chatmsg);
+                    chatmsgsList.add(chatmsg);
+                    adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -136,40 +229,88 @@ public class ChatPage extends AppCompatActivity {
             }
         });
 
+
+
+
+    }
+
+
+
+    private class ChatAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return chatmsgsList.size();
+        }
+
+        @Override
+        public ChatModel getItem(int arg0) {
+            return chatmsgsList.get(arg0);
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            return arg0;
+        }
+
+        @SuppressLint("InflateParams")
+        @Override
+        public View getView(int pos, View v, ViewGroup arg2) {
+            ChatModel c = getItem(pos);
+            String currentUser = Util.cleanEmailID(UserService.getInstance().getEmail());
+            if (c.getSender().matches(currentUser) ) {
+                if(c.getImagemessage() != null){
+                    v = getLayoutInflater().inflate(R.layout.chat_item_sent_img,null);
+                }else {
+                    v = getLayoutInflater().inflate(R.layout.chat_item_sent, null);
+                }
+            }else if(c.getSender() != currentUser) {
+                if(c.getImagemessage() != null){
+                    v = getLayoutInflater().inflate(R.layout.chat_item_rcv_img,null);
+                }else {
+                    v = getLayoutInflater().inflate(R.layout.chat_item_rcv, null);
+                }
+            }
+            TextView lbl = (TextView) v.findViewById(R.id.lbl1);
+            ImageView img = (ImageView) v.findViewById(R.id.lb4);
+            lbl.setText(c.getSender());
+
+            if(c.getMessage() != null) {
+                lbl = (TextView) v.findViewById(R.id.lbl2);
+                lbl.setText(c.getMessage());
+            }
+
+            if(c.getImagemessage()!=null) {
+                img = (ImageView) v.findViewById(R.id.lb4);
+                Bitmap imgmsg = Util.decodeImage(c.getImagemessage());
+                img.setImageBitmap(imgmsg);
+            }
+            /*if (c.isSent()) {
+                if (c.getStatus() == Conversation.STATUS_SENT)
+                    lbl.setText(R.string.delivered_text);
+                else {
+                    if (c.getStatus() == Conversation.STATUS_SENDING)
+                        lbl.setText(R.string.sending_text);
+                    else {
+                        lbl.setText(R.string.failed_text);
+                    }
+                }
+            } else*/
+
+
+            return v;
+        }
 
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mFirebaseAdapter1 = new FirebaseRecyclerAdapter<ChatModel, ChatMessageViewHolder>(ChatModel.class,
-                R.layout.textview,
-                ChatMessageViewHolder.class,
-                ref_chatchildnode1) {
-            @Override
-            protected void populateViewHolder(ChatMessageViewHolder chatMessageViewHolder, ChatModel m, int i) {
-
-
-
-                chatMessageViewHolder.sender.setText(m.getSender());
-                chatMessageViewHolder.msg.setText(m.getMessage());
-            }
-        };
-        mFirebaseAdapter2 = new FirebaseRecyclerAdapter<ChatModel, ChatMessageViewHolder>(ChatModel.class,
-                R.layout.textview,
-                ChatMessageViewHolder.class,
-                ref_chatchildnode2) {
-            @Override
-            protected void populateViewHolder(ChatMessageViewHolder chatMessageViewHolder, ChatModel m, int i) {
-
-
-                chatMessageViewHolder.sender.setText(m.getSender());
-                chatMessageViewHolder.msg.setText(m.getMessage());
-            }
-        };
-
-        mRecyclerView.setAdapter(mFirebaseAdapter1);
-
-        mRecyclerView.setAdapter(mFirebaseAdapter2);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
+
+
+

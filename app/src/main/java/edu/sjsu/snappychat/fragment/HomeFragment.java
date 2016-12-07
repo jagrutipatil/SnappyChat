@@ -84,11 +84,13 @@ public class HomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);
                 // conditional check here for registration or profile update
-                nickName.setText(currentUser.getNickName());
-                profession.setText(currentUser.getProfession());
-                location.setText(currentUser.getLocation());
-                aboutMe.setText(currentUser.getAboutMe());
-                interests.setText(currentUser.getInterests());
+               /*
+                    nickName.setText(currentUser.getNickName());
+                    profession.setText(currentUser.getProfession());
+                    location.setText(currentUser.getLocation());
+                    aboutMe.setText(currentUser.getAboutMe());
+                    interests.setText(currentUser.getInterests());
+                }*/
 
             }
 

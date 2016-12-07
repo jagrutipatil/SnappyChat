@@ -1,11 +1,14 @@
 package edu.sjsu.snappychat.fragment.chats;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by i856547 on 12/6/16.
  */
 
 public class ChatModel {
     private String message;
+    private String imagemessage;
     private String Sender;
     public String getSender() {
         return Sender;
@@ -23,15 +26,23 @@ public class ChatModel {
         this.message = message;
     }
 
+    public String getImagemessage() {
+        return imagemessage;
+    }
+
+    public void setImagemessage(String imagemessage) {
+        this.imagemessage = imagemessage;
+    }
 
 
 
     public ChatModel(){
 
     }
-    public ChatModel(String s, String m){
+    public ChatModel(String s, String m,String img){
         this.Sender =s ;
         this.message =m;
+        this.imagemessage = img;
     }
 
 }
