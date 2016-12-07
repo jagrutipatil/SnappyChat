@@ -1,7 +1,10 @@
 package edu.sjsu.snappychat.service;
 
 import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.Friend;
+import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.model.UserFriend;
 
 /**
  * Created by jagruti on 12/4/16.
@@ -10,6 +13,8 @@ import edu.sjsu.snappychat.model.User;
 public class UserService {
     private static User user = null;
     private static AdvancedSettigs settings = null;
+    private static UserFriend friends = null;
+    private static Invitations invitations = null;
 
     static private UserService instance = null;
 
@@ -21,8 +26,19 @@ public class UserService {
             instance = new UserService();
             user = new User();
             settings = new AdvancedSettigs("FriendsOnly", true);
+            friends = new UserFriend();
+            invitations = new Invitations();
+
         }
         return instance;
+    }
+
+    public static UserFriend getFriends() {
+        return friends;
+    }
+
+    public static Invitations getInvitations() {
+        return invitations;
     }
 
 

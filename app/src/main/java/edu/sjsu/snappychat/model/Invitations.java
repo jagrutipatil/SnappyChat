@@ -23,4 +23,13 @@ public class Invitations {
     public ArrayList<String> getInvitationReceived() {
         return invitationReceived;
     }
+
+
+    public void setInvitationSent(ArrayList<String> invitationSent) {
+        this.invitationSent = invitationSent;
+    }
+
+    public void setInvitationReceived(ArrayList<String> invitationReceived) {
+        this.invitationReceived = invitationReceived;
+    }
 }

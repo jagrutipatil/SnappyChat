@@ -22,8 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.util.ArrayList;
+
 import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UploadImage;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
@@ -134,6 +138,44 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     long count = dataSnapshot.getChildrenCount();
                     if(count == 0){
                         mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(settings);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            final UserFriend friends = UserService.getFriends();
+            friends.setEmail(UserService.getInstance().getEmail());
+            friends.setFriends(new ArrayList<String>());
+
+            mDatabaseReference.child(Constant.FRIENDS_NODE).orderByKey().equalTo(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long count  = dataSnapshot.getChildrenCount();
+                    if (count==0){
+                        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(friends);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            final Invitations invitations = UserService.getInvitations();
+            invitations.setInvitationReceived(new ArrayList<String>());
+            invitations.setInvitationSent(new ArrayList<String>());
+
+            mDatabaseReference.child(Constant.INVITATIONS_NODE).orderByKey().equalTo(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long count  = dataSnapshot.getChildrenCount();
+                    if (count==0){
+                        mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(invitations);
                     }
                 }
 
