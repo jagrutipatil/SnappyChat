@@ -150,6 +150,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             final UserFriend friends = UserService.getFriends();
             friends.setEmail(UserService.getInstance().getEmail());
             friends.setFriends(new ArrayList<String>());
+            friends.getFriends().add(UserService.getInstance().getEmail());
 
             mDatabaseReference.child(Constant.FRIENDS_NODE).orderByKey().equalTo(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

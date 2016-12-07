@@ -91,14 +91,14 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
 
         final String receiver = emailID.get(position);
-
+        /*
         if(friendList.contains(emailID.get(position))){
             friendTag.setVisibility(rowView.VISIBLE);
             addFriend.setVisibility(rowView.INVISIBLE);
         }else{
             friendTag.setVisibility(rowView.INVISIBLE);
             addFriend.setVisibility(rowView.VISIBLE);
-        }
+        }*/
 
         addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
