@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class HomeFragment extends Fragment {
     private EditText location;
     private EditText aboutMe;
     private EditText interests;
+    private ImageView profilePic;
 
     @Nullable
     @Override
@@ -52,6 +54,7 @@ public class HomeFragment extends Fragment {
         location = (EditText) view.findViewById(R.id.location);
         aboutMe = (EditText) view.findViewById(R.id.about_me);
         interests = (EditText) view.findViewById(R.id.interests);
+        profilePic = (ImageView) view.findViewById(R.id.profile_photo);
 
         ImageButton edit = (ImageButton) view.findViewById(R.id.edit);
 
@@ -78,33 +81,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO this is fetching data from db everytime on click on home fragment
-                // TODO load all the data into userservice while editing and in home fragment if data is not present in userservice then and then only load data
-                User currentUser = dataSnapshot.getValue(User.class);
-                // conditional check here for registration or profile update
-                UserService.getInstance().setNickName(currentUser.getNickName());
-                UserService.getInstance().setProfession(currentUser.getProfession());
-                UserService.getInstance().setLocation(currentUser.getLocation());
-                UserService.getInstance().setAboutMe(currentUser.getAboutMe());
-                UserService.getInstance().setInterests(currentUser.getInterests());
-
-                nickName.setText(currentUser.getNickName());
-                profession.setText(currentUser.getProfession());
-                location.setText(currentUser.getLocation());
-                aboutMe.setText(currentUser.getAboutMe());
-                interests.setText(currentUser.getInterests());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
-                // [START_EXCLUDE]
-                Toast.makeText(getActivity(), "Failed.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (UserService.getInstance().getEmail() != null) {
+            nickName.setText(UserService.getInstance().getNickName());
+            profession.setText(UserService.getInstance().getProfession());
+            location.setText(UserService.getInstance().getLocation());
+            aboutMe.setText(UserService.getInstance().getAboutMe());
+            interests.setText(UserService.getInstance().getInterests());
+            profilePic.setImageBitmap(Util.decodeImage(UserService.getInstance().getProfilePictureLocation()));
+        }
+      }
     }
-}
