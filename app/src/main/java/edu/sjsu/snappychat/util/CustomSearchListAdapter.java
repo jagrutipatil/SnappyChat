@@ -24,7 +24,6 @@ import java.util.List;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.User;
-import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
 
 public class CustomSearchListAdapter extends ArrayAdapter<String> {
@@ -36,14 +35,14 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
     private DatabaseReference mDatabaseReference;
     private List<String> friendList;
 
-    public CustomSearchListAdapter(Context context, List<String> email, List<String> nickName, UserFriend userFriend) {
+    public CustomSearchListAdapter(Context context, List<String> email, List<String> nickName, ArrayList<String> userFriends) {
         super(context, R.layout.search_listview, email);
         // TODO Auto-generated constructor stub
 
         this.context = context;
         this.emailID = email;
         this.nickNameArray = nickName;
-        this.friendList = userFriend != null ? userFriend.getFriends() : null;
+        this.friendList = userFriends;
 
         this.loggedInUser = UserService.getInstance().getUser();
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -65,7 +64,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        return emailID.size();
+        return emailID != null ? emailID.size() : 0;
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -105,12 +104,12 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
-                        if(invitationsOfUser == null){
+                        if (invitationsOfUser == null) {
                             invitationsOfUser = new Invitations();
                             ArrayList<String> senderList = new ArrayList<String>();
                             senderList.add(receiver);
                             invitationsOfUser.setInvitationSent(senderList);
-                        }else{
+                        } else {
                             invitationsOfUser.getInvitationSent().add(receiver);
                         }
 
@@ -131,12 +130,12 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
-                        if(invitationsOfUser == null){
+                        if (invitationsOfUser == null) {
                             invitationsOfUser = new Invitations();
                             ArrayList<String> receiverList = new ArrayList<String>();
                             receiverList.add(sender);
                             invitationsOfUser.setInvitationReceived(receiverList);
-                        }else{
+                        } else {
                             invitationsOfUser.getInvitationReceived().add(sender);
                         }
 

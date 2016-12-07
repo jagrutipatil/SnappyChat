@@ -109,18 +109,23 @@ public class SearchFragment extends Fragment {
                     //nickName.add(settings.getEmail_id());//change to nickname
                 }
 
-                mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(Constant.FRIENDS_NODE).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        UserFriend friends = null;
+                      //  UserFriend friends = null;
 
-                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        final ArrayList<String> friendList = (ArrayList<String>) dataSnapshot.getValue();
+                      /*  for (DataSnapshot snap : dataSnapshot.getChildren()) {
 
                             friends = snap.getValue(UserFriend.class);
                             if (friends != null) {
                                 emailID.addAll(friends.getFriends());
                                 //nickName.addAll(friends.getFriends());//change to nickname
                             }
+                        }*/
+                        if(friendList != null){
+                            emailID.addAll(friendList);
+                            nickName.addAll(friendList);
                         }
 
                         mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -132,6 +137,18 @@ public class SearchFragment extends Fragment {
                                 for(int i=0;i<count;i++){
                                     nickName.add(i, mapping.getNickName(Util.cleanEmailID(emailID.get(i))));
                                 }
+
+                                final ListView searchList = (ListView) view.findViewById(R.id.list);
+
+                                CustomSearchListAdapter adapter = new CustomSearchListAdapter(getContext(), emailID, nickName, friendList);
+                                searchList.setAdapter(adapter);
+
+                                searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        //go to that user's profile
+                                    }
+                                });
                             }
 
                             @Override
@@ -140,17 +157,7 @@ public class SearchFragment extends Fragment {
                             }
                         });
 
-                        final ListView searchList = (ListView) view.findViewById(R.id.list);
 
-                        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getContext(), emailID, nickName, friends);
-                        searchList.setAdapter(adapter);
-
-                        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                //go to that user's profile
-                            }
-                        });
 
                     }
 
