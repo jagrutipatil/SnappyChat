@@ -56,8 +56,8 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
         this.loggedInUser = UserService.getInstance().getUser();
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        String[] friendArray = DatabaseService.getFriendlist(loggedInUser.getEmail()).split(",");
-        this.friendList = Arrays.asList(friendArray);
+        //String[] friendArray = DatabaseService.getFriendlist(loggedInUser.getEmail()).split(",");
+        this.friendList = null ; //Arrays.asList(friendArray);
 
     }
 

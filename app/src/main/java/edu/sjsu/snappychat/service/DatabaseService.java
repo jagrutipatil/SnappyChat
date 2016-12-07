@@ -11,6 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.sjsu.snappychat.model.AdvancedSettigs;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.sjsu.snappychat.HomeActivity;
@@ -31,10 +33,14 @@ public class DatabaseService {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null) {
-                    currentUser.setFriends(currentUser.getFriends() + "," + friendEmail);
+                    ArrayList<String> friends = currentUser.getFriends();
+                    friends.add(friendEmail);
+                    currentUser.setFriends(friends);
                     mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(currentUserEmail)).setValue(currentUser);
                 } else {
-                    UserFriend userFriend = new UserFriend(currentUserEmail, friendEmail);
+                    ArrayList<String> friendList = new ArrayList<String>();
+                    friendList.add(friendEmail);
+                    UserFriend userFriend = new UserFriend(currentUserEmail, friendList);
                     mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(currentUserEmail)).setValue(userFriend);
                 }
             }
@@ -46,7 +52,7 @@ public class DatabaseService {
         });
     }
 
-    public static String getFriendlist(String userEmail){
+   /* public static String getFriendlist(String userEmail){
 
         final String[] friendList = new String[1];
 
@@ -65,7 +71,7 @@ public class DatabaseService {
 
 
         return friendList[0];
-    }
+    }*/
 
     /**
      * Logic to write advanced settings to database directly

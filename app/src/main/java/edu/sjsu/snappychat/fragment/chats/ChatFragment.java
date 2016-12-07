@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.DatabaseService;
@@ -31,8 +33,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class ChatFragment extends Fragment {
 
     private DatabaseReference mDatabaseReference;
-    String[] friendsEmailList = null;
     String LoggedInUser;
+    ArrayList<String> friendsEmailList = null;
 
     @Nullable
     @Override
@@ -47,7 +49,7 @@ public class ChatFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null && currentUser.getFriends() != null) {
-                    friendsEmailList = currentUser.getFriends().split(",");
+                    friendsEmailList = currentUser.getFriends();
                     ArrayAdapter<String> arrayAdapter =
                             new ArrayAdapter<String>( getContext(), android.R.layout.simple_list_item_1, friendsEmailList);
                     friendList.setAdapter(arrayAdapter);
@@ -68,8 +70,8 @@ public class ChatFragment extends Fragment {
 
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3) {
-                if (friendsEmailList.length > position) {
-                    String selectedFriend = friendsEmailList[position];
+                if (friendsEmailList.size() > position) {
+                    String selectedFriend = friendsEmailList.get(position);
                     Toast.makeText(getApplicationContext(), "Friend Selected : "+selectedFriend,   Toast.LENGTH_LONG).show();
                     String to_user = Util.cleanEmailID(selectedFriend) ;
                     String from_user = Util.cleanEmailID(UserService.getInstance().getEmail());
