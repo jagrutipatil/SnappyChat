@@ -7,19 +7,20 @@ import java.util.ArrayList;
  */
 
 public class Invitations {
-    public ArrayList<String> interestsSent;
-    public ArrayList<String> interestsReceived;
+
+    public ArrayList<String> invitationSent;
+    public ArrayList<String> invitationReceived;
 
 
-    public Invitations(){
+    public Invitations() {
 
     }
 
-    public ArrayList<String> getInterestsSent() {
-        return interestsSent;
+    public ArrayList<String> getInvitationSent() {
+        return invitationSent;
     }
 
-    public ArrayList<String> getInterestsReceived() {
-        return interestsReceived;
+    public ArrayList<String> getInvitationReceived() {
+        return invitationReceived;
     }
 }

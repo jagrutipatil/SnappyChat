@@ -7,12 +7,19 @@ import edu.sjsu.snappychat.service.DatabaseService;
  * Created by I074841 on 12/6/2016.
  */
 
-public class AdvancedSettingsReadWrite {
+public class DataGenerator {
 
     private static DatabaseService databaseService = new DatabaseService();
 
 
     public static void write() {
+      writeAdvancedSettings();
+    }
+
+    private static void writeInvitations(){
+
+    }
+    private static void writeAdvancedSettings(){
         AdvancedSettigs advancedSettigArray[] = new AdvancedSettigs[5];
         advancedSettigArray[0] = new AdvancedSettigs("Public", true, "kamlendrachauhan21@gmail.com");
         advancedSettigArray[1] = new AdvancedSettigs("Public", true, "mayurisapre@gmail.com");
