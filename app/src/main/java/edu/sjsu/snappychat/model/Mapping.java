@@ -16,4 +16,8 @@ public class Mapping {
     public void addOrUpdateMailAndNickNameMapping(String cleanedEmailID, String nickName) {
         mailnicknamemap.put(cleanedEmailID, nickName);
     }
+
+    public String getNickName(String cleanedEmailID){
+        return mailnicknamemap.get(cleanedEmailID);
+    }
 }
