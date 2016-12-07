@@ -74,6 +74,8 @@ public class UserService {
 
     public void setEmail(String email) {
         user.setEmail(email);
+        settings.setEmail_id(email);
+        friends.setEmail(email);
     }
 
     public String getLocation() {
