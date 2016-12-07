@@ -1,7 +1,9 @@
 package edu.sjsu.snappychat.service;
 
-import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.AdvancedSettings;
+import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.model.UserFriend;
 
 /**
  * Created by jagruti on 12/4/16.
@@ -9,9 +11,13 @@ import edu.sjsu.snappychat.model.User;
 
 public class UserService {
     private static User user = null;
-    private static AdvancedSettigs settings = null;
+    private static AdvancedSettings settings = null;
+    private static UserFriend friends = null;
+    private static Invitations invitations = null;
 
     static private UserService instance = null;
+
+    private boolean dataLoaded = false;
 
     private UserService() {
     }
@@ -20,9 +26,20 @@ public class UserService {
         if (instance == null) {
             instance = new UserService();
             user = new User();
-            settings = new AdvancedSettigs("FriendsOnly", true);
+            settings = new AdvancedSettings("FriendsOnly", true,"");
+            friends = new UserFriend();
+            invitations = new Invitations();
+
         }
         return instance;
+    }
+
+    public static UserFriend getFriends() {
+        return friends;
+    }
+
+    public static Invitations getInvitations() {
+        return invitations;
     }
 
 
@@ -56,6 +73,8 @@ public class UserService {
 
     public void setEmail(String email) {
         user.setEmail(email);
+        settings.setEmail_id(email);
+        friends.setEmail(email);
     }
 
     public String getLocation() {
@@ -82,17 +101,24 @@ public class UserService {
         user.setProfession(profession);
     }
 
-    public void setAdvancedSettings(AdvancedSettigs settings){
-        settings.setVisibility(settings.visibility);
-        settings.setEmail_notification(settings.email_notification);
+    public void setAdvancedSettings(AdvancedSettings settings){
+        settings.setVisibility(settings.getVisibility());
+        settings.setEmail_notification(settings.isEmail_notification());
     }
 
     public User getUser(){
-        User dummyUser = new User();
-        return this.user;
+        return user;
     }
 
-    public AdvancedSettigs getAdvancedSettings(){
+    public AdvancedSettings getAdvancedSettings(){
         return settings;
+    }
+
+    public boolean isDataLoaded() {
+        return dataLoaded;
+    }
+
+    public void setDataLoaded(boolean dataLoaded) {
+        dataLoaded = dataLoaded;
     }
 }

@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
@@ -55,7 +55,7 @@ public class AdvancedSettingActivity extends AppCompatActivity {
                 String visibility = radioButton.getText().toString();
                 Boolean emailNotificationStatus = emailNotificationButton.isChecked();
 
-                AdvancedSettigs settings = new AdvancedSettigs(visibility, emailNotificationStatus);
+                AdvancedSettings settings = new AdvancedSettings(visibility, emailNotificationStatus,UserService.getInstance().getEmail());
 
                 UserService loggedInUserService = UserService.getInstance();
                 loggedInUserService.setAdvancedSettings(settings);
@@ -69,13 +69,11 @@ public class AdvancedSettingActivity extends AppCompatActivity {
 
     }
 
-    private class databaseWrite extends AsyncTask<AdvancedSettigs, Void, String> {
+    private class databaseWrite extends AsyncTask<AdvancedSettings, Void, String> {
 
         @Override
-        protected String doInBackground(AdvancedSettigs... setting) {
-            User loggedUser = new User("kamlendr1@gmail.com");
-            //User loggedUser = UserService.getInstance().getUser();
-            mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedUser.getEmail())).setValue(setting[0]);
+        protected String doInBackground(AdvancedSettings... setting) {
+            mDatabaseReference.child(Constant.ADVANCED_SETTINGS).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(setting[0]);
             return "Executed";
         }
 
@@ -95,13 +93,7 @@ public class AdvancedSettingActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-        loggedInUser = new User("kamlendr1@gmail.com");
-        /*
-        UserService user = UserService.getInstance();
-        loggedInUser = user.getUser();
-        */
-
-        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.ADVANCED_SETTINGS).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -110,22 +102,22 @@ public class AdvancedSettingActivity extends AppCompatActivity {
                 long count = dataSnapshot.getChildrenCount();
                 if(count==1) {
 
-                    AdvancedSettigs currentSeetings = dataSnapshot.getValue(AdvancedSettigs.class);
+                    AdvancedSettings currentSeetings = dataSnapshot.getValue(AdvancedSettings.class);
 
                     // select radio button in the UI
-                    switch (currentSeetings.visibility) {
-                        case "Friends Only":
+                    switch (currentSeetings.getVisibility()) {
+                        case Constant.FRIENDS_ONLY_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.friend_only);
                             break;
-                        case "Public":
+                        case Constant.PUBLIC_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.publickey);
                             break;
-                        case "Private":
+                        case Constant.PRIVATE_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.privatekey);
                             break;
                     }
 
-                    emailNotification = currentSeetings.email_notification;
+                    emailNotification = currentSeetings.isEmail_notification();
                 }
 
                 button.setChecked(true);

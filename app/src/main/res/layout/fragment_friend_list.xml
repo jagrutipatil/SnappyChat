@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     tools:context="edu.sjsu.snappychat.fragment.friends.FriendListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Friend List" />
+    <ListView
+        android:id="@+id/friendlistview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:dividerHeight="0.1dp"
+        android:divider="#0000CC"
+        >
+    </ListView>
 
 </FrameLayout>

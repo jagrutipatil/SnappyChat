@@ -6,19 +6,6 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <ImageButton
-            android:id="@+id/edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.14"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scroller"
@@ -42,6 +29,7 @@
                     android:layout_gravity="left"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
+                    android:src="@drawable/profileimg"
                     app:srcCompat="@android:drawable/screen_background_light_transparent" />
 
                 <LinearLayout
@@ -121,6 +109,12 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false" />
 
+            <ImageButton
+                android:id="@+id/edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
+
             <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="5dp"
@@ -147,5 +141,6 @@
 
         </LinearLayout>
     </ScrollView>
+
 
 </LinearLayout>

@@ -1,7 +1,5 @@
 package edu.sjsu.snappychat.fragment.friends;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,17 +19,19 @@ import java.util.List;
 
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.Invitations;
+import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.FriendInvitationAdapter;
 import edu.sjsu.snappychat.util.Util;
 
-public class RequestReceivedFragment extends Fragment {
+
+public class RequestSentFragment extends Fragment {
     private List<String> emailIds;
     private List<String> nickNames;
     private DatabaseReference mDatabaseReference;
 
-    public RequestReceivedFragment() {
+    public RequestSentFragment() {
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         this.emailIds = new ArrayList<String>();
         this.nickNames = new ArrayList<String>();
@@ -39,27 +39,30 @@ public class RequestReceivedFragment extends Fragment {
 
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_request_received, container, false);
+       final View view = inflater.inflate(R.layout.fragment_reqeust_sent, container, false);
+
         mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Invitations invitations = dataSnapshot.getValue(Invitations.class);
                 if (invitations != null) {
-                    emailIds = invitations.getInvitationReceived();
-                    nickNames = invitations.getInvitationReceived();
+                    emailIds = invitations.getInvitationSent();
+                    nickNames = invitations.getInvitationSent();
 
-                    final ListView searchList = (ListView) view.findViewById(R.id.receivedreqeustlistview);
+                    final ListView searchList = (ListView) view.findViewById(R.id.sentrequestlist);
 
-                    FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, false);
+                    FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, true);
                     searchList.setAdapter(adapter);
 
                     searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,6 +79,10 @@ public class RequestReceivedFragment extends Fragment {
 
             }
         });
+
+
         return view;
     }
+
+
 }

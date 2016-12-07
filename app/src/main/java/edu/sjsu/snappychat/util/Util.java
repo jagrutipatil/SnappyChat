@@ -27,5 +27,4 @@ public class Util {
         byte[] decodedByteArray = android.util.Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.length);
     }
-
 }

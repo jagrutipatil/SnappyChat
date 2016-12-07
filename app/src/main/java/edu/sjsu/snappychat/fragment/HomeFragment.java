@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -20,10 +21,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.sjsu.snappychat.HomeActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserProfileActivity;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
@@ -34,36 +36,37 @@ import edu.sjsu.snappychat.util.Util;
 public class HomeFragment extends Fragment {
 
     private DatabaseReference mDatabaseReference;
-    private User loggedInUser;
+//    private User loggedInUser;
 
     private EditText nickName;
     private EditText profession;
     private EditText location;
     private EditText aboutMe;
     private EditText interests;
+    private ImageView profilePic;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         nickName = (EditText) view.findViewById(R.id.nickname);
         profession = (EditText) view.findViewById(R.id.profession);
         location = (EditText) view.findViewById(R.id.location);
         aboutMe = (EditText) view.findViewById(R.id.about_me);
         interests = (EditText) view.findViewById(R.id.interests);
+        profilePic = (ImageView) view.findViewById(R.id.profile_photo);
 
         ImageButton edit = (ImageButton) view.findViewById(R.id.edit);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        loggedInUser = new User("kamlendr1@gmail.com");
-        ScrollView sv = (ScrollView)view.findViewById(R.id.scroller);
+
+        ScrollView sv = (ScrollView) view.findViewById(R.id.scroller);
         sv.scrollTo(0, sv.getTop());
         //loggedInUser = UserService.getInstance().getUser();
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent edit_page = new Intent(getContext(), UserProfileActivity.class);
-
                 startActivity(edit_page);
             }
         });
@@ -73,34 +76,49 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User currentUser = dataSnapshot.getValue(User.class);
-                // conditional check here for registration or profile update
-               /*
-                    nickName.setText(currentUser.getNickName());
-                    profession.setText(currentUser.getProfession());
-                    location.setText(currentUser.getLocation());
-                    aboutMe.setText(currentUser.getAboutMe());
-                    interests.setText(currentUser.getInterests());
-                }*/
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
-                // [START_EXCLUDE]
-                Toast.makeText(getActivity(), "Failed.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (!UserService.getInstance().isDataLoaded()) {
+            loadDataFromServer();
+        }
+        setFields();
     }
-}
+
+    private void setFields() {
+        nickName.setText(UserService.getInstance().getNickName());
+        profession.setText(UserService.getInstance().getProfession());
+        location.setText(UserService.getInstance().getLocation());
+        aboutMe.setText(UserService.getInstance().getAboutMe());
+        interests.setText(UserService.getInstance().getInterests());
+        if (UserService.getInstance().getProfilePictureLocation() != null) {
+            profilePic.setImageBitmap(Util.decodeImage(UserService.getInstance().getProfilePictureLocation()));
+        }
+    }
+
+    private void loadDataFromServer() {
+        FirebaseDatabase.getInstance().getReference().child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    UserService.getInstance().setNickName(currentUser.getNickName());
+                    UserService.getInstance().setProfession(currentUser.getProfession());
+                    UserService.getInstance().setLocation(currentUser.getLocation());
+                    UserService.getInstance().setAboutMe(currentUser.getAboutMe());
+                    UserService.getInstance().setInterests(currentUser.getInterests());
+                    UserService.getInstance().setProfilePictureLocation(currentUser.getProfilePictureLocation());
+                    UserService.getInstance().setDataLoaded(true);
+                    setFields();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
+                }
+            });
+    }
+
+    }
+
