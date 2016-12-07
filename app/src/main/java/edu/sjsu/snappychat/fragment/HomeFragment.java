@@ -24,6 +24,7 @@ import edu.sjsu.snappychat.HomeActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserProfileActivity;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
@@ -55,10 +56,10 @@ public class HomeFragment extends Fragment {
         ImageButton edit = (ImageButton) view.findViewById(R.id.edit);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        loggedInUser = new User("kamlendr1@gmail.com");
+        //loggedInUser = new User("kamlendr1@gmail.com");
         ScrollView sv = (ScrollView)view.findViewById(R.id.scroller);
         sv.scrollTo(0, sv.getTop());
-        //loggedInUser = UserService.getInstance().getUser();
+        loggedInUser = UserService.getInstance().getUser();
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
