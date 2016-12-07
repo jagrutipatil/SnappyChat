@@ -15,7 +15,7 @@ import android.widget.TabWidget;
 
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.fragment.friends.FriendListFragment;
-import edu.sjsu.snappychat.fragment.friends.ReqeustSentFragment;
+import edu.sjsu.snappychat.fragment.friends.RequestSentFragment;
 import edu.sjsu.snappychat.fragment.friends.RequestReceivedFragment;
 
 
@@ -65,7 +65,7 @@ public class FriendsFragment extends Fragment {
         mTabHost.addTab(mTabHost.newTabSpec("Request Received").setIndicator("Request Received"),
                 RequestReceivedFragment.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("Request Sent").setIndicator("Request Sent"),
-                ReqeustSentFragment.class, null);
+                RequestSentFragment.class, null);
 
         // Set the header scrollable start
         TabWidget tw = (TabWidget) view.findViewById(android.R.id.tabs);

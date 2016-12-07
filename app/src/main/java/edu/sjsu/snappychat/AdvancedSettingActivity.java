@@ -75,7 +75,7 @@ public class AdvancedSettingActivity extends AppCompatActivity {
         protected String doInBackground(AdvancedSettigs... setting) {
             User loggedUser = new User("kamlendr1@gmail.com");
             //User loggedUser = UserService.getInstance().getUser();
-            mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedUser.getEmail())).setValue(setting[0]);
+            mDatabaseReference.child(Constant.ADVANCED_SETTINGS).child(Util.cleanEmailID(loggedUser.getEmail())).setValue(setting[0]);
             return "Executed";
         }
 
@@ -101,7 +101,7 @@ public class AdvancedSettingActivity extends AppCompatActivity {
         loggedInUser = user.getUser();
         */
 
-        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.ADVANCED_SETTINGS).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -113,7 +113,7 @@ public class AdvancedSettingActivity extends AppCompatActivity {
                     AdvancedSettigs currentSeetings = dataSnapshot.getValue(AdvancedSettigs.class);
 
                     // select radio button in the UI
-                    switch (currentSeetings.visibility) {
+                    switch (currentSeetings.getVisibility()) {
                         case Constant.FRIENDS_ONLY_VISIBILITY:
                             button = (RadioButton) findViewById(R.id.friend_only);
                             break;
@@ -125,7 +125,7 @@ public class AdvancedSettingActivity extends AppCompatActivity {
                             break;
                     }
 
-                    emailNotification = currentSeetings.email_notification;
+                    emailNotification = currentSeetings.isEmail_notification();
                 }
 
                 button.setChecked(true);

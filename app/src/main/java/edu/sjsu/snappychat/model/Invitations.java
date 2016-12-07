@@ -20,13 +20,12 @@ public class Invitations {
         return invitationSent;
     }
 
-    public ArrayList<String> getInvitationReceived() {
-        return invitationReceived;
-    }
-
-
     public void setInvitationSent(ArrayList<String> invitationSent) {
         this.invitationSent = invitationSent;
+    }
+
+    public ArrayList<String> getInvitationReceived() {
+        return invitationReceived;
     }
 
     public void setInvitationReceived(ArrayList<String> invitationReceived) {
