@@ -1,11 +1,15 @@
 package edu.sjsu.snappychat;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.User;
-import edu.sjsu.snappychat.service.UploadImage;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -45,6 +48,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference mDatabaseReference;
     private AdvancedSettigs settings;
     private Button advanced;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
 
     //progress dialogue
     private ProgressDialog progress;
@@ -164,24 +168,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageViewProfilePic.setImageBitmap(imageBitmap);
+            UserService.getInstance().setProfilePictureLocation(Util.encodeImage(imageBitmap));
+//            UploadImage imageLoader = new UploadImage(UserProfileActivity.this, imageViewProfilePic, extras);
+//            imageLoader.execute();
 
-            UploadImage imageLoader = new UploadImage(UserProfileActivity.this,imageViewProfilePic,uri);
-            imageLoader.execute();
-
-        }else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
-
-            //progress.setMessage("Uploading Image.....");
-            //progress.show();
-
-            Uri uri = data.getData();
-
-            UploadImage imageLoader = new UploadImage(UserProfileActivity.this,imageViewProfilePic,uri);
-            imageLoader.execute();
-
+        } else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageViewProfilePic.setImageBitmap(imageBitmap);
+            UserService.getInstance().setProfilePictureLocation(Util.encodeImage(imageBitmap));
         }
     }
-
 
     private void actionTypeChooser(){
           final int REQUEST_CAMERA = 1;
@@ -198,6 +198,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 if (items[item].equals("Take Photo")) {
                    // PROFILE_PIC_COUNT = 1;
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    //TODO Ask for Permissions
+                    requestPermissionForCamera();
                     startActivityForResult(intent, CAMERA_CODE);
                 } else if (items[item].equals("Choose from Library")) {
                     //PROFILE_PIC_COUNT = 1;
@@ -212,5 +215,54 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             }
         });
         builder.show();
+    }
+
+    private void requestPermissionForCamera() {
+        if (ContextCompat.checkSelfPermission(UserProfileActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(UserProfileActivity.this,
+                    Manifest.permission.CAMERA)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(UserProfileActivity.this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
     }
 }

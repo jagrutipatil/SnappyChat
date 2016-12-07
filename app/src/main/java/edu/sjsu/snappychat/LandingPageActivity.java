@@ -34,7 +34,7 @@ import edu.sjsu.snappychat.util.Util;
 public class LandingPageActivity extends FragmentActivity implements FriendsFragment.OnFragmentInteractionListener, ReqeustSentFragment.OnFragmentInteractionListener, RequestReceivedFragment.OnFragmentInteractionListener {
 
     private BottomBar bottomBar;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

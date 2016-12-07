@@ -13,4 +13,6 @@ public class Constant {
     public static final String PUBLIC_VISIBILITY = "Public";
     public static final String PRIVATE_VISIBILITY = "Private";
     public static final String FRIENDS_ONLY_VISIBILITY = "Friends Only";
+    public static final String PROFILE_PIC_LOCATION = "profilePictureLocation";
+
 }
