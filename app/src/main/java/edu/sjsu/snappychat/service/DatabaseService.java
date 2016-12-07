@@ -46,7 +46,7 @@ public class DatabaseService {
             }
         });
     }
-
+    /*
     public static String getFriendlist(String userEmail){
 
         final String[] friendList = new String[1];
@@ -68,36 +68,8 @@ public class DatabaseService {
         return friendList[0];
     }
 
-    public void writeAdvancedSettings(AdvancedSettigs advancedSettigs) {
-        //where String is email address.
-        new AdvancedSettingsDBWriter().execute(advancedSettigs);
-    }
-
-    private class AdvancedSettingsDBWriter extends AsyncTask<AdvancedSettigs, Void, String> {
-
-        @Override
-        protected String doInBackground(AdvancedSettigs... advancedSettigs) {
-
-            mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(advancedSettigs[0].getEmail_id())).setValue(advancedSettigs[0]);
-            return "Executed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.d("TAG-AFTER EXECUTION", "Done");
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
-    }
-
     //IMPORTANT NOTE: Following function requires "cleanedEmail"
-    public static void getUserRecord(String cleanedEmail, User user){
+    public static void getUserRecord(String cleanedEmail){
 
         mDatabaseReference.child(Constant.USER_NODE).child(cleanedEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -111,7 +83,7 @@ public class DatabaseService {
             }
         });
     }
-    /*
+
     //IMPORTANT NOTE -- Following function returns ArrayList of all "CLEANED Email ids"
     public static List<String> getAllPublicUsers(){
         List<String> publicUsers = new ArrayList<String>();

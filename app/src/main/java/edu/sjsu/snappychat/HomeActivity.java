@@ -43,22 +43,12 @@ public class HomeActivity extends AppCompatActivity {
         aboutMe = (EditText) findViewById(R.id.about_me);
         interests = (EditText) findViewById(R.id.interests);
 
-        ImageButton home = (ImageButton) findViewById(R.id.home);
         ImageButton edit = (ImageButton) findViewById(R.id.edit);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         loggedInUser = new User("kamlendr1@gmail.com");
 
         //loggedInUser = UserService.getInstance().getUser();
-
-        /*
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ScrollView sv = (ScrollView)findViewById(R.id.scroller);
-                sv.scrollTo(0, sv.getTop());
-            }
-        });*/
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override

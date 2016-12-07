@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
-import edu.sjsu.snappychat.datagenerate.AdvancedSettingsReadWrite;
+import edu.sjsu.snappychat.datagenerate.DataGenerator;
 import edu.sjsu.snappychat.fragment.ChatFragment;
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
@@ -36,7 +36,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
 
 
         //For testing
-        User user = DatabaseService.getUserRecord("kamlendr1gmailcom");
+        //User user = DatabaseService.getUserRecord("kamlendr1gmailcom");
 
 
 
@@ -47,6 +47,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
                     //Home
                     HomeFragment homeFragment = new HomeFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+
                 } else if (menuItemId == R.id.bottombaritemtwo) {
                     //Friends
                     FriendsFragment friendsFragment = new FriendsFragment();
@@ -75,6 +76,6 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
     }
 
     private void generateData(){
-        AdvancedSettingsReadWrite.write();
+        DataGenerator.write();
     }
 }
