@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
@@ -52,7 +53,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Button buttonDone;
     private Button buttonAdvanced;
     private DatabaseReference mDatabaseReference;
-    private AdvancedSettigs settings;
+    private AdvancedSettings settings;
     private Button advanced;
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
 

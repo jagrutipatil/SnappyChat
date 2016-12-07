@@ -4,22 +4,17 @@ package edu.sjsu.snappychat.model;
  * Created by mayur on 12/4/2016.
  */
 
-public class AdvancedSettigs {
+public class AdvancedSettings {
     private String visibility;
     private boolean email_notification;
     private String email_id;
     private String nick_name;
 
-    public AdvancedSettigs() {
+    public AdvancedSettings() {
 
     }
 
-    public AdvancedSettigs(String visibility, boolean email_notification) {
-        this.email_notification = email_notification;
-        this.visibility = visibility;
-    }
-
-    public AdvancedSettigs(String visibility, boolean email_notification, String email_id) {
+    public AdvancedSettings(String visibility, boolean email_notification, String email_id) {
         this.visibility = visibility;
         this.email_notification = email_notification;
         this.email_id = email_id;

@@ -1,7 +1,6 @@
 package edu.sjsu.snappychat.service;
 
-import edu.sjsu.snappychat.model.AdvancedSettigs;
-import edu.sjsu.snappychat.model.Friend;
+import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
@@ -12,7 +11,7 @@ import edu.sjsu.snappychat.model.UserFriend;
 
 public class UserService {
     private static User user = null;
-    private static AdvancedSettigs settings = null;
+    private static AdvancedSettings settings = null;
     private static UserFriend friends = null;
     private static Invitations invitations = null;
 
@@ -27,7 +26,7 @@ public class UserService {
         if (instance == null) {
             instance = new UserService();
             user = new User();
-            settings = new AdvancedSettigs("FriendsOnly", true);
+            settings = new AdvancedSettings("FriendsOnly", true,"");
             friends = new UserFriend();
             invitations = new Invitations();
 
@@ -102,7 +101,7 @@ public class UserService {
         user.setProfession(profession);
     }
 
-    public void setAdvancedSettings(AdvancedSettigs settings){
+    public void setAdvancedSettings(AdvancedSettings settings){
         settings.setVisibility(settings.getVisibility());
         settings.setEmail_notification(settings.isEmail_notification());
     }
@@ -111,7 +110,7 @@ public class UserService {
         return user;
     }
 
-    public AdvancedSettigs getAdvancedSettings(){
+    public AdvancedSettings getAdvancedSettings(){
         return settings;
     }
 

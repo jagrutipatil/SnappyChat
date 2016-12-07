@@ -1,8 +1,6 @@
 package edu.sjsu.snappychat.service;
 
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,17 +8,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.sjsu.snappychat.model.AdvancedSettigs;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
-import edu.sjsu.snappychat.HomeActivity;
-import edu.sjsu.snappychat.UserProfileActivity;
-import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
-import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
@@ -48,7 +38,7 @@ public class DatabaseService {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
+                Log.w("DatabaseService", "loadPost:onCancelled", databaseError.toException());
             }
         });
     }
