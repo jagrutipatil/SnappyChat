@@ -51,14 +51,14 @@ public class HomeActivity extends AppCompatActivity {
 
         //loggedInUser = UserService.getInstance().getUser();
 
-
+        /*
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ScrollView sv = (ScrollView)findViewById(R.id.scroller);
                 sv.scrollTo(0, sv.getTop());
             }
-        });
+        });*/
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
