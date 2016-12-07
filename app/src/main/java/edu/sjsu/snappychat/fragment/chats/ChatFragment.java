@@ -39,7 +39,6 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        addDummyFriends();
         //TODO get nickname of each friend from their profile
         final ListView friendList = (ListView) view.findViewById(R.id.listFriends);
 
@@ -72,11 +71,11 @@ public class ChatFragment extends Fragment {
                 if (friendsEmailList.length > position) {
                     String selectedFriend = friendsEmailList[position];
                     Toast.makeText(getApplicationContext(), "Friend Selected : "+selectedFriend,   Toast.LENGTH_LONG).show();
-                    String to_user = selectedFriend;
-                    String from_user = UserService.getInstance().getEmail();
-                    LoggedInUser = UserService.getInstance().getEmail();
+                    String to_user = Util.cleanEmailID(selectedFriend) ;
+                    String from_user = Util.cleanEmailID(UserService.getInstance().getEmail());
+                    LoggedInUser = Util.cleanEmailID(UserService.getInstance().getEmail());
                     Log.v("from_user", from_user);
-                    Intent intent = new Intent(getApplicationContext(), ChatPage.class);
+                    Intent intent = new Intent(getActivity(), ChatPage.class);
                     intent.putExtra("FROM_USER", from_user);
                     intent.putExtra("TO_USER", to_user);
                     intent.putExtra("LOG_IN_USER", LoggedInUser);
@@ -88,10 +87,4 @@ public class ChatFragment extends Fragment {
         return view;
     }
 
-    private void addDummyFriends() {
-        //Add Some for dummy friends
-        for (int i = 0; i < 5; i++) {
-            DatabaseService.addFriend(UserService.getInstance().getEmail(), "timesofIndia " + i + " @sjsu.edu");
-        }
-    }
 }

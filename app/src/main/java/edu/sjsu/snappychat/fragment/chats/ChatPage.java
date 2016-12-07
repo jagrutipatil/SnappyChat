@@ -30,10 +30,11 @@ public class ChatPage extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private FirebaseRecyclerAdapter<ChatModel, ChatMessageViewHolder> mFirebaseAdapter1 = null;
     private FirebaseRecyclerAdapter<ChatModel, ChatMessageViewHolder> mFirebaseAdapter2 = null;
-    Firebase firebase_chatnode = new Firebase("https://snappychat-25a5a.firebaseio.com/chats");
+    Firebase firebase_chatnode ;
     Firebase ref_chatchildnode1 = null;
     Firebase ref_chatchildnode2 = null;
     String from_user, to_user, newmsg, LoggedInUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class ChatPage extends AppCompatActivity {
         setContentView(R.layout.activity_chat_page);
         Firebase.setAndroidContext(this);
 
+        firebase_chatnode = new Firebase("https://snappychat-25a5a.firebaseio.com/chats");
 
         editText = (EditText) findViewById(R.id.editText);
 
