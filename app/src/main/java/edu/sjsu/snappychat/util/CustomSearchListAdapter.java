@@ -58,11 +58,11 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
         this.loggedInUser = UserService.getInstance().getUser();
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserFriend friendList = dataSnapshot.getValue(UserFriend.class);
-
+                UserFriend userFriend = dataSnapshot.getValue(UserFriend.class);
+                friendList = userFriend.getFriends();
             }
 
             @Override
@@ -70,10 +70,6 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
             }
         });
-
-        String[] friendArray = DatabaseService.getFriendlist(loggedInUser.getEmail()).split(",");
-        this.friendList = Arrays.asList(friendArray);
-
     }
 
     @Override
