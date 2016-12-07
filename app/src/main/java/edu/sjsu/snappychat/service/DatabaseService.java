@@ -67,11 +67,14 @@ public class DatabaseService {
         return friendList[0];
     }
 
+    /**
+     * Logic to write advanced settings to database directly
+     * @param advancedSettigs
+     */
     public void writeAdvancedSettings(AdvancedSettigs advancedSettigs) {
         //where String is email address.
         new AdvancedSettingsDBWriter().execute(advancedSettigs);
     }
-
     private class AdvancedSettingsDBWriter extends AsyncTask<AdvancedSettigs, Void, String> {
 
         @Override
