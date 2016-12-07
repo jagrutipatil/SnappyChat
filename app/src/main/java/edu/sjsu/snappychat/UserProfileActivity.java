@@ -26,8 +26,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.util.ArrayList;
+
+import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.AdvancedSettings;
+import edu.sjsu.snappychat.model.Invitations;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.model.UserFriend;
+import edu.sjsu.snappychat.service.UploadImage;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -139,6 +146,23 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     if(count == 0){
                         mDatabaseReference.child(Constant.ADVANCED_SETTINGS).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(settings);
                     }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Mapping mapping = dataSnapshot.getValue(Mapping.class);
+                    if(mapping==null)
+                        mapping = new Mapping();
+
+                    mapping.addOrUpdateMailAndNickNameMapping(Util.cleanEmailID(UserService.getInstance().getEmail()),UserService.getInstance().getNickName());
+
+                    mDatabaseReference.child(Constant.MAPPING).setValue(mapping);
                 }
 
                 @Override

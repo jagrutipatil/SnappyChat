@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.AdvancedSettings;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
@@ -105,7 +107,7 @@ public class SearchFragment extends Fragment {
                         continue;
                     }
                     emailID.add(settings.getEmail_id());
-                    nickName.add(settings.getEmail_id());//change to nickname
+                    //nickName.add(settings.getEmail_id());//change to nickname
                 }
 
                 mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,9 +120,26 @@ public class SearchFragment extends Fragment {
                             friends = snap.getValue(UserFriend.class);
                             if (friends != null) {
                                 emailID.addAll(friends.getFriends());
-                                nickName.addAll(friends.getFriends());//change to nickname
+                                //nickName.addAll(friends.getFriends());//change to nickname
                             }
                         }
+
+                        mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Mapping mapping = dataSnapshot.getValue(Mapping.class);
+
+                                int count = emailID.size();
+                                for(int i=0;i<count;i++){
+                                    nickName.add(i, mapping.getNickName(Util.cleanEmailID(emailID.get(i))));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                         final ListView searchList = (ListView) view.findViewById(R.id.list);
 
