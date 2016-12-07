@@ -18,6 +18,8 @@ public class UserService {
 
     static private UserService instance = null;
 
+    private boolean dataLoaded = false;
+
     private UserService() {
     }
 
@@ -109,5 +111,13 @@ public class UserService {
 
     public AdvancedSettigs getAdvancedSettings(){
         return settings;
+    }
+
+    public boolean isDataLoaded() {
+        return dataLoaded;
+    }
+
+    public void setDataLoaded(boolean dataLoaded) {
+        dataLoaded = dataLoaded;
     }
 }

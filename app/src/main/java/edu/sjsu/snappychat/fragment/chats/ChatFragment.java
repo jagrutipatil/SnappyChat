@@ -56,6 +56,12 @@ public class ChatFragment extends Fragment {
                 } else {
                     Log.w("UserProfileActivity", "No friend");
                     Toast.makeText(getApplicationContext(), "No Friends ", Toast.LENGTH_LONG).show();
+                    friendsEmailList = new ArrayList<String>();
+                    friendsEmailList.add("angeli_rai@yahoo.com");
+                    ArrayAdapter<String> arrayAdapter =
+                            new ArrayAdapter<String>( getContext(), android.R.layout.simple_list_item_1, friendsEmailList);
+
+                    friendList.setAdapter(arrayAdapter);
                 }
             }
 

@@ -81,15 +81,44 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (!UserService.getInstance().isDataLoaded()) {
+            loadDataFromServer();
+        }
+        setFields();
+    }
 
-        if (UserService.getInstance().getEmail() != null) {
-            nickName.setText(UserService.getInstance().getNickName());
-            profession.setText(UserService.getInstance().getProfession());
-            location.setText(UserService.getInstance().getLocation());
-            aboutMe.setText(UserService.getInstance().getAboutMe());
-            interests.setText(UserService.getInstance().getInterests());
+    private void setFields() {
+        nickName.setText(UserService.getInstance().getNickName());
+        profession.setText(UserService.getInstance().getProfession());
+        location.setText(UserService.getInstance().getLocation());
+        aboutMe.setText(UserService.getInstance().getAboutMe());
+        interests.setText(UserService.getInstance().getInterests());
+        if (UserService.getInstance().getProfilePictureLocation() != null) {
             profilePic.setImageBitmap(Util.decodeImage(UserService.getInstance().getProfilePictureLocation()));
         }
-      }
+    }
+
+    private void loadDataFromServer() {
+        FirebaseDatabase.getInstance().getReference().child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    UserService.getInstance().setNickName(currentUser.getNickName());
+                    UserService.getInstance().setProfession(currentUser.getProfession());
+                    UserService.getInstance().setLocation(currentUser.getLocation());
+                    UserService.getInstance().setAboutMe(currentUser.getAboutMe());
+                    UserService.getInstance().setInterests(currentUser.getInterests());
+                    UserService.getInstance().setProfilePictureLocation(currentUser.getProfilePictureLocation());
+                    UserService.getInstance().setDataLoaded(true);
+                    setFields();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
+                }
+            });
+    }
+
     }
 
