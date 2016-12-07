@@ -101,7 +101,5 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
 
     }
 
-    private void generateData(){
-        DataGenerator.write();
-    }
+
 }

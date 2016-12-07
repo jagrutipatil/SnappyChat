@@ -12,15 +12,15 @@ public class User {
     public String interests;
     public String aboutMe;
     public String profession;
-    //public AdvancedSettigs advancedSetting;
+    //public AdvancedSettings advancedSetting;
 
     public User(){
-        //this.advancedSetting = new AdvancedSettigs("Friends Only", true);
+        //this.advancedSetting = new AdvancedSettings("Friends Only", true);
     }
 
     public User(String email){
         this.email = email;
-        //this.advancedSetting = new AdvancedSettigs("Friends Only", true);
+        //this.advancedSetting = new AdvancedSettings("Friends Only", true);
     }
 
     public User(String email, String nickName, String Location, String profession){
@@ -97,11 +97,11 @@ public class User {
     }
 
     /*
-    public void setAdvancedSettings(AdvancedSettigs settings){
+    public void setAdvancedSettings(AdvancedSettings settings){
         this.advancedSetting = settings;
     }
 
-    public AdvancedSettigs getAdvancedSettings(){
+    public AdvancedSettings getAdvancedSettings(){
         return this.advancedSetting;
     }*/
 

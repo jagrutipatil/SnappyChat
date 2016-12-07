@@ -71,24 +71,6 @@ public class RequestSentFragment extends Fragment {
                             //go to that user's profile
                         }
                     });
-
-           /*         for (String emailId : emailIds) {
-                        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(emailId)).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                User user = dataSnapshot.getValue(User.class);
-                                if (user != null) {
-                                    nickNames.add(user.getNickName());
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }*/
                 }
             }
 

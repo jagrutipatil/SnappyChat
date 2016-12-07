@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
-import edu.sjsu.snappychat.model.AdvancedSettigs;
+import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
@@ -97,10 +97,10 @@ public class SearchFragment extends Fragment {
         mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                AdvancedSettigs settings = null;
+                AdvancedSettings settings = null;
 
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    settings = snap.getValue(AdvancedSettigs.class);
+                    settings = snap.getValue(AdvancedSettings.class);
                     if (settings.getEmail_id().equals(loggedInUser.getEmail())) {
                         continue;
                     }
