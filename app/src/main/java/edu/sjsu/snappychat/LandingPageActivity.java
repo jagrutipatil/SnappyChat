@@ -10,7 +10,8 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import edu.sjsu.snappychat.datagenerate.DataGenerator;
-import edu.sjsu.snappychat.fragment.ChatFragment;
+
+import edu.sjsu.snappychat.fragment.chats.ChatFragment;
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
 import edu.sjsu.snappychat.fragment.SearchFragment;
