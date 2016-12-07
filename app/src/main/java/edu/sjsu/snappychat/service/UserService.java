@@ -83,8 +83,8 @@ public class UserService {
     }
 
     public void setAdvancedSettings(AdvancedSettigs settings){
-        settings.setVisibility(settings.visibility);
-        settings.setEmail_notification(settings.email_notification);
+        settings.setVisibility(settings.getVisibility());
+        settings.setEmail_notification(settings.isEmail_notification());
     }
 
     public User getUser(){

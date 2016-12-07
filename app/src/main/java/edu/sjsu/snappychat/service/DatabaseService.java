@@ -94,6 +94,6 @@ public class DatabaseService {
     public static List<String> getAllPublicUsers(){
         List<String> publicUsers = new ArrayList<String>();
 
-        mDatabaseReference.child(Constant.Advanced_Settings).orderByKey()
+        mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByKey()
     }*/
 }

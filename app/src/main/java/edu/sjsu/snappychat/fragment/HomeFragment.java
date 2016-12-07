@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserProfileActivity;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment {
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        ScrollView sv = (ScrollView)view.findViewById(R.id.scroller);
+        ScrollView sv = (ScrollView) view.findViewById(R.id.scroller);
         sv.scrollTo(0, sv.getTop());
         //loggedInUser = UserService.getInstance().getUser();
         edit.setOnClickListener(new View.OnClickListener() {

@@ -1,11 +1,8 @@
 package edu.sjsu.snappychat.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,27 +66,74 @@ public class SearchFragment extends Fragment {
         nickName = new ArrayList<String>();
 
         //Populate emailId list
-        mDatabaseReference.child(Constant.Advanced_Settings).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
+
+       /* //Populate nickName ArrayList
+        for (int i = 0; i < emailID.size(); i++) {
+            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(emailID.get(i))).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    nickName.add(user.getNickName());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }*/
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
+
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                AdvancedSettigs settings;
+                AdvancedSettigs settings = null;
 
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     settings = snap.getValue(AdvancedSettigs.class);
-                    emailID.add(settings.email_id);
+                    if (settings.getEmail_id().equals(loggedInUser.getEmail())) {
+                        continue;
+                    }
+                    emailID.add(settings.getEmail_id());
+                    nickName.add(settings.getEmail_id());//change to nickname
                 }
 
                 mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        UserFriend friends;
+                        UserFriend friends = null;
 
-                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
 
                             friends = snap.getValue(UserFriend.class);
-                            emailID.addAll(friends.getFriends());
+                            if (friends != null) {
+                                emailID.addAll(friends.getFriends());
+                                nickName.addAll(friends.getFriends());//change to nickname
+                            }
                         }
+
+                        final ListView searchList = (ListView) view.findViewById(R.id.list);
+
+                        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getContext(), emailID, nickName, friends);
+                        searchList.setAdapter(adapter);
+
+                        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                //go to that user's profile
+                            }
+                        });
+
                     }
 
                     @Override
@@ -106,44 +150,6 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        //Populate nickName ArrayList
-        for(int i=0;i<emailID.size();i++){
-            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(emailID.get(i))).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    nickName.add(user.getNickName());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-
-        final ListView searchList = (ListView) view.findViewById(R.id.list);
-
-        CustomSearchListAdapter adapter=new CustomSearchListAdapter(getContext(), emailID, nickName);
-        searchList.setAdapter(adapter);
-
-        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //go to that user's profile
-            }
-        });
 
         return view;
     }

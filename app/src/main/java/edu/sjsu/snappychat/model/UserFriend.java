@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class UserFriend {
     String email;
 
-    ArrayList<String> friends;
+    ArrayList<String> friends = new ArrayList<>();
 
     public UserFriend() {
     }

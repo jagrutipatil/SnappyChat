@@ -132,12 +132,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
             //Move it to async
             mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(UserService.getInstance().getUser());
-            mDatabaseReference.child(Constant.Advanced_Settings).orderByKey().equalTo(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByKey().equalTo(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     long count = dataSnapshot.getChildrenCount();
                     if(count == 0){
-                        mDatabaseReference.child(Constant.Advanced_Settings).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(settings);
+                        mDatabaseReference.child(Constant.ADVANCED_SETTINGS).child(Util.cleanEmailID(UserService.getInstance().getEmail())).setValue(settings);
                     }
                 }
 

@@ -5,9 +5,10 @@ package edu.sjsu.snappychat.model;
  */
 
 public class AdvancedSettigs {
-    public String visibility;
-    public boolean email_notification;
-    public String email_id;
+    private String visibility;
+    private boolean email_notification;
+    private String email_id;
+    private String nick_name;
 
     public AdvancedSettigs() {
 
