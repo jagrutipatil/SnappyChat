@@ -28,7 +28,7 @@ public class DataGenerator {
         advancedSettigArray[4] = new AdvancedSettigs("Public", true, "jagrutipatil@gmail.com");
 
         for (AdvancedSettigs as : advancedSettigArray) {
-            databaseService.writeAdvancedSettings(as);
+            //databaseService.writeAdvancedSettings(as);
         }
     }
 }
