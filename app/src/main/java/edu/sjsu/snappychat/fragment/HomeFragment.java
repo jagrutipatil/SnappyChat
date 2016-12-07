@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.sjsu.snappychat.HomeActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserProfileActivity;
 import edu.sjsu.snappychat.model.User;
@@ -81,8 +80,6 @@ public class HomeFragment extends Fragment {
         mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO this is fetching data from db everytime on click on home fragment
-                // TODO load all the data into userservice while editing and in home fragment if data is not present in userservice then and then only load data
                 User currentUser = dataSnapshot.getValue(User.class);
                 // conditional check here for registration or profile update
                 UserService.getInstance().setNickName(currentUser.getNickName());
