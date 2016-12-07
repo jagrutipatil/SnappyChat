@@ -88,11 +88,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 startActivity(advanced_page);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -105,6 +100,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     editTextCity.setText(currentUser.getLocation());
                     editTextAboutMe.setText(currentUser.getAboutMe());
                     editTextInterests.setText(currentUser.getInterests());
+                    if (currentUser.getProfilePictureLocation() != null) {
+                        imageViewProfilePic.setImageBitmap(Util.decodeImage(currentUser.getProfilePictureLocation()));
+                    }
 
                     //Use picaso to load the profile pic. This should be async
                 }
@@ -118,7 +116,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     /**
