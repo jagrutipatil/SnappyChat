@@ -1,7 +1,7 @@
 package edu.sjsu.snappychat.fragment.chats;
 
 /**
- * Created by i856547 on 12/7/16.
+ * Created by Akshatha Anantharamu on 12/7/16.
  */
 
 public class FriendList {
