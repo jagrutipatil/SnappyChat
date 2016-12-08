@@ -2,12 +2,16 @@ package edu.sjsu.snappychat.fragment.friends;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,6 +48,10 @@ public class FriendListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
         final ListView friendList = (ListView) view.findViewById(R.id.friendlistview);
+        //Button to add new friend by email address
+        FloatingActionButton button = (FloatingActionButton) view.findViewById(R.id.addfriendbyemail);
+        button.setOnClickListener(new AddFriendByEmailDialog(getActivity()));
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addValueEventListener(new ValueEventListener() {
@@ -53,7 +61,7 @@ public class FriendListFragment extends Fragment {
                 if (currentUser != null && currentUser.getFriends() != null) {
                     friendsEmailList = currentUser.getFriends();
                     ArrayAdapter<String> arrayAdapter =
-                            new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, friendsEmailList);
+                            new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendsEmailList);
                     friendList.setAdapter(arrayAdapter);
                 } else {
                     Log.w("FriendListFragment", "No friend");

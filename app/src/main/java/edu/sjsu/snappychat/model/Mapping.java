@@ -3,7 +3,7 @@ package edu.sjsu.snappychat.model;
 import java.util.HashMap;
 
 /**
- * Created by I074841 on 12/7/2016.
+ * Created by Kamlendra on 12/7/2016.
  */
 
 public class Mapping {

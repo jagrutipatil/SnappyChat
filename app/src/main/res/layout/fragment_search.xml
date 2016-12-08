@@ -17,9 +17,32 @@
 
         <SearchView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:id="@+id/search_list">
 
         </SearchView>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:text="By Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/by_email"
+                android:layout_weight="1"
+                android:checked="true" />
+
+            <RadioButton
+                android:text="By Interests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/by_interests"
+                android:layout_weight="1" />
+
+        </RadioGroup>
 
         <ListView
             android:layout_width="match_parent"

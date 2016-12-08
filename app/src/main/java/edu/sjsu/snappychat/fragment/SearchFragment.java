@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.SearchView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
@@ -44,56 +47,27 @@ public class SearchFragment extends Fragment {
 
     private ListView list;
     private List<String> emailID;
-    private List<String> nickName;
-    /*
-    private String[] nickName = {
-            "mayu",
-            "jagruti",
-            "madhu",
-            "akki",
-            "kd",
-            "sagar",
-            "raavi",
-            "atitha",
-            "nagya",
-            "purva"
-    };*/
+    private SearchView searchView;
+    private CustomSearchListAdapter adapter;
+    private Mapping mapObject;
+    private RadioButton searchByName;
 
     public SearchFragment() {
         // Get a list of all public visible users
         this.loggedInUser = UserService.getInstance().getUser();
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         emailID = new ArrayList<String>();
-        nickName = new ArrayList<String>();
-
-        //Populate emailId list
-
-       /* //Populate nickName ArrayList
-        for (int i = 0; i < emailID.size(); i++) {
-            mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(emailID.get(i))).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    nickName.add(user.getNickName());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }*/
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
+        searchByName = (RadioButton) view.findViewById(R.id.by_email);
 
         mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -106,32 +80,62 @@ public class SearchFragment extends Fragment {
                         continue;
                     }
                     emailID.add(settings.getEmail_id());
-                    //nickName.add(settings.getEmail_id());//change to nickname
                 }
 
-                mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(Constant.FRIENDS_NODE).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        UserFriend friends = null;
+                        //  UserFriend friends = null;
 
-                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        final ArrayList<String> friendList = (ArrayList<String>) dataSnapshot.getValue();
 
-                            friends = snap.getValue(UserFriend.class);
-                            if (friends != null) {
-                                emailID.addAll(friends.getFriends());
-                                //nickName.addAll(friends.getFriends());//change to nickname
+                        if (friendList != null) {
+                            for (String emailIDString : friendList) {
+                                if (friendList.contains(emailIDString))
+                                    continue;
+                                emailID.add(emailIDString);
                             }
+
                         }
 
-                        mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
+                        mDatabaseReference.child(Constant.USER_NODE).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                Mapping mapping = dataSnapshot.getValue(Mapping.class);
+                                long count = dataSnapshot.getChildrenCount();
+                                final HashMap<String, String> emailToInterestMap = new HashMap<String, String>();
 
-                                int count = emailID.size();
-                                for(int i=0;i<count;i++){
-                                    nickName.add(i, mapping.getNickName(Util.cleanEmailID(emailID.get(i))));
+                                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                                    User user = snap.getValue(User.class);
+                                    if (emailID.contains(user.getEmail())) {
+                                        emailToInterestMap.put(user.getEmail(),user.getInterests());
+                                    }
                                 }
+
+                                mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        mapObject = dataSnapshot.getValue(Mapping.class);
+
+
+                                        final ListView searchList = (ListView) view.findViewById(R.id.list);
+
+                                        adapter = new CustomSearchListAdapter(getActivity(), getContext(), emailID, friendList, emailToInterestMap, mapObject);
+                                        searchList.setAdapter(adapter);
+
+                                        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                //go to that user's profile
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
                             }
 
                             @Override
@@ -139,19 +143,6 @@ public class SearchFragment extends Fragment {
 
                             }
                         });
-
-                        final ListView searchList = (ListView) view.findViewById(R.id.list);
-
-                        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getContext(), emailID, nickName, friends);
-                        searchList.setAdapter(adapter);
-
-                        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                //go to that user's profile
-                            }
-                        });
-
                     }
 
                     @Override
@@ -168,7 +159,19 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        searchView = (SearchView) view.findViewById(R.id.search_list);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String text) {
+                adapter.getFilter().filter(text);
+                return false;
+            }
+        });
         return view;
     }
 }

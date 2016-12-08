@@ -10,6 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import edu.sjsu.snappychat.model.AvailabilityMap;
+import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -39,6 +41,81 @@ public class DatabaseService {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("DatabaseService", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    public static void sendFriendRequest(final String sender, final String receiver) {
+        //Database operations
+        //updating in sender
+        mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(sender)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
+                if (invitationsOfUser == null) {
+                    invitationsOfUser = new Invitations();
+                    ArrayList<String> senderList = new ArrayList<String>();
+                    senderList.add(receiver);
+                    invitationsOfUser.setInvitationSent(senderList);
+                } else {
+                    invitationsOfUser.getInvitationSent().add(receiver);
+                }
+
+                //Again put in database
+                mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(sender)).setValue(invitationsOfUser);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //Database operations
+        //updating in receiver
+        mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(receiver)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
+                if (invitationsOfUser == null) {
+                    invitationsOfUser = new Invitations();
+                    ArrayList<String> receiverList = new ArrayList<String>();
+                    receiverList.add(sender);
+                    invitationsOfUser.setInvitationReceived(receiverList);
+                } else {
+                    invitationsOfUser.getInvitationReceived().add(sender);
+                }
+
+                //Again put in database
+                mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(receiver)).setValue(invitationsOfUser);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void setAvailabilityStatus(final String loggedInUserEmail, final String status) {
+
+        mDatabaseReference.child(Constant.AVAILABILITY_STATUS_NODE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AvailabilityMap availabilityMap = dataSnapshot.getValue(AvailabilityMap.class);
+                if (availabilityMap == null)
+                    availabilityMap = new AvailabilityMap();
+
+                availabilityMap.setStatus(Util.cleanEmailID(loggedInUserEmail), status);
+
+                mDatabaseReference.child(Constant.AVAILABILITY_STATUS_NODE).setValue(availabilityMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

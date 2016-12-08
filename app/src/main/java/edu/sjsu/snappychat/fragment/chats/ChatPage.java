@@ -40,11 +40,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.File;
 import java.util.ArrayList;
 
+import edu.sjsu.snappychat.BaseAppCompatActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.service.UserService;
+import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class ChatPage extends AppCompatActivity {
+public class ChatPage extends BaseAppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 2;
     private static final int CAMERA_CODE = 1;
@@ -117,6 +119,7 @@ public class ChatPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_page);
         Firebase.setAndroidContext(this);
+
 
         firebase_chatnode = new Firebase("https://snappychat-25a5a.firebaseio.com/chats");
 

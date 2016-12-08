@@ -34,12 +34,13 @@ import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
+import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UploadImage;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class UserProfileActivity extends BaseAppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private static final int PICK_IMAGE_REQUEST = 234;
     private static final int CAMERA_CODE = 1;
@@ -88,11 +89,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 startActivity(advanced_page);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -105,6 +101,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     editTextCity.setText(currentUser.getLocation());
                     editTextAboutMe.setText(currentUser.getAboutMe());
                     editTextInterests.setText(currentUser.getInterests());
+                    if (currentUser.getProfilePictureLocation() != null) {
+                        imageViewProfilePic.setImageBitmap(Util.decodeImage(currentUser.getProfilePictureLocation()));
+                    }
 
                     //Use picaso to load the profile pic. This should be async
                 }
@@ -118,7 +117,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     /**
