@@ -4,14 +4,11 @@ package edu.sjsu.snappychat.fragment.friends;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -60,9 +57,11 @@ public class FriendListFragment extends Fragment {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null && currentUser.getFriends() != null) {
                     friendsEmailList = currentUser.getFriends();
-                    ArrayAdapter<String> arrayAdapter =
-                            new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendsEmailList);
-                    friendList.setAdapter(arrayAdapter);
+                    if (getActivity() != null) {
+                        ArrayAdapter<String> arrayAdapter =
+                                new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendsEmailList);
+                        friendList.setAdapter(arrayAdapter);
+                    }
                 } else {
                     Log.w("FriendListFragment", "No friend");
                     Toast.makeText(getApplicationContext(), "No Friends ", Toast.LENGTH_LONG).show();

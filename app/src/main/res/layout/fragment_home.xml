@@ -43,43 +43,43 @@
                         android:id="@+id/nickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.32"
+                        android:background="@null"
                         android:clickable="false"
                         android:ems="10"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName"
-                        android:textAlignment="inherit"
-                        android:textSize="30sp"
-                        android:background="@null"
                         android:paddingStart="5dp"
-                        android:layout_weight="0.32" />
+                        android:textAlignment="inherit"
+                        android:textSize="30sp" />
 
                     <EditText
+                        android:id="@+id/profession"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:ems="10"
-                        android:id="@+id/profession"
-                        android:paddingStart="5dp"
-                        android:textSize="24dp"
+                        android:background="@null"
                         android:clickable="false"
+                        android:ems="10"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:background="@null"/>
+                        android:inputType="textPersonName"
+                        android:paddingStart="5dp"
+                        android:textSize="24dp" />
 
                     <EditText
                         android:id="@+id/location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.24"
+                        android:background="@null"
                         android:clickable="false"
                         android:ems="10"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName"
-                        android:textSize="24sp"
-                        android:background="@null"
                         android:paddingStart="5dp"
-                        android:layout_weight="0.24" />
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -89,31 +89,31 @@
                 android:id="@+id/about_me"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
+                android:background="@null"
                 android:ems="10"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textMultiLine"
-                android:textSize="24sp"
-                android:background="@null"
-                android:paddingStart="5dp" />
+                android:paddingStart="5dp"
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/interests"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:textSize="24sp"
                 android:background="@null"
-                android:paddingStart="5dp"
+                android:ems="10"
                 android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:focusableInTouchMode="false"
+                android:inputType="textMultiLine"
+                android:paddingStart="5dp"
+                android:textSize="24sp" />
 
-            <ImageButton
+            <!--<ImageButton
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
+                app:srcCompat="@android:drawable/ic_menu_edit" />-->
 
             <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"

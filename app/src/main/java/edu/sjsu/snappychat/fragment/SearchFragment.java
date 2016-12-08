@@ -25,21 +25,12 @@ import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
-import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.CustomSearchListAdapter;
 import edu.sjsu.snappychat.util.Util;
 
 
-/*
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchFragment extends Fragment {
 
     private User loggedInUser;
@@ -107,7 +98,7 @@ public class SearchFragment extends Fragment {
                                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                     User user = snap.getValue(User.class);
                                     if (emailID.contains(user.getEmail())) {
-                                        emailToInterestMap.put(user.getEmail(),user.getInterests());
+                                        emailToInterestMap.put(user.getEmail(), user.getInterests());
                                     }
                                 }
 
@@ -118,16 +109,17 @@ public class SearchFragment extends Fragment {
 
 
                                         final ListView searchList = (ListView) view.findViewById(R.id.list);
+                                        if (getActivity() != null) {
+                                            adapter = new CustomSearchListAdapter(getActivity(), getContext(), emailID, friendList, emailToInterestMap, mapObject);
+                                            searchList.setAdapter(adapter);
 
-                                        adapter = new CustomSearchListAdapter(getActivity(), getContext(), emailID, friendList, emailToInterestMap, mapObject);
-                                        searchList.setAdapter(adapter);
-
-                                        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                                //go to that user's profile
-                                            }
-                                        });
+                                            searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                    //go to that user's profile
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
