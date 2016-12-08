@@ -69,6 +69,9 @@ public class SearchFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchByName = (RadioButton) view.findViewById(R.id.by_email);
 
+        searchView = (SearchView) view.findViewById(R.id.search_list);
+        searchView.setQueryHint("Search...");
+
         mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -161,7 +164,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        searchView = (SearchView) view.findViewById(R.id.search_list);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

@@ -97,7 +97,8 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
 
         email.setText(filteredEmail.get(position));
         nickName.setText(mapping.getNickName(Util.cleanEmailID(filteredEmail.get(position))));
-
+        addFriend.setVisibility(rowView.INVISIBLE);
+        friendTag.setVisibility(rowView.INVISIBLE);
 
         mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
