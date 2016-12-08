@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import edu.sjsu.snappychat.model.AvailabilityMap;
 import edu.sjsu.snappychat.model.Invitations;
+import edu.sjsu.snappychat.model.UserChatList;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -132,6 +133,32 @@ public class DatabaseService {
         });
     }
 
+    public static void updateChatList(final String from_user, final String to_user){
+        mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
+                if (currentUser != null) {
+                    ArrayList<String> chats = currentUser.getUsers();
+                    if(!chats.contains(to_user)) {
+                        chats.add(to_user);
+                        currentUser.setUsers(chats);
+                        mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
+                    }
+                } else {
+                    ArrayList<String> chatsList = new ArrayList<String>();
+                    chatsList.add(to_user);
+                    UserChatList userFriend = new UserChatList(chatsList);
+                    mDatabaseReference.child(Constant.CHAT_LIST).child(Util.cleanEmailID(from_user)).setValue(userFriend);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("chat add", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
    /* public static String getFriendlist(String userEmail){
 
         final String[] friendList = new String[1];
