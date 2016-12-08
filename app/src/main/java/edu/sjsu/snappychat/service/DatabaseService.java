@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import edu.sjsu.snappychat.model.AvailabilityMap;
 import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.util.Constant;
@@ -97,6 +98,28 @@ public class DatabaseService {
             }
         });
     }
+
+    public static void setAvailabilityStatus(final String loggedInUserEmail, final String status) {
+
+        mDatabaseReference.child(Constant.AVAILABILITY_STATUS_NODE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AvailabilityMap availabilityMap = dataSnapshot.getValue(AvailabilityMap.class);
+                if (availabilityMap == null)
+                    availabilityMap = new AvailabilityMap();
+
+                availabilityMap.setStatus(Util.cleanEmailID(loggedInUserEmail), status);
+
+                mDatabaseReference.child(Constant.AVAILABILITY_STATUS_NODE).setValue(availabilityMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
    /* public static String getFriendlist(String userEmail){
 
         final String[] friendList = new String[1];
