@@ -83,6 +83,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                UserService.getInstance().setNickName(editTextNickName.getText().toString());
+                UserService.getInstance().setProfession(editTextProfession.getText().toString());
+                UserService.getInstance().setLocation(editTextCity.getText().toString());
+                UserService.getInstance().setAboutMe(editTextAboutMe.getText().toString());
+                UserService.getInstance().setInterests(editTextInterests.getText().toString());
+
                 Intent advanced_page = new Intent(UserProfileActivity.this,AdvancedSettingActivity.class);
                 startActivity(advanced_page);
             }
@@ -104,6 +110,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     //Use picaso to load the profile pic. This should be async
+                }else{
+                    editTextNickName.setText(UserService.getInstance().getNickName());
+                    editTextProfession.setText(UserService.getInstance().getProfession());
+                    editTextCity.setText(UserService.getInstance().getLocation());
+                    editTextAboutMe.setText(UserService.getInstance().getAboutMe());
+                    editTextInterests.setText(UserService.getInstance().getInterests());
                 }
             }
 
