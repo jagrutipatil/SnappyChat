@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -43,6 +44,59 @@ public class DatabaseService {
         });
     }
 
+    public static void sendFriendRequest(final String sender, final String receiver) {
+        //Database operations
+        //updating in sender
+        mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(sender)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
+                if (invitationsOfUser == null) {
+                    invitationsOfUser = new Invitations();
+                    ArrayList<String> senderList = new ArrayList<String>();
+                    senderList.add(receiver);
+                    invitationsOfUser.setInvitationSent(senderList);
+                } else {
+                    invitationsOfUser.getInvitationSent().add(receiver);
+                }
+
+                //Again put in database
+                mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(sender)).setValue(invitationsOfUser);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //Database operations
+        //updating in receiver
+        mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(receiver)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
+                if (invitationsOfUser == null) {
+                    invitationsOfUser = new Invitations();
+                    ArrayList<String> receiverList = new ArrayList<String>();
+                    receiverList.add(sender);
+                    invitationsOfUser.setInvitationReceived(receiverList);
+                } else {
+                    invitationsOfUser.getInvitationReceived().add(sender);
+                }
+
+                //Again put in database
+                mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(receiver)).setValue(invitationsOfUser);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
    /* public static String getFriendlist(String userEmail){
 
         final String[] friendList = new String[1];
