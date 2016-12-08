@@ -15,5 +15,8 @@ public class Constant {
     public static final String FRIENDS_ONLY_VISIBILITY = "Friends Only";
     public static final String PROFILE_PIC_LOCATION = "profilePictureLocation";
     public static final String MAPPING = "emailToNickNameMapping";
-
+    //Availability Status constants
+    public static final String AVAILABILITY_STATUS_ONLINE = "online";
+    public static final String AVAILABILITY_STATUS_OFFLINE = "offline";
+    public static final String AVAILABILITY_STATUS_NODE = "availability";
 }

@@ -24,7 +24,7 @@ import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class AdvancedSettingActivity extends AppCompatActivity {
+public class AdvancedSettingActivity extends BaseAppCompatActivity {
 
     private Button ok;
     private ToggleButton emailNotificationButton;

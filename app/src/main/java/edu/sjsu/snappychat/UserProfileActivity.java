@@ -33,12 +33,13 @@ import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.model.UserFriend;
+import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UploadImage;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class UserProfileActivity extends BaseAppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private static final int PICK_IMAGE_REQUEST = 234;
     private static final int CAMERA_CODE = 1;

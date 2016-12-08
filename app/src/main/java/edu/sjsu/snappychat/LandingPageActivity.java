@@ -18,6 +18,7 @@ import edu.sjsu.snappychat.fragment.HomeFragment;
 import edu.sjsu.snappychat.fragment.SearchFragment;
 import edu.sjsu.snappychat.fragment.chats.ChatFragment;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -31,6 +32,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
         loadDataFromServer();
+        setUserStatus(Constant.AVAILABILITY_STATUS_ONLINE);
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
         bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabClickListener() {
@@ -80,10 +82,37 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
+                    Log.w("LandingPageActivity", "loadPost:onCancelled", databaseError.toException());
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("LandingPageActivity", "OnResume Status changed to" + Constant.AVAILABILITY_STATUS_ONLINE);
+        setUserStatus(Constant.AVAILABILITY_STATUS_ONLINE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("LandingPageActivity", "Ondestroy Status changed to" + Constant.AVAILABILITY_STATUS_OFFLINE);
+
+        setUserStatus(Constant.AVAILABILITY_STATUS_OFFLINE);
+    }
+
+   /* @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("LandingPageActivity", "OnStop Status changed to" + Constant.AVAILABILITY_STATUS_OFFLINE);
+
+        setUserStatus(Constant.AVAILABILITY_STATUS_OFFLINE);
+    }*/
+
+    private void setUserStatus(String status) {
+        DatabaseService.setAvailabilityStatus(UserService.getInstance().getEmail(), status);
     }
 
     @Override
