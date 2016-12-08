@@ -74,6 +74,7 @@ public class SearchFragment extends Fragment {
 
         searchView = (SearchView) view.findViewById(R.id.search_list);
         searchView.setQueryHint("Search...");
+        searchView.setIconifiedByDefault(false);
 
         mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
