@@ -15,6 +15,6 @@
         android:icon="@drawable/ic_chat_bubble_black_18dp"
         android:title="Chat"></item>
     <item android:id="@+id/bottombaritemfive"
-        android:icon="@drawable/ic_perm_identity_black_18dp"
-        android:title="Profile"></item>
+        android:icon="@drawable/ic_news_black_18dp"
+        android:title="News Feed"></item>
 </menu>

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +23,8 @@ import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Kamlendra on 12/6/2016.
@@ -71,6 +74,7 @@ public class FriendInvitationAdapter extends ArrayAdapter<String> {
                     confirmButton.setEnabled(false);
                     //TODO KD Show progress bar here
                     final String receiver = loggedInUser.getEmail();
+                    Toast.makeText(getApplicationContext(), "Request Accepted!", Toast.LENGTH_LONG).show();
 
                     //Database operations
                     //updating in receiver i.e. current user logged in

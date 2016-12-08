@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.sjsu.snappychat.model.AvailabilityMap;
@@ -27,7 +28,7 @@ public class DatabaseService {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null) {
                     ArrayList<String> friends = currentUser.getFriends();
-                    if(!friends.contains(friendEmail)){
+                    if (friends != null && !friends.contains(friendEmail)) {
                         friends.add(friendEmail);
                         currentUser.setFriends(friends);
                         mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(currentUserEmail)).setValue(currentUser);
@@ -54,13 +55,18 @@ public class DatabaseService {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
-                if (invitationsOfUser == null) {
+
+                if (invitationsOfUser != null) {
+                    ArrayList<String> listOfInvitationsSent = invitationsOfUser.getInvitationSent();
+                    if(listOfInvitationsSent != null && !listOfInvitationsSent.contains(receiver)){
+                        listOfInvitationsSent.add(receiver);
+                        invitationsOfUser.setInvitationSent(listOfInvitationsSent);
+                    }
+                } else  {
                     invitationsOfUser = new Invitations();
                     ArrayList<String> senderList = new ArrayList<String>();
                     senderList.add(receiver);
                     invitationsOfUser.setInvitationSent(senderList);
-                } else {
-                    invitationsOfUser.getInvitationSent().add(receiver);
                 }
 
                 //Again put in database
@@ -80,15 +86,19 @@ public class DatabaseService {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Invitations invitationsOfUser = dataSnapshot.getValue(Invitations.class);
-                if (invitationsOfUser == null) {
+
+                if (invitationsOfUser != null) {
+                    ArrayList<String> listOfInvitationsReceived = invitationsOfUser.getInvitationReceived();
+                    if(listOfInvitationsReceived != null && !listOfInvitationsReceived.contains(receiver)){
+                        listOfInvitationsReceived.add(sender);
+                        invitationsOfUser.setInvitationReceived(listOfInvitationsReceived);
+                    }
+                } else  {
                     invitationsOfUser = new Invitations();
                     ArrayList<String> receiverList = new ArrayList<String>();
                     receiverList.add(sender);
                     invitationsOfUser.setInvitationReceived(receiverList);
-                } else {
-                    invitationsOfUser.getInvitationReceived().add(sender);
                 }
-
                 //Again put in database
                 mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(receiver)).setValue(invitationsOfUser);
 

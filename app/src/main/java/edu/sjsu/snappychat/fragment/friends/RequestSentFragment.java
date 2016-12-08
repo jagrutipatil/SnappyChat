@@ -72,7 +72,7 @@ public class RequestSentFragment extends Fragment {
 
                             ListView searchList = (ListView) view.findViewById(R.id.sentrequestlist);
 
-                            FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, false);
+                            FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, true);
                             searchList.setAdapter(adapter);
 
                         }
