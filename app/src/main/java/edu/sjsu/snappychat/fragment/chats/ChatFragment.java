@@ -50,14 +50,15 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-       /* final ListView chatList = (ListView) view.findViewById(R.id.conversation);
+        final ListView chatList = (ListView) view.findViewById(R.id.conversation);
         final ChatListAdapter chatAdapter = new ChatListAdapter();
         chatList.setAdapter(chatAdapter);
 
         final String cleanEmailAddress = Util.cleanEmailID(UserService.getInstance().getEmail());
-        mDatabaseReference.child(Constant.CHATS_NODE).child(cleanEmailAddress).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                
 
             }
 
@@ -65,7 +66,8 @@ public class ChatFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });*/
+        });
+        /*
         final ListView friendList = (ListView) view.findViewById(R.id.listFriends);
         final FriendListAdapter friendListAdapter = new FriendListAdapter();
         friendList.setAdapter(friendListAdapter);
@@ -193,7 +195,7 @@ public class ChatFragment extends Fragment {
         }
     }
 
-/*    return view;
+*/    return view;
     }
 
     private class ChatListAdapter extends BaseAdapter {
@@ -257,5 +259,5 @@ public class ChatFragment extends Fragment {
 
 
         }
-    }*/
+    }
 }

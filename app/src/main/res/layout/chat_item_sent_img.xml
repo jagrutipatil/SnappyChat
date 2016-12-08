@@ -28,9 +28,9 @@
             android:id="@+id/lbl1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="TextView :"
             android:textColor="@color/white"
-            android:textSize="@dimen/txt_13sp"
+            android:textSize="14sp"
             android:textStyle="normal|bold" />
 
         <ImageView

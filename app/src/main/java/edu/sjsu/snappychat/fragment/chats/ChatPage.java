@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,10 +17,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -319,7 +323,7 @@ public class ChatPage extends BaseAppCompatActivity {
             }
             TextView lbl = (TextView) v.findViewById(R.id.lbl1);
             ImageView img = (ImageView) v.findViewById(R.id.lb4);
-            lbl.setText(c.getSender());
+            lbl.setText(c.getSender()+" :");
 
             if(c.getMessage() != null) {
                 lbl = (TextView) v.findViewById(R.id.lbl2);
@@ -338,11 +342,60 @@ public class ChatPage extends BaseAppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.chat_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        if (item.getItemId() == R.id.endsession) {
+            // Delete chat
+            deleteChatItem(from_user,to_user);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteChatItem(final String from_user, final String to_user) {
+        final AlertDialog.Builder dialogue = new AlertDialog.Builder(ChatPage.this);
+        dialogue.setTitle("Warning");
+        dialogue.setMessage("Conversation will be deleted");
+        dialogue.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabaseReference.child(Constant.CHATS_NODE).child(from_user + " " + to_user).removeValue();
+                mDatabaseReference.child(Constant.CHATS_NODE).child(to_user + " " + from_user).removeValue();
+                mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                        UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
+                        if (currentUser != null) {
+                            ArrayList<String> chats = currentUser.getChats();
+                            if(chats.contains(to_user)) {
+                                chats.remove(to_user);
+                                currentUser.setChats(chats);
+                                mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("chat add", "loadPost:onCancelled", databaseError.toException());
+                    }
+                });
+                finish();
+            }
+        });
+        dialogue.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        dialogue.show();
+
     }
 }
 
