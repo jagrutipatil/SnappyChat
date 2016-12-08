@@ -4,13 +4,19 @@ package edu.sjsu.snappychat.util;
  * Created by mayur on 12/6/2016.
  */
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,14 +25,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.Invitations;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UserService;
 
-public class CustomSearchListAdapter extends ArrayAdapter<String> {
+public class CustomSearchListAdapter extends ArrayAdapter<String> implements Filterable{
 
     private final Context context;
     private final List<String> emailID;
@@ -34,53 +42,58 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
     private User loggedInUser;
     private DatabaseReference mDatabaseReference;
     private List<String> friendList;
+    private ValueFilter valueFilter;
+    private List<String> filteredEmail;
+    private Mapping mapping;
+    private Activity activity;
+    private HashMap<String, String> interestMap;
+    private List<String> interestArray;
 
-    public CustomSearchListAdapter(Context context, List<String> email, List<String> nickName, ArrayList<String> userFriends) {
+    public CustomSearchListAdapter(Activity activity, Context context, List<String> email, ArrayList<String> userFriends, HashMap<String,String> interestMap, Mapping mapObject) {
         super(context, R.layout.search_listview, email);
         // TODO Auto-generated constructor stub
 
+        this.activity = activity;
         this.context = context;
         this.emailID = email;
-        this.nickNameArray = nickName;
+        this.filteredEmail = email;
         this.friendList = userFriends;
+        this.mapping = mapObject;
+        this.interestMap = interestMap;
+
+        nickNameArray = new ArrayList();
+        for(String emailString:emailID){
+            nickNameArray.add(mapObject.getNickName(Util.cleanEmailID(emailString)));
+        }
+        interestArray = new ArrayList();
+        for(String emailString:emailID){
+            interestArray.add(interestMap.get(emailString));
+        }
 
         this.loggedInUser = UserService.getInstance().getUser();
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
-      /*  mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(loggedInUser.getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UserFriend userFriend = dataSnapshot.getValue(UserFriend.class);
-                if (userFriend != null)
-                    friendList = userFriend.getFriends();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
     @Override
     public int getCount() {
-        return emailID != null ? emailID.size() : 0;
+        return filteredEmail != null ? filteredEmail.size() : 0;
     }
 
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.search_listview, null, true);
+    public View getView(final int position, View view, ViewGroup parent) {
+        //this.parent = parent;
 
-        EditText email = (EditText) rowView.findViewById(R.id.email);
-        EditText nickName = (EditText) rowView.findViewById(R.id.nickname);
-        EditText friendTag = (EditText) rowView.findViewById(R.id.friend_tag);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View rowView = inflater.inflate(R.layout.search_listview, null, true);
+
+        final EditText email = (EditText) rowView.findViewById(R.id.email);
+        final EditText nickName = (EditText) rowView.findViewById(R.id.nickname);
+        final EditText friendTag = (EditText) rowView.findViewById(R.id.friend_tag);
         final ImageButton addFriend = (ImageButton) rowView.findViewById(R.id.add_friend);
 
-        email.setText(emailID.get(position));
-        nickName.setText(nickNameArray.get(position));
+        final String receiver = filteredEmail.get(position);
 
-
-        final String receiver = emailID.get(position);
+        email.setText(filteredEmail.get(position));
+        nickName.setText(mapping.getNickName(Util.cleanEmailID(filteredEmail.get(position))));
 
         if (friendList != null && friendList.contains(emailID.get(position))) {
             friendTag.setVisibility(rowView.VISIBLE);
@@ -89,6 +102,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
             friendTag.setVisibility(rowView.INVISIBLE);
             addFriend.setVisibility(rowView.VISIBLE);
         }
+
 
         addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,5 +171,52 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
     }
 
-    ;
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        if(valueFilter == null){
+            valueFilter = new ValueFilter();
+        }
+        return valueFilter;
+    }
+
+    private class ValueFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(final CharSequence constraint) {
+            final FilterResults results = new FilterResults();
+            RadioButton searchType = (RadioButton) activity.findViewById(R.id.by_email);
+            List filterList = new ArrayList();
+            Boolean searchByName = searchType.isChecked();
+
+            if (constraint != null && constraint.length() > 0) {
+                if(searchByName){
+                    for (int i = 0; i < nickNameArray.size(); i++) {
+                        if ((nickNameArray.get(i).toUpperCase()).contains(constraint.toString().toUpperCase())) {
+                            filterList.add(emailID.get(i));
+                        }
+                    }
+                }else{
+                    for(int i=0;i<interestArray.size();i++) {
+                        if (interestArray.get(i).toUpperCase().contains(constraint.toString().toUpperCase())) {
+                            filterList.add(emailID.get(i));
+                        }
+                    }
+                }
+
+                results.count = filterList.size();
+                results.values = filterList;
+
+            }else{
+                results.count = emailID.size();
+                results.values = emailID;
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredEmail = (List) results.values;
+            notifyDataSetChanged();
+        }
+    }
 }
