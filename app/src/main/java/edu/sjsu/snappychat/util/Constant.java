@@ -19,4 +19,6 @@ public class Constant {
     public static final String AVAILABILITY_STATUS_ONLINE = "online";
     public static final String AVAILABILITY_STATUS_OFFLINE = "offline";
     public static final String AVAILABILITY_STATUS_NODE = "availability";
+    public static final String CHATS_NODE = "chats";
+    public static final String CHAT_LIST = "chat_list";
 }

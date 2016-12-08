@@ -9,6 +9,8 @@ public class ChatModel {
     private String message;
     private String imagemessage;
     private String Sender;
+    private String receiver;
+
     public String getSender() {
         return Sender;
     }
@@ -33,15 +35,22 @@ public class ChatModel {
         this.imagemessage = imagemessage;
     }
 
+    public String getReceiver() {
+        return receiver;
+    }
 
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
 
     public ChatModel(){
 
     }
-    public ChatModel(String s, String m,String img){
+    public ChatModel(String s, String m,String rcv,String img){
         this.Sender =s ;
         this.message =m;
         this.imagemessage = img;
+        this.receiver = rcv;
     }
 
 }

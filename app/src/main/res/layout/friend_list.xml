@@ -57,7 +57,9 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:paddingLeft="5dp" />
+            android:paddingLeft="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/startChat" />
 
         <ImageButton
             android:layout_width="30dp"

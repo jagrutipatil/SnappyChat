@@ -27,6 +27,14 @@ public class AvailabilityMap {
         return Constant.AVAILABILITY_STATUS_OFFLINE;
     }
 
+    public boolean getStatus(String cleanEmailAddress){
+        if(cleanEmailAddress != null){
+            if(status.containsKey(cleanEmailAddress)) {
+                return Constant.AVAILABILITY_STATUS_ONLINE.equals(status.get(cleanEmailAddress));
+            }
+        }
+        return false;
+    }
     public void setStatus(String cleanEmailAddress, String status) {
         this.status.put(cleanEmailAddress, status);
     }

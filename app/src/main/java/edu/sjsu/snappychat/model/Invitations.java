@@ -3,7 +3,7 @@ package edu.sjsu.snappychat.model;
 import java.util.ArrayList;
 
 /**
- * Created by mayur on 12/6/2016.
+ * Created by mayuri on 12/6/2016.
  */
 
 public class Invitations {

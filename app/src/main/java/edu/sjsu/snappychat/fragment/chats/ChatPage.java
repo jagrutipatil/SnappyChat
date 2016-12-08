@@ -34,14 +34,20 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.ui.FirebaseListAdapter;
 import com.firebase.ui.FirebaseRecyclerAdapter;
+import com.google.android.gms.vision.text.Text;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import edu.sjsu.snappychat.BaseAppCompatActivity;
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.model.UserChatList;
+import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -60,9 +66,9 @@ public class ChatPage extends BaseAppCompatActivity {
     Firebase firebase_chatnode ;
     Firebase ref_chatchildnode1 = null;
     Firebase ref_chatchildnode2 = null;
-    String from_user, to_user, newmsg, LoggedInUser, ImageDecode;
+    String from_user, to_user, newmsg, LoggedInUser, ImageDecode, from_user_nick_name, to_user_nick_name;
     Bitmap myBitmap;;
-
+    DatabaseReference mDatabaseReference;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -99,6 +105,7 @@ public class ChatPage extends BaseAppCompatActivity {
             m.setImagemessage(img);
             ref_chatchildnode1.push().setValue(m);
             ref_chatchildnode2.push().setValue(m);
+            checkUser();
 
         } else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
@@ -111,7 +118,35 @@ public class ChatPage extends BaseAppCompatActivity {
             m.setImagemessage(img);
             ref_chatchildnode1.push().setValue(m);
             ref_chatchildnode2.push().setValue(m);
+            checkUser();
         }
+    }
+
+    private void checkUser() {
+        mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
+                if (currentUser != null) {
+                    ArrayList<String> chats = currentUser.getChats();
+                    if(!chats.contains(to_user)) {
+                        chats.add(to_user);
+                        currentUser.setChats(chats);
+                        mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
+                    }
+                } else {
+                    ArrayList<String> chatsList = new ArrayList<String>();
+                    chatsList.add(to_user);
+                    UserChatList userFriend = new UserChatList(chatsList);
+                    mDatabaseReference.child(Constant.CHAT_LIST).child(Util.cleanEmailID(from_user)).setValue(userFriend);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("chat add", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
     }
 
     @Override
@@ -122,6 +157,7 @@ public class ChatPage extends BaseAppCompatActivity {
 
 
         firebase_chatnode = new Firebase("https://snappychat-25a5a.firebaseio.com/chats");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         editText = (EditText) findViewById(R.id.editText);
 
@@ -133,6 +169,8 @@ public class ChatPage extends BaseAppCompatActivity {
         from_user = startingintent.getStringExtra("FROM_USER");
         to_user = startingintent.getStringExtra("TO_USER");
         LoggedInUser = startingintent.getStringExtra("LOG_IN_USER");
+        from_user_nick_name = startingintent.getStringExtra("FROM_USER_NICK_NAME");
+        to_user_nick_name = startingintent.getStringExtra("TO_USER_NICK_NAME");
 
         chatmsgsList = new ArrayList<ChatModel>();
         chatList = (ListView) findViewById(R.id.recycler_view);
@@ -144,7 +182,8 @@ public class ChatPage extends BaseAppCompatActivity {
 
 
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setTitle(to_user);
+        actionbar.setTitle(to_user_nick_name);
+        actionbar.setDefaultDisplayHomeAsUpEnabled(true);
 
 
 
@@ -158,15 +197,19 @@ public class ChatPage extends BaseAppCompatActivity {
 
 
 
+
         sendbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 newmsg = editText.getText().toString().trim();
                 ChatModel m = new ChatModel();
-                m.setSender(LoggedInUser);
+                m.setSender(from_user_nick_name);
+                m.setReceiver(to_user_nick_name);
                 m.setMessage(newmsg);
+
                 ref_chatchildnode1.push().setValue(m);
                 ref_chatchildnode2.push().setValue(m);
+                checkUser();
                 editText.setText("");
 
 
@@ -261,7 +304,7 @@ public class ChatPage extends BaseAppCompatActivity {
         public View getView(int pos, View v, ViewGroup arg2) {
             ChatModel c = getItem(pos);
             String currentUser = Util.cleanEmailID(UserService.getInstance().getEmail());
-            if (c.getSender().matches(currentUser) ) {
+            if (c.getSender().matches(from_user_nick_name) ) {
                 if(c.getImagemessage() != null){
                     v = getLayoutInflater().inflate(R.layout.chat_item_sent_img,null);
                 }else {

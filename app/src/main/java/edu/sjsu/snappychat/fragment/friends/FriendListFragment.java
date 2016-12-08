@@ -60,9 +60,11 @@ public class FriendListFragment extends Fragment {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null && currentUser.getFriends() != null) {
                     friendsEmailList = currentUser.getFriends();
-                    ArrayAdapter<String> arrayAdapter =
-                            new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendsEmailList);
-                    friendList.setAdapter(arrayAdapter);
+                    if(getActivity()!= null) {
+                        ArrayAdapter<String> arrayAdapter =
+                                new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendsEmailList);
+                        friendList.setAdapter(arrayAdapter);
+                    }
                 } else {
                     Log.w("FriendListFragment", "No friend");
                     Toast.makeText(getApplicationContext(), "No Friends ", Toast.LENGTH_LONG).show();
