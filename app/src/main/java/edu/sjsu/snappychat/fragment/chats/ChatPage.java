@@ -285,18 +285,6 @@ public class ChatPage extends AppCompatActivity {
                 Bitmap imgmsg = Util.decodeImage(c.getImagemessage());
                 img.setImageBitmap(imgmsg);
             }
-            /*if (c.isSent()) {
-                if (c.getStatus() == Conversation.STATUS_SENT)
-                    lbl.setText(R.string.delivered_text);
-                else {
-                    if (c.getStatus() == Conversation.STATUS_SENDING)
-                        lbl.setText(R.string.sending_text);
-                    else {
-                        lbl.setText(R.string.failed_text);
-                    }
-                }
-            } else*/
-
 
             return v;
         }

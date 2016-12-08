@@ -1,6 +1,5 @@
 package edu.sjsu.snappychat.fragment.chats;
 
-import android.graphics.Bitmap;
 
 /**
  * Created by i856547 on 12/6/16.

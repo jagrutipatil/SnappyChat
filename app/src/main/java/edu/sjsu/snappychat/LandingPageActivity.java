@@ -7,8 +7,6 @@ import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,15 +16,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
-import java.util.ArrayList;
-
-import edu.sjsu.snappychat.datagenerate.DataGenerator;
-
 import edu.sjsu.snappychat.fragment.chats.ChatFragment;
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
 import edu.sjsu.snappychat.fragment.SearchFragment;
-import edu.sjsu.snappychat.fragment.chats.ChatFragment;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;

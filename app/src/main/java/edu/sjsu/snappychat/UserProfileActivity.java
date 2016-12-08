@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import edu.sjsu.snappychat.model.AdvancedSettigs;
+
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.Mapping;

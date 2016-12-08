@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
-import edu.sjsu.snappychat.model.AdvancedSettigs;
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
