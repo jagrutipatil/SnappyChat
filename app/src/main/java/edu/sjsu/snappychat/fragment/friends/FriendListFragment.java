@@ -60,7 +60,7 @@ public class FriendListFragment extends Fragment {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null && currentUser.getFriends() != null) {
                     friendsEmailList = currentUser.getFriends();
-                    if(getActivity()!= null) {
+                    if(getActivity() != null) {
                         ArrayAdapter<String> arrayAdapter =
                                 new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendsEmailList);
                         friendList.setAdapter(arrayAdapter);
