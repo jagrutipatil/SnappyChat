@@ -21,6 +21,7 @@ import java.util.List;
 
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.Invitations;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.FriendInvitationAdapter;
@@ -53,21 +54,32 @@ public class RequestReceivedFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Invitations invitations = dataSnapshot.getValue(Invitations.class);
-                if (invitations != null) {
+                if (invitations != null && invitations.getInvitationReceived()!=null) {
                     emailIds = invitations.getInvitationReceived();
-                    nickNames = invitations.getInvitationReceived();
+                    //nickNames = invitations.getInvitationReceived();
 
-                    final ListView searchList = (ListView) view.findViewById(R.id.receivedreqeustlistview);
-
-                    FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, false);
-                    searchList.setAdapter(adapter);
-
-                    searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            //go to that user's profile
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Mapping mapObject = dataSnapshot.getValue(Mapping.class);
+
+                            for(String email:emailIds){
+                                nickNames.add(mapObject.getNickName(Util.cleanEmailID(email)));
+                            }
+
+                            final ListView searchList = (ListView) view.findViewById(R.id.receivedreqeustlistview);
+
+                            FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, false);
+                            searchList.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
                     });
+
                 }
             }
 
