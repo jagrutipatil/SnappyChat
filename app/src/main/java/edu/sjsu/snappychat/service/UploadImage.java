@@ -25,7 +25,7 @@ import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
 /**
- * Created by i856547 on 12/4/16.
+ * Created by Akshatha Anantharmu on 12/4/16.
  */
 
 public class UploadImage extends AsyncTask<Void, Object, Void> {

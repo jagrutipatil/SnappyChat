@@ -10,12 +10,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,9 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,9 +29,6 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.ui.FirebaseListAdapter;
-import com.firebase.ui.FirebaseRecyclerAdapter;
-import com.google.android.gms.vision.text.Text;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,12 +36,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import edu.sjsu.snappychat.BaseAppCompatActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.UserChatList;
-import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -132,10 +120,10 @@ public class ChatPage extends BaseAppCompatActivity {
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                 UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
                 if (currentUser != null) {
-                    ArrayList<String> chats = currentUser.getChats();
+                    ArrayList<String> chats = currentUser.getUsers();
                     if(!chats.contains(to_user)) {
                         chats.add(to_user);
-                        currentUser.setChats(chats);
+                        currentUser.setUsers(chats);
                         mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
                     }
                 } else {
@@ -371,10 +359,10 @@ public class ChatPage extends BaseAppCompatActivity {
                     public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                         UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
                         if (currentUser != null) {
-                            ArrayList<String> chats = currentUser.getChats();
+                            ArrayList<String> chats = currentUser.getUsers();
                             if(chats.contains(to_user)) {
                                 chats.remove(to_user);
-                                currentUser.setChats(chats);
+                                currentUser.setUsers(chats);
                                 mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
                             }
                         }

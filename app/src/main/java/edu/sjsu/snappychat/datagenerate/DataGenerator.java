@@ -4,7 +4,7 @@ import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.service.DatabaseService;
 
 /**
- * Created by I074841 on 12/6/2016.
+ * Created by Kamlendra Chauhan on 12/6/2016.
  */
 
 public class DataGenerator {

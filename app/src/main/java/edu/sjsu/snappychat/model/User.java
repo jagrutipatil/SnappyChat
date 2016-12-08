@@ -1,7 +1,7 @@
 package edu.sjsu.snappychat.model;
 
 /**
- * Created by I074841 on 12/4/2016.
+ * Created by Kamlendra Chauhan on 12/4/2016.
  */
 
 public class User {
