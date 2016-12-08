@@ -1,5 +1,6 @@
 package edu.sjsu.snappychat.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.ViewProfilePage;
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
@@ -128,8 +131,15 @@ public class SearchFragment extends Fragment {
 
                                             searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                 @Override
-                                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                                    //go to that user's profile
+                                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                                                    if (position < searchList.getCount()) {
+                                                        //go to that user's profile
+                                                        Intent intent = new Intent(getActivity(), ViewProfilePage.class);
+                                                        View view1 = searchList.getChildAt(position);
+                                                        TextView tv = (TextView) view1.findViewById(R.id.email);
+                                                        intent.putExtra("USER_EMAIL", tv.getText().toString());
+                                                        startActivity(intent);
+                                                    }
                                                 }
                                             });
                                         }

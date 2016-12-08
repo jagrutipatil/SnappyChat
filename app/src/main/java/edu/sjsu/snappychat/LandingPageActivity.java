@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +35,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
         loadDataFromServer();
+
         setUserStatus(Constant.AVAILABILITY_STATUS_ONLINE);
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
