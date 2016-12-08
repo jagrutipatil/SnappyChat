@@ -4,7 +4,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +28,7 @@ import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
-public class LandingPageActivity extends FragmentActivity implements FriendsFragment.OnFragmentInteractionListener {
+public class LandingPageActivity extends AppCompatActivity implements FriendsFragment.OnFragmentInteractionListener {
 
     private BottomBar bottomBar;
 
@@ -32,6 +37,7 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
         loadDataFromServer();
+
         setUserStatus(Constant.AVAILABILITY_STATUS_ONLINE);
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
@@ -42,19 +48,25 @@ public class LandingPageActivity extends FragmentActivity implements FriendsFrag
                     //Home
                     HomeFragment homeFragment = new HomeFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+                    getSupportActionBar().show();
 
                 } else if (menuItemId == R.id.bottombaritemtwo) {
                     //Friends
                     FriendsFragment friendsFragment = new FriendsFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, friendsFragment).commit();
+                    getSupportActionBar().hide();
                 } else if (menuItemId == R.id.bottombaritemthree) {
                     //Search
                     SearchFragment searchFragment = new SearchFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, searchFragment).commit();
+                    getSupportActionBar().hide();
+
                 } else if (menuItemId == R.id.bottombaritemfour) {
                     //chat
                     ChatFragment chatFragment = new ChatFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, chatFragment).commit();
+                    getSupportActionBar().hide();
+
                 }
             }
 

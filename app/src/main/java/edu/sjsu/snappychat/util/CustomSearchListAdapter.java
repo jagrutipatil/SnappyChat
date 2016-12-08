@@ -7,7 +7,6 @@ package edu.sjsu.snappychat.util;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.UserService;
 
-public class CustomSearchListAdapter extends ArrayAdapter<String> implements Filterable{
+public class CustomSearchListAdapter extends ArrayAdapter<String> implements Filterable {
 
     private final Context context;
     private final List<String> emailID;
@@ -50,7 +49,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
     private List<String> interestArray;
     private List<String> sendInvitationsOfLoggedUser;
 
-    public CustomSearchListAdapter(Activity activity, Context context, List<String> email, ArrayList<String> userFriends, HashMap<String,String> interestMap, Mapping mapObject) {
+    public CustomSearchListAdapter(Activity activity, Context context, List<String> email, ArrayList<String> userFriends, HashMap<String, String> interestMap, Mapping mapObject) {
         super(context, R.layout.search_listview, email);
         // TODO Auto-generated constructor stub
 
@@ -64,11 +63,11 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
         this.sendInvitationsOfLoggedUser = null;
 
         nickNameArray = new ArrayList();
-        for(String emailString:emailID){
+        for (String emailString : emailID) {
             nickNameArray.add(mapObject.getNickName(Util.cleanEmailID(emailString)));
         }
         interestArray = new ArrayList();
-        for(String emailString:emailID){
+        for (String emailString : emailID) {
             interestArray.add(interestMap.get(emailString));
         }
 
@@ -97,7 +96,8 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
 
         email.setText(filteredEmail.get(position));
         nickName.setText(mapping.getNickName(Util.cleanEmailID(filteredEmail.get(position))));
-
+        addFriend.setVisibility(rowView.INVISIBLE);
+        friendTag.setVisibility(rowView.INVISIBLE);
 
         mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -207,7 +207,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
     @NonNull
     @Override
     public Filter getFilter() {
-        if(valueFilter == null){
+        if (valueFilter == null) {
             valueFilter = new ValueFilter();
         }
         return valueFilter;
@@ -217,31 +217,34 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
             final FilterResults results = new FilterResults();
-            RadioButton searchType = (RadioButton) activity.findViewById(R.id.by_email);
-            List filterList = new ArrayList();
-            Boolean searchByName = searchType.isChecked();
 
-            if (constraint != null && constraint.length() > 0) {
-                if(searchByName){
-                    for (int i = 0; i < nickNameArray.size(); i++) {
-                        if ((nickNameArray.get(i).toUpperCase()).contains(constraint.toString().toUpperCase())) {
-                            filterList.add(emailID.get(i));
+            if (activity != null) {
+                RadioButton searchType = (RadioButton) activity.findViewById(R.id.by_email);
+                List filterList = new ArrayList();
+                Boolean searchByName = searchType.isChecked();
+
+                if (constraint != null && constraint.length() > 0) {
+                    if (searchByName) {
+                        for (int i = 0; i < nickNameArray.size(); i++) {
+                            if ((nickNameArray.get(i).toUpperCase()).contains(constraint.toString().toUpperCase())) {
+                                filterList.add(emailID.get(i));
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < interestArray.size(); i++) {
+                            if (interestArray.get(i).toUpperCase().contains(constraint.toString().toUpperCase())) {
+                                filterList.add(emailID.get(i));
+                            }
                         }
                     }
-                }else{
-                    for(int i=0;i<interestArray.size();i++) {
-                        if (interestArray.get(i).toUpperCase().contains(constraint.toString().toUpperCase())) {
-                            filterList.add(emailID.get(i));
-                        }
-                    }
+
+                    results.count = filterList.size();
+                    results.values = filterList;
+
+                } else {
+                    results.count = emailID.size();
+                    results.values = emailID;
                 }
-
-                results.count = filterList.size();
-                results.values = filterList;
-
-            }else{
-                results.count = emailID.size();
-                results.values = emailID;
             }
             return results;
         }

@@ -27,9 +27,11 @@ public class DatabaseService {
                 UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
                 if (currentUser != null) {
                     ArrayList<String> friends = currentUser.getFriends();
-                    friends.add(friendEmail);
-                    currentUser.setFriends(friends);
-                    mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(currentUserEmail)).setValue(currentUser);
+                    if(!friends.contains(friendEmail)){
+                        friends.add(friendEmail);
+                        currentUser.setFriends(friends);
+                        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(currentUserEmail)).setValue(currentUser);
+                    }
                 } else {
                     ArrayList<String> friendList = new ArrayList<String>();
                     friendList.add(friendEmail);
