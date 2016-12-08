@@ -1,5 +1,6 @@
 package edu.sjsu.snappychat.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,15 +24,25 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.ViewProfilePage;
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
+import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.CustomSearchListAdapter;
 import edu.sjsu.snappychat.util.Util;
 
 
+/*
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link SearchFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link SearchFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class SearchFragment extends Fragment {
 
     private User loggedInUser;
@@ -59,6 +71,9 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchByName = (RadioButton) view.findViewById(R.id.by_email);
+
+        searchView = (SearchView) view.findViewById(R.id.search_list);
+        searchView.setQueryHint("Search...");
 
         mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByChild("visibility").equalTo(Constant.PUBLIC_VISIBILITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -109,14 +124,22 @@ public class SearchFragment extends Fragment {
 
 
                                         final ListView searchList = (ListView) view.findViewById(R.id.list);
+
                                         if (getActivity() != null) {
                                             adapter = new CustomSearchListAdapter(getActivity(), getContext(), emailID, friendList, emailToInterestMap, mapObject);
                                             searchList.setAdapter(adapter);
 
                                             searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                 @Override
-                                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                                    //go to that user's profile
+                                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                                                    if (position < searchList.getCount()) {
+                                                        //go to that user's profile
+                                                        Intent intent = new Intent(getActivity(), ViewProfilePage.class);
+                                                        View view1 = searchList.getChildAt(position);
+                                                        TextView tv = (TextView) view1.findViewById(R.id.email);
+                                                        intent.putExtra("USER_EMAIL", tv.getText().toString());
+                                                        startActivity(intent);
+                                                    }
                                                 }
                                             });
                                         }
@@ -151,7 +174,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        searchView = (SearchView) view.findViewById(R.id.search_list);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

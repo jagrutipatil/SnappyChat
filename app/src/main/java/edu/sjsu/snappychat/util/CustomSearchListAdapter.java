@@ -47,6 +47,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
     private Activity activity;
     private HashMap<String, String> interestMap;
     private List<String> interestArray;
+    private List<String> sendInvitationsOfLoggedUser;
 
     public CustomSearchListAdapter(Activity activity, Context context, List<String> email, ArrayList<String> userFriends, HashMap<String, String> interestMap, Mapping mapObject) {
         super(context, R.layout.search_listview, email);
@@ -59,6 +60,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
         this.friendList = userFriends;
         this.mapping = mapObject;
         this.interestMap = interestMap;
+        this.sendInvitationsOfLoggedUser = null;
 
         nickNameArray = new ArrayList();
         for (String emailString : emailID) {
@@ -71,6 +73,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
 
         this.loggedInUser = UserService.getInstance().getUser();
         this.mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
     }
 
     @Override
@@ -93,14 +96,36 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
 
         email.setText(filteredEmail.get(position));
         nickName.setText(mapping.getNickName(Util.cleanEmailID(filteredEmail.get(position))));
+        addFriend.setVisibility(rowView.INVISIBLE);
+        friendTag.setVisibility(rowView.INVISIBLE);
 
-        if (friendList != null && friendList.contains(emailID.get(position))) {
-            friendTag.setVisibility(rowView.VISIBLE);
-            addFriend.setVisibility(rowView.INVISIBLE);
-        } else {
-            friendTag.setVisibility(rowView.INVISIBLE);
-            addFriend.setVisibility(rowView.VISIBLE);
-        }
+        mDatabaseReference.child(Constant.INVITATIONS_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Invitations invitations = dataSnapshot.getValue(Invitations.class);
+
+                if(invitations!=null)
+                    sendInvitationsOfLoggedUser = invitations.getInvitationSent();
+
+                if (friendList != null && friendList.contains(filteredEmail.get(position))) {
+                    friendTag.setText("Friend");
+                    friendTag.setVisibility(rowView.VISIBLE);
+                    addFriend.setVisibility(rowView.INVISIBLE);
+                } else if(sendInvitationsOfLoggedUser!= null && sendInvitationsOfLoggedUser.contains(filteredEmail.get(position))){
+                    friendTag.setText("Pending");
+                    friendTag.setVisibility(rowView.VISIBLE);
+                    addFriend.setVisibility(rowView.INVISIBLE);
+                } else{
+                    friendTag.setVisibility(rowView.INVISIBLE);
+                    addFriend.setVisibility(rowView.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         addFriend.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +148,10 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
                             senderList.add(receiver);
                             invitationsOfUser.setInvitationSent(senderList);
                         } else {
+                            if(invitationsOfUser.getInvitationSent()==null){
+                                ArrayList<String> senderList = new ArrayList<String>();
+                                invitationsOfUser.setInvitationSent(senderList);
+                            }
                             invitationsOfUser.getInvitationSent().add(receiver);
                         }
 
@@ -149,6 +178,11 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
                             receiverList.add(sender);
                             invitationsOfUser.setInvitationReceived(receiverList);
                         } else {
+
+                            if(invitationsOfUser.getInvitationReceived()==null){
+                                ArrayList<String> invitationReceived = new ArrayList<String>();
+                                invitationsOfUser.setInvitationReceived(invitationReceived);
+                            }
                             invitationsOfUser.getInvitationReceived().add(sender);
                         }
 
