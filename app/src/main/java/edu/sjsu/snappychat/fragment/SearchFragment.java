@@ -107,7 +107,7 @@ public class SearchFragment extends Fragment {
                                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                     User user = snap.getValue(User.class);
                                     if (emailID.contains(user.getEmail())) {
-                                        emailToInterestMap.put(user.getEmail(),user.getInterests());
+                                        emailToInterestMap.put(user.getEmail(), user.getInterests());
                                     }
                                 }
 
@@ -119,15 +119,17 @@ public class SearchFragment extends Fragment {
 
                                         final ListView searchList = (ListView) view.findViewById(R.id.list);
 
-                                        adapter = new CustomSearchListAdapter(getActivity(), getContext(), emailID, friendList, emailToInterestMap, mapObject);
-                                        searchList.setAdapter(adapter);
+                                        if (getActivity() != null) {
+                                            adapter = new CustomSearchListAdapter(getActivity(), getContext(), emailID, friendList, emailToInterestMap, mapObject);
+                                            searchList.setAdapter(adapter);
 
-                                        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                                //go to that user's profile
-                                            }
-                                        });
+                                            searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                    //go to that user's profile
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
