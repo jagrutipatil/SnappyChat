@@ -6,20 +6,35 @@
     android:descendantFocusability="blocksDescendants"
     android:weightSum="1">
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="email"
-        android:ems="10"
-        android:id="@+id/email"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textSize="24sp"
-        android:background="@null"
-        android:layout_weight="0.04"
-        android:paddingStart="5dp" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="NickName"
+            android:ems="10"
+            android:id="@+id/nickname"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textSize="24sp"
+            android:background="@null"
+            android:layout_weight="1"
+            android:paddingStart="5dp" />
+
+        <ImageButton
+            android:id="@+id/add_friend"
+            android:src="@drawable/ic_person_add_black_18dp"
+            android:background="@color/transparent"
+            android:scaleType="fitCenter"
+            android:layout_width="40dp"
+            android:paddingEnd="10dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -31,22 +46,15 @@
             android:layout_width="159dp"
             android:layout_height="40dp"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:text="email"
             android:ems="10"
-            android:id="@+id/nickname"
+            android:id="@+id/email"
             android:background="@null"
             android:layout_weight="0.01"
             android:paddingStart="5dp"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false" />
-
-        <ImageButton
-            android:layout_width="69dp"
-            android:id="@+id/add_friend"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_perm_identity_black_18dp"
-            android:layout_weight="0.00" />
 
         <EditText
             android:layout_width="77dp"
@@ -65,13 +73,4 @@
             android:paddingEnd="3dp" />
 
     </LinearLayout>
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:paddingBottom="2dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="2dp"
-        android:scaleType="fitXY"
-        android:src="@android:drawable/divider_horizontal_bright" />
 </LinearLayout>

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class Invitations {
 
-    public ArrayList<String> invitationSent;
-    public ArrayList<String> invitationReceived;
+    public ArrayList<String> invitationSent = new ArrayList<>();
+    public ArrayList<String> invitationReceived = new ArrayList<>();
 
 
     public Invitations() {
