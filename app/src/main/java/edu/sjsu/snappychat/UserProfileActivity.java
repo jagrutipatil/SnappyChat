@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -71,12 +72,12 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
         setContentView(R.layout.activity_user_profile);
 
         buttonDone = (Button) findViewById(R.id.done);
-        editTextNickName = (EditText) findViewById(R.id.nickName);
-        editTextInterests = (EditText) findViewById(R.id.interest);
-        editTextProfession = (EditText) findViewById(R.id.profession);
-        editTextCity = (EditText) findViewById(R.id.city);
-        editTextAboutMe = (EditText) findViewById(R.id.aboutme);
-        imageViewProfilePic = (ImageView) findViewById(R.id.profilePic);
+        editTextNickName = (EditText) findViewById(R.id.tvENickName1);
+        editTextInterests = (EditText) findViewById(R.id.tvEInterest1);
+        editTextProfession = (EditText) findViewById(R.id.tvEProfession1);
+        editTextCity = (EditText) findViewById(R.id.tvELocataion5);
+        editTextAboutMe = (EditText) findViewById(R.id.tvEAboutMe1);
+        imageViewProfilePic = (ImageView) findViewById(R.id.ivEProfilePic);
         advanced = (Button) findViewById(R.id.advanced);
 
         imageViewProfilePic.setOnTouchListener(this);

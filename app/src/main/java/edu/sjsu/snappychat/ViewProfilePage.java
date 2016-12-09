@@ -39,13 +39,12 @@ public class ViewProfilePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile_page);
 
-
-        nickName = (TextView) findViewById(R.id.view_nickname);
-        interests = (TextView) findViewById(R.id.view_interest);
-        profession = (TextView) findViewById(R.id.view_profession);
-        city = (TextView) findViewById(R.id.view_city);
-        aboutMe = (TextView) findViewById(R.id.view_aboutme);
-        imageViewProfilePic = (ImageView) findViewById(R.id.view_profilePic);
+        nickName = (TextView) findViewById(R.id.tvNickName1);
+        interests = (TextView) findViewById(R.id.tvInterest1);
+        profession = (TextView) findViewById(R.id.tvProfession1);
+        city = (TextView) findViewById(R.id.tvLocataion5);
+        aboutMe = (TextView) findViewById(R.id.tvAboutMe1);
+        imageViewProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 

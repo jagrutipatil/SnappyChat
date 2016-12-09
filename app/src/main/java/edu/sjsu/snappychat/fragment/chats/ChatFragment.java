@@ -50,7 +50,7 @@ public class ChatFragment extends Fragment {
         final String cleanEmailAddress = Util.cleanEmailID(UserService.getInstance().getEmail());
         final ChatListAdapter chatAdapter = new ChatListAdapter();
 
-        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHATS_NODE).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHAT_USERS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final ArrayList<String> listOfChatUsers = (ArrayList<String>) dataSnapshot.getValue();

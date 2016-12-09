@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import edu.sjsu.snappychat.BaseAppCompatActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.UserChatList;
+import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -115,30 +116,8 @@ public class ChatPage extends BaseAppCompatActivity {
     }
 
     private void checkUser() {
-        mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
-                if (currentUser != null) {
-                    ArrayList<String> chats = currentUser.getUsers();
-                    if(!chats.contains(to_user)) {
-                        chats.add(to_user);
-                        currentUser.setUsers(chats);
-                        mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
-                    }
-                } else {
-                    ArrayList<String> chatsList = new ArrayList<String>();
-                    chatsList.add(to_user);
-                    UserChatList userFriend = new UserChatList(chatsList);
-                    mDatabaseReference.child(Constant.CHAT_LIST).child(Util.cleanEmailID(from_user)).setValue(userFriend);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("chat add", "loadPost:onCancelled", databaseError.toException());
-            }
-        });
+        DatabaseService.updateChatList(from_user,to_user);
+        DatabaseService.updateChatList(to_user,from_user);
     }
 
     @Override

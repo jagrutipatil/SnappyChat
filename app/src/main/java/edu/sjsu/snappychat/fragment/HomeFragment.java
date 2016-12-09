@@ -16,9 +16,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -26,6 +29,7 @@ import edu.sjsu.snappychat.LoginActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserCheckActivity;
 import edu.sjsu.snappychat.UserProfileActivity;
+import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
@@ -37,36 +41,40 @@ import edu.sjsu.snappychat.util.Util;
  */
 
 public class HomeFragment extends Fragment {
-    private EditText nickName;
-    private EditText profession;
-    private EditText location;
-    private EditText aboutMe;
-    private EditText interests;
+
+    private DatabaseReference mDatabaseReference;
+//    private User loggedInUser;
+
+    private TextView nickName;
+    private TextView profession;
+    private TextView location;
+    private TextView aboutMe;
+    private TextView interests;
     private ImageView profilePic;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        nickName = (EditText) view.findViewById(R.id.nickname);
-        profession = (EditText) view.findViewById(R.id.profession);
-        location = (EditText) view.findViewById(R.id.location);
-        aboutMe = (EditText) view.findViewById(R.id.about_me);
-        interests = (EditText) view.findViewById(R.id.interests);
-        profilePic = (ImageView) view.findViewById(R.id.profile_photo);
+        nickName = (TextView) view.findViewById(R.id.tvHNickName1);
+        profession = (TextView) view.findViewById(R.id.tvHProfession1);
+        location = (TextView) view.findViewById(R.id.tvHLocataion5);
+        aboutMe = (TextView) view.findViewById(R.id.tvHAboutMe1);
+        interests = (TextView) view.findViewById(R.id.tvHInterest1);
+        profilePic = (ImageView) view.findViewById(R.id.ivHProfilePic);
 
 
-        ScrollView sv = (ScrollView) view.findViewById(R.id.scroller);
-        sv.scrollTo(0, sv.getTop());
-        //loggedInUser = UserService.getInstance().getUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        setHasOptionsMenu(true);
+//        ScrollView sv = (ScrollView) view.findViewById(R.id.sc);
+//        sv.scrollTo(0, sv.getTop());
         return view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
