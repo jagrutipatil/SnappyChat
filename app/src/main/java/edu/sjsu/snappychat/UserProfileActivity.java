@@ -5,7 +5,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -27,9 +30,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.io.File;
 import java.util.ArrayList;
 
 
+import edu.sjsu.snappychat.fragment.chats.ChatModel;
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.Invitations;
 import edu.sjsu.snappychat.model.Mapping;
@@ -58,9 +63,8 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
     private AdvancedSettings settings;
     private Button advanced;
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
-
-    //progress dialogue
-    private ProgressDialog progress;
+    private String ImageDecode;
+    private Bitmap myBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,7 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
 
         imageViewProfilePic.setOnTouchListener(this);
         buttonDone.setOnClickListener(this);
-        progress = new ProgressDialog(this);
+
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         settings = UserService.getInstance().getAdvancedSettings();
@@ -209,11 +213,26 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageViewProfilePic.setImageBitmap(imageBitmap);
-            UserService.getInstance().setProfilePictureLocation(Util.encodeImage(imageBitmap));
-//            UploadImage imageLoader = new UploadImage(UserProfileActivity.this, imageViewProfilePic, extras);
-//            imageLoader.execute();
+            Uri URI = data.getData();
+            String[] FILE = { MediaStore.Images.Media.DATA };
+
+
+            Cursor cursor = getContentResolver().query(URI,
+                    FILE, null, null, null);
+
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(FILE[0]);
+            ImageDecode = cursor.getString(columnIndex);
+            cursor.close();
+
+            File imgFile = new File(ImageDecode);
+            if(imgFile.exists()) {
+                myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            }
+            imageViewProfilePic.setImageBitmap(myBitmap);
+            UserService.getInstance().setProfilePictureLocation(Util.encodeImage(myBitmap));
+
 
         } else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
