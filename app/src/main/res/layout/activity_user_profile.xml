@@ -112,6 +112,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/ivAboutMe1"
                     android:text="Travel and Geek"
+                    android:id="@+id/tvEAboutMe2"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@android:color/black"
                     android:layout_centerHorizontal="true" />
@@ -134,7 +135,7 @@
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:src="@drawable/briefcase_medium" />
 
-                <TextView
+                <EditText
                     android:id="@+id/tvEProfession1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -144,7 +145,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#212121" />
 
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvEProfession1"
@@ -176,7 +177,7 @@
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:src="@drawable/ic_favorite_black" />
 
-                <TextView
+                <EditText
                     android:id="@+id/tvEInterest1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -216,7 +217,7 @@
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:src="@drawable/ic_email_black" />
 
-                <TextView
+                <EditText
                     android:id="@+id/tvEEmail3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -228,7 +229,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#212121" />
 
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvEEmail3"
@@ -258,7 +259,7 @@
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:src="@drawable/ic_location_on_black" />
 
-                <TextView
+                <EdiText
                     android:id="@+id/tvELocataion5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -270,7 +271,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#212121" />
 
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvELocataion5"
