@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment {
     private TextView location;
     private TextView aboutMe;
     private TextView interests;
+    private TextView email;
     private ImageView profilePic;
 
     @Nullable
@@ -59,8 +60,9 @@ public class HomeFragment extends Fragment {
         nickName = (TextView) view.findViewById(R.id.tvHNickName1);
         profession = (TextView) view.findViewById(R.id.tvHProfession1);
         location = (TextView) view.findViewById(R.id.tvHLocataion5);
-        aboutMe = (TextView) view.findViewById(R.id.tvHAboutMe1);
+        aboutMe = (TextView) view.findViewById(R.id.tvHAboutMe2);
         interests = (TextView) view.findViewById(R.id.tvHInterest1);
+        email = (TextView) view.findViewById(R.id.tvHEmail3);
         profilePic = (ImageView) view.findViewById(R.id.ivHProfilePic);
 
 
@@ -92,6 +94,7 @@ public class HomeFragment extends Fragment {
         location.setText(UserService.getInstance().getLocation());
         aboutMe.setText(UserService.getInstance().getAboutMe());
         interests.setText(UserService.getInstance().getInterests());
+        email.setText(UserService.getInstance().getEmail());
         if (UserService.getInstance().getProfilePictureLocation() != null) {
             profilePic.setImageBitmap(Util.decodeImage(UserService.getInstance().getProfilePictureLocation()));
         }

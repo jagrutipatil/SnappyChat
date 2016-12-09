@@ -30,6 +30,7 @@ public class ViewProfilePage extends AppCompatActivity {
     private TextView city;
     private TextView aboutMe;
     private TextView interests;
+    private TextView email;
     private ImageView imageViewProfilePic;
     private DatabaseReference mDatabaseReference;
     String userEmail;
@@ -43,7 +44,8 @@ public class ViewProfilePage extends AppCompatActivity {
         interests = (TextView) findViewById(R.id.tvInterest1);
         profession = (TextView) findViewById(R.id.tvProfession1);
         city = (TextView) findViewById(R.id.tvLocataion5);
-        aboutMe = (TextView) findViewById(R.id.tvAboutMe1);
+        email = (TextView) findViewById(R.id.tvEmail3);
+        aboutMe = (TextView) findViewById(R.id.tvAboutMe2);
         imageViewProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -56,7 +58,9 @@ public class ViewProfilePage extends AppCompatActivity {
                 User currentUser = dataSnapshot.getValue(User.class);
 
                 if (currentUser != null) {
+
                     // conditional check here for registration or profile update
+                    email.setText(userEmail);
                     nickName.setText(currentUser.getNickName());
                     profession.setText(currentUser.getProfession());
                     city.setText(currentUser.getLocation());
