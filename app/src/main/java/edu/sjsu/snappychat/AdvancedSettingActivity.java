@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -26,46 +30,23 @@ import edu.sjsu.snappychat.util.Util;
 
 public class AdvancedSettingActivity extends BaseAppCompatActivity {
 
-    private Button ok;
-    private ToggleButton emailNotificationButton;
+    private SwitchCompat emailNotificationButton;
     private RadioButton radioButton;
     private DatabaseReference mDatabaseReference;
     private RadioGroup radioGroup;
     private User loggedInUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_setting);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        emailNotificationButton = (ToggleButton) findViewById(R.id.email_notification);
+        emailNotificationButton = (SwitchCompat) findViewById(R.id.email_notification);
 
-        final RadioGroup radiogrp = (RadioGroup) findViewById(R.id.visibility);
+        setTitle("Advanced Settings");
 
-        ok = (Button) findViewById(R.id.ok);
+      radioGroup = (RadioGroup) findViewById(R.id.visibility);
 
-        ok.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-
-                int visibility_radioButtonID = radiogrp.getCheckedRadioButtonId();
-                radioButton = (RadioButton) findViewById(visibility_radioButtonID);
-
-                String visibility = radioButton.getText().toString();
-                Boolean emailNotificationStatus = emailNotificationButton.isChecked();
-
-                AdvancedSettings settings = new AdvancedSettings(visibility, emailNotificationStatus,UserService.getInstance().getEmail());
-
-                UserService loggedInUserService = UserService.getInstance();
-                loggedInUserService.setAdvancedSettings(settings);
-
-                AsyncTask write_database = new databaseWrite().execute(settings);
-
-                Intent updateProfile = new Intent(AdvancedSettingActivity.this, UserProfileActivity.class);
-                startActivity(updateProfile);
-            }
-        });
 
     }
 
@@ -153,5 +134,34 @@ public class AdvancedSettingActivity extends BaseAppCompatActivity {
         });
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.advanced_settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.saveadvancedsettings) {
+            int visibility_radioButtonID = radioGroup.getCheckedRadioButtonId();
+            radioButton = (RadioButton) findViewById(visibility_radioButtonID);
+
+            String visibility = radioButton.getText().toString();
+            Boolean emailNotificationStatus = emailNotificationButton.isChecked();
+
+            AdvancedSettings settings = new AdvancedSettings(visibility, emailNotificationStatus,UserService.getInstance().getEmail());
+
+            UserService loggedInUserService = UserService.getInstance();
+            loggedInUserService.setAdvancedSettings(settings);
+
+            AsyncTask write_database = new databaseWrite().execute(settings);
+
+            Intent updateProfile = new Intent(AdvancedSettingActivity.this, UserProfileActivity.class);
+            startActivity(updateProfile);        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }
