@@ -106,6 +106,7 @@ android:fitsSystemWindows="true">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Travel and Geek"
+                    android:id="@+id/tvHAboutMe2"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@android:color/black"
                     android:layout_below="@+id/tvHAboutMe1"
