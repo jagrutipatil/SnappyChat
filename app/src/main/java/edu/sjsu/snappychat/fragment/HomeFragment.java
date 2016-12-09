@@ -45,11 +45,11 @@ public class HomeFragment extends Fragment {
     private DatabaseReference mDatabaseReference;
 //    private User loggedInUser;
 
-    private EditText nickName;
-    private EditText profession;
-    private EditText location;
-    private EditText aboutMe;
-    private EditText interests;
+    private TextView nickName;
+    private TextView profession;
+    private TextView location;
+    private TextView aboutMe;
+    private TextView interests;
     private ImageView profilePic;
 
     @Nullable
