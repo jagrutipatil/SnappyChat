@@ -76,7 +76,7 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
         editTextInterests = (EditText) findViewById(R.id.tvEInterest1);
         editTextProfession = (EditText) findViewById(R.id.tvEProfession1);
         editTextCity = (EditText) findViewById(R.id.tvELocataion5);
-        editTextAboutMe = (EditText) findViewById(R.id.tvEAboutMe1);
+        editTextAboutMe = (EditText) findViewById(R.id.tvEAboutMe2);
         imageViewProfilePic = (ImageView) findViewById(R.id.ivEProfilePic);
         advanced = (Button) findViewById(R.id.advanced);
 
