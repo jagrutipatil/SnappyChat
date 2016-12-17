@@ -1,6 +1,7 @@
 package edu.sjsu.snappychat.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Akshatha Anantharmu on 12/8/16.
@@ -8,20 +9,22 @@ import java.util.ArrayList;
 
 public class UserChatList {
 
-    ArrayList<String> users = new ArrayList<>();
+    HashMap<String,Long> userlist = new HashMap<>();
+
+    //ArrayList<String> users = new ArrayList<>();
 
     public UserChatList() {
     }
 
-    public UserChatList( ArrayList<String> users) {
-        this.users = users;
+    public UserChatList(HashMap<String,Long> userlist) {
+        this.userlist = userlist;
     }
 
-    public ArrayList<String> getUsers() {
-        return users;
+    public HashMap<String,Long> getUsers() {
+        return userlist;
     }
 
-    public void setUsers(ArrayList<String> friends) {
-        this.users = friends;
+    public void setUsers(HashMap<String,Long> userlist) {
+        this.userlist = userlist;
     }
 }

@@ -1,7 +1,23 @@
 package edu.sjsu.snappychat.datagenerate;
 
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
+
+import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.AdvancedSettings;
+import edu.sjsu.snappychat.model.TimeLineCard;
+import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.DatabaseService;
+import edu.sjsu.snappychat.service.UserService;
+import edu.sjsu.snappychat.util.Constant;
+import edu.sjsu.snappychat.util.Util;
 
 /**
  * Created by Kamlendra Chauhan on 12/6/2016.
@@ -10,6 +26,7 @@ import edu.sjsu.snappychat.service.DatabaseService;
 public class DataGenerator {
 
     private static DatabaseService databaseService = new DatabaseService();
+    private static DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
 
     public static void write() {
@@ -30,5 +47,28 @@ public class DataGenerator {
         for (AdvancedSettings as : advancedSettigArray) {
             //databaseService.writeAdvancedSettings(as);
         }
+    }
+
+
+    public static void writeDummyTimeLineData(){
+        TimeLineCard timeLineCard = new TimeLineCard(UserService.getInstance().getNickName(),UserService.getInstance().getProfilePictureLocation());
+        timeLineCard.setUserUpdatedText("This is an uploaded photo by kd please do not delete otherwise you will be in danger :P");
+        timeLineCard.addToUploadImageList(UserService.getInstance().getProfilePictureLocation());
+        timeLineCard.addToUploadImageList(UserService.getInstance().getProfilePictureLocation());
+        mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(String.valueOf(System.currentTimeMillis())).setValue(timeLineCard);
+      /*  mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(String.valueOf(System.currentTimeMillis())).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currentUser = dataSnapshot.getValue(User.class);
+                //setFields();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("HomeFragment", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+*/
+
     }
 }

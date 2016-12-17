@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
+import edu.sjsu.snappychat.fragment.HomeTimeLineFragment;
 import edu.sjsu.snappychat.fragment.chats.ChatFragment;
 import edu.sjsu.snappychat.fragment.FriendsFragment;
 import edu.sjsu.snappychat.fragment.HomeFragment;
@@ -46,7 +47,8 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottombaritemone) {
                     //Home
-                    HomeFragment homeFragment = new HomeFragment();
+                    //HomeFragment homeFragment = new HomeFragment();
+                    HomeTimeLineFragment homeFragment = new HomeTimeLineFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
                     getSupportActionBar().show();
 

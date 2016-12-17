@@ -24,6 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.Mapping;
@@ -50,16 +53,17 @@ public class ChatFragment extends Fragment {
         final String cleanEmailAddress = Util.cleanEmailID(UserService.getInstance().getEmail());
         final ChatListAdapter chatAdapter = new ChatListAdapter();
 
-        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHAT_USERS).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHAT_USERS).orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                final ArrayList<String> listOfChatUsers = (ArrayList<String>) dataSnapshot.getValue();
+                final Map<String,Long> listOfChatUsers = (HashMap<String, Long>) dataSnapshot.getValue();
+
                 if (listOfChatUsers != null && !listOfChatUsers.isEmpty()) {
                     mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             emailmap = dataSnapshot.getValue(Mapping.class);
-                            for (String user : listOfChatUsers) {
+                            for (String user : listOfChatUsers.keySet()) {
                                 ChatUserListItem item = new ChatUserListItem();
                                 item.setEmail(user);
                                 item.setNickName(emailmap.getNickName(user));

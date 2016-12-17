@@ -1,11 +1,12 @@
 package edu.sjsu.snappychat.fragment;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,25 +14,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.sjsu.snappychat.LoginActivity;
 import edu.sjsu.snappychat.R;
-import edu.sjsu.snappychat.UserCheckActivity;
 import edu.sjsu.snappychat.UserProfileActivity;
-import edu.sjsu.snappychat.ViewProfilePage;
-import edu.sjsu.snappychat.model.Mapping;
+import edu.sjsu.snappychat.datagenerate.DataGenerator;
+import edu.sjsu.snappychat.model.TimeLineCard;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
@@ -39,61 +38,85 @@ import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
 
 /**
- * Created by Kamlendra Chauhan on 12/5/2016.
+ * Created by I074841 on 12/13/2016.
  */
 
-public class HomeFragment extends Fragment {
-
+public class HomeTimeLineFragment extends Fragment {
     private DatabaseReference mDatabaseReference;
-//    private User loggedInUser;
-
-    private TextView nickName;
-    private TextView profession;
-    private TextView location;
-    private TextView aboutMe;
-    private TextView interests;
-    private TextView email;
     private ImageView profilePic;
     private FloatingActionButton profile;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        /*nickName = (TextView) view.findViewById(R.id.tvHNickName1);
-       profession = (TextView) view.findViewById(R.id.Profession);
-        location = (TextView) view.findViewById(R.id.Location);
-        aboutMe = (TextView) view.findViewById(R.id.Aboutme);
-        interests = (TextView) view.findViewById(R.id.Interest);
-        email = (TextView) view.findViewById(R.id.email);*/
-        profilePic = (ImageView) view.findViewById(R.id.profilepic);
-        profile = (FloatingActionButton) view.findViewById(R.id.floatprofile);
+        View view = inflater.inflate(R.layout.timeline_item, container, false);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        setHasOptionsMenu(true);
 
-        profile.setOnClickListener(new View.OnClickListener(){
+        final RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(llm);
+        //Pass timeline object here as a list. Add an event where on child update set the adapter.
+        mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
-            public void onClick(View view) {
-                Intent viewProfile = new Intent(getActivity(), ViewProfilePage.class);
-                startActivity(viewProfile);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
+                Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : iterable) {
+                    listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
+                }
+                //setFields();
+                RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
+                rv.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
+        /*mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).orderByKey().addChildEventListener(new ChildEventListener() {
 
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            *//*    List<TimeLineCard> listOfTimeLineCard = new ArrayList<TimeLineCard>();
+                Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : iterable) {
+                    listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
+                }
+                //setFields();
+                RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
+                rv.setAdapter(adapter);*//*
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+              *//*  List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
+                Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : iterable) {
+                    listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
+                }
+                //setFields();
+                RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
+                rv.setAdapter(adapter);*//*
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("HomeFragment", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+*/
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
-//        ScrollView sv = (ScrollView) view.findViewById(R.id.sc);
-//        sv.scrollTo(0, sv.getTop());
         return view;
-    }
 
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -101,20 +124,11 @@ public class HomeFragment extends Fragment {
         super.onStart();
         if (!UserService.getInstance().isDataLoaded()) {
             loadDataFromServer();
-        }
-        setFields();
-    }
+            DataGenerator.writeDummyTimeLineData();
 
-    private void setFields() {
-        /*nickName.setText(UserService.getInstance().getNickName());
-        profession.setText(UserService.getInstance().getProfession());
-        location.setText(UserService.getInstance().getLocation());
-        aboutMe.setText(UserService.getInstance().getAboutMe());
-        interests.setText(UserService.getInstance().getInterests());
-        email.setText(UserService.getInstance().getEmail());*/
-        if (UserService.getInstance().getProfilePictureLocation() != null) {
-            profilePic.setImageBitmap(Util.decodeImage(UserService.getInstance().getProfilePictureLocation()));
         }
+
+
     }
 
     private void loadDataFromServer() {
@@ -129,7 +143,7 @@ public class HomeFragment extends Fragment {
                 UserService.getInstance().setInterests(currentUser.getInterests());
                 UserService.getInstance().setProfilePictureLocation(currentUser.getProfilePictureLocation());
                 UserService.getInstance().setDataLoaded(true);
-                setFields();
+                //setFields();
             }
 
             @Override
@@ -137,6 +151,11 @@ public class HomeFragment extends Fragment {
                 Log.w("HomeFragment", "loadPost:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -163,4 +182,3 @@ public class HomeFragment extends Fragment {
         }
     }
 }
-
