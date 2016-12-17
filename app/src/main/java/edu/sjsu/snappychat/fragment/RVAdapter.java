@@ -8,41 +8,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.snappychat.R;
-import edu.sjsu.snappychat.datagenerate.Person;
+import edu.sjsu.snappychat.model.TimeLineCard;
+import edu.sjsu.snappychat.util.Util;
 
 /**
  * Created by I074841 on 12/13/2016.
  */
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
+public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
 
-    List<Person> persons;
+    List<TimeLineCard> listOfTimeLineCard;
 
-    RVAdapter(List<Person> persons){
-        this.persons = new ArrayList<>();
-        this.persons.add(new Person("Emma Wilson", "23 years old", R.drawable.ic_audiotrack));
-        this.persons.add(new Person("Lavery Maiss", "25 years old", R.drawable.ic_audiotrack_light));
-        this.persons.add(new Person("Lillie Watts", "35 years old", R.drawable.ic_black_profession));
-    }
-
-    public static class PersonViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView personName;
-        TextView personAge;
-        ImageView personPhoto;
-
-        PersonViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
-            personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
-        }
+    RVAdapter(List<TimeLineCard> listOfTimeLineCard) {
+        this.listOfTimeLineCard = listOfTimeLineCard == null ? new ArrayList<TimeLineCard>() : listOfTimeLineCard;
     }
 
     @Override
@@ -51,18 +33,49 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
         PersonViewHolder pvh = new PersonViewHolder(v);
         return pvh;
     }
+
     @Override
     public int getItemCount() {
-        return persons.size();
+        return listOfTimeLineCard.size();
     }
+
     @Override
     public void onBindViewHolder(PersonViewHolder personViewHolder, int i) {
-        personViewHolder.personName.setText(persons.get(i).name);
-        personViewHolder.personAge.setText(persons.get(i).age);
-        personViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
+        personViewHolder.nickNameHeader.setText(listOfTimeLineCard.get(i).getNickName());
+        personViewHolder.userText.setText(listOfTimeLineCard.get(i).getUserUpdatedText());
+        //personViewHolder.personAge.setText(persons.get(i).age);
+        if (listOfTimeLineCard.get(i).getProfilePicture() != null)
+            personViewHolder.personPhoto.setImageBitmap(Util.decodeImage(listOfTimeLineCard.get(i).getProfilePicture()));
+        List<String> listOfUploadedImageLocation = listOfTimeLineCard.get(i).getListOfUploadedImage();
+        for (int j = 0; j < listOfUploadedImageLocation.size(); j++) {
+            if (listOfUploadedImageLocation.get(j) != null)
+                personViewHolder.uploadImages.get(j).setImageBitmap(Util.decodeImage(listOfUploadedImageLocation.get(j)));
+        }
     }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public static class PersonViewHolder extends RecyclerView.ViewHolder {
+        CardView cv;
+        TextView nickNameHeader;
+        TextView userText;
+        // TextView personAge;
+        ImageView personPhoto;
+        List<ImageView> uploadImages = new ArrayList<>();
+
+        PersonViewHolder(View itemView) {
+            super(itemView);
+            cv = (CardView) itemView.findViewById(R.id.cv);
+            nickNameHeader = (TextView) itemView.findViewById(R.id.nickNameHeader);
+            userText = (TextView) itemView.findViewById(R.id.usertext);
+            //personAge = (TextView)itemView.findViewById(R.id.person_age);
+            personPhoto = (ImageView) itemView.findViewById(R.id.person_photo);
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage1));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage2));
+            //TODO add all the upload image
+        }
     }
 }

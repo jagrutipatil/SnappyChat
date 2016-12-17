@@ -19,7 +19,7 @@
         <activity android:name=".UserCheckActivity"></activity>
         <activity
             android:name=".UserProfileActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".LandingPageActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
