@@ -1,0 +1,53 @@
+var firebase = require('firebase');
+var emailModule = require('./email');
+
+var config = {
+		  apiKey: "AIzaSyCtNKArzdakLuFNib9p9yprAKi1rLx8kZ4",
+		  authDomain: "snappychat-25a5a.firebaseapp.com",
+		  databaseURL: "https://snappychat-25a5a.firebaseio.com"
+		};
+
+firebase.initializeApp(config);
+var firebaseRef = firebase.database().ref().child('timelinecontent');
+var me = "jagpatil22gmailcom";
+
+var getFriendList = function(callback) {
+	firebase.database().ref('/friends').on("value", function(snapshot) {
+		var user = snapshot.child(me).val();
+		var email = user.email;
+		var friendList = user.friends;		
+		
+		console.log("my email:" + email);
+		console.log("myFriends:" + friendList[0]);
+		
+		callback(null, friendList);		
+	  }, function (errorObject) {
+	    console.log("The read failed: " + errorObject.code);
+	    callback(errorObject, null);
+	  });
+}; 		
+
+
+var isFriend = function(email, callback) {  
+	getFriendList( function(err, friendList) {
+		if (friendList.indexOf(email) > -1)  {
+			callback(true);
+		}	else {
+			callback(false);
+		}
+	});
+};
+
+exports.onChange = function() {
+	firebaseRef.on('child_changed', function(childsnapshot, prevchildname){  
+		console.log("Element Changed");	
+		var newPost = childsnapshot.val();
+		console.log("Email: " + childsnapshot.key);
+		isFriend(childsnapshot.key, function(returnType) {
+			//notify
+			emailModule.sendEmail(childsnapshot.key, "Your profile was changed", function(err, reply) {
+			});
+			console.log("Notify");
+		}); 
+	}) ;
+}; 

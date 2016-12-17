@@ -1,0 +1,24 @@
+var nodemailer = require('nodemailer');
+
+exports.handleSayHello = function (req, res) {
+    // Not the movie transporter!
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'cmpe277snappychat@gmail.com', // Your email id
+            pass: '21DaysToGo' // Your password
+        }
+    });
+};
+
+exports.sendEmail = function () {
+	transporter.sendMail(mailOptions, function(error, info){
+	    if(error){
+	        console.log(error);
+	        res.json({yo: 'error'});
+	    }else{
+	        console.log('Message sent: ' + info.response);
+	        res.json({yo: info.response});
+	    };
+	});
+}

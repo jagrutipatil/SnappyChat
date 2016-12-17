@@ -1,0 +1,37 @@
+var firebase = require('firebase');
+var config = {
+		  apiKey: "AIzaSyCtNKArzdakLuFNib9p9yprAKi1rLx8kZ4",
+		  authDomain: "snappychat-25a5a.firebaseapp.com",
+		  databaseURL: "https://snappychat-25a5a.firebaseio.com"
+		};
+
+firebase.initializeApp(config);
+var firebaseRef = firebase.database().ref().child('users');
+var me = "jagpatil22gmailcom";
+
+var getFriendList = firebase.database().ref('/friends').orderByChild("email").equalTo(me).on("value", function(snapshot) {
+    console.log(snapshot.key);
+//    console.log(snapshot.email);
+  },function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });
+
+var isFriend = function(email) {
+	//get friend list from db	
+}
+
+exports.onChange = function() {
+	getFriendList();
+	firebaseRef.on('child_changed',function(childsnapshot,prevchildname){  
+		console.log("Element Changed");	
+		var newPost = childsnapshot.val();
+		console.log("About Me: " + newPost.aboutMe);
+		console.log("Email: " + newPost.email);
+	}) ;
+}; 
+	
+
+
+
+
+

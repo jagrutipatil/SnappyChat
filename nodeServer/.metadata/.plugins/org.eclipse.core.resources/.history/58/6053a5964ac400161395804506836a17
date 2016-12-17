@@ -1,0 +1,12 @@
+var Firebase = require('firebase');
+var firebaseRef = new Firebase("https://snappychat-25a5a.firebaseio.com/chats");
+
+
+firebaseRef.on('child_changed',function(childsnapshot,prevchildname){  
+	console.log("Element Changed");	
+}) ;
+
+
+
+
+
