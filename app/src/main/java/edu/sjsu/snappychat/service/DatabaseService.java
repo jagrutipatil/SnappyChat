@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.sjsu.snappychat.model.AvailabilityMap;
 import edu.sjsu.snappychat.model.Invitations;
@@ -133,21 +134,21 @@ public class DatabaseService {
         });
     }
 
-    public static void updateChatList(final String from_user, final String to_user){
+    public static void updateChatList(final String from_user, final String to_user, final Long timestamp){
         mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                 UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
                 if (currentUser != null) {
-                    ArrayList<String> chats = currentUser.getUsers();
-                    if(!chats.contains(to_user)) {
-                        chats.add(to_user);
+                    HashMap<String,Long> chats = currentUser.getUsers();
+                    {
+                        chats.put(to_user,timestamp);
                         currentUser.setUsers(chats);
                         mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
                     }
                 } else {
-                    ArrayList<String> chatsList = new ArrayList<String>();
-                    chatsList.add(to_user);
+                    HashMap<String,Long> chatsList = new HashMap<String, Long>();
+                    chatsList.put(to_user,timestamp);
                     UserChatList userFriend = new UserChatList(chatsList);
                     mDatabaseReference.child(Constant.CHAT_LIST).child(Util.cleanEmailID(from_user)).setValue(userFriend);
                 }

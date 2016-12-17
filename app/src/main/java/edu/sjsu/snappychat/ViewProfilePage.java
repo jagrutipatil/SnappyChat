@@ -38,21 +38,21 @@ public class ViewProfilePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profile_page);
+        setContentView(R.layout.detail_profile_view);
 
-        nickName = (TextView) findViewById(R.id.tvNickName1);
-        interests = (TextView) findViewById(R.id.tvInterest1);
-        profession = (TextView) findViewById(R.id.tvProfession1);
-        city = (TextView) findViewById(R.id.tvLocataion5);
-        email = (TextView) findViewById(R.id.tvEmail3);
-        aboutMe = (TextView) findViewById(R.id.tvAboutMe2);
-        imageViewProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
+        nickName = (TextView) findViewById(R.id.nickName);
+        interests = (TextView) findViewById(R.id.Interest);
+        profession = (TextView) findViewById(R.id.Profession);
+        city = (TextView) findViewById(R.id.Location);
+        email = (TextView) findViewById(R.id.email);
+        aboutMe = (TextView) findViewById(R.id.Aboutme);
+        imageViewProfilePic = (ImageView) findViewById(R.id.profilepic);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         Intent intent = this.getIntent();
-        userEmail = intent.getStringExtra("USER_EMAIL");
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(userEmail)).addListenerForSingleValueEvent(new ValueEventListener() {
+        userEmail = UserService.getInstance().getEmail();
+        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);

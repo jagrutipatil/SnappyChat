@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.sjsu.snappychat.BaseAppCompatActivity;
 import edu.sjsu.snappychat.R;
@@ -116,8 +117,8 @@ public class ChatPage extends BaseAppCompatActivity {
     }
 
     private void checkUser() {
-        DatabaseService.updateChatList(from_user,to_user);
-        DatabaseService.updateChatList(to_user,from_user);
+        DatabaseService.updateChatList(from_user,to_user,getTime());
+        DatabaseService.updateChatList(to_user,from_user,getTime());
     }
 
     @Override
@@ -220,9 +221,12 @@ public class ChatPage extends BaseAppCompatActivity {
         ref_chatchildnode1.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ChatModel chatmsg = dataSnapshot.getValue(ChatModel.class);
+                if( dataSnapshot.getKey() != "lastUpdated"){
+                    ChatModel chatmsg = dataSnapshot.getValue(ChatModel.class);
                     chatmsgsList.add(chatmsg);
                     adapter.notifyDataSetChanged();
+                }
+
             }
 
             @Override
@@ -251,6 +255,11 @@ public class ChatPage extends BaseAppCompatActivity {
 
     }
 
+    private Long getTime() {
+        Long tsLong = System.currentTimeMillis()/1000;
+        //String ts = tsLong.toString();
+        return tsLong;
+    }
 
 
     private class ChatAdapter extends BaseAdapter {
@@ -338,8 +347,8 @@ public class ChatPage extends BaseAppCompatActivity {
                     public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                         UserChatList currentUser = dataSnapshot.getValue(UserChatList.class);
                         if (currentUser != null) {
-                            ArrayList<String> chats = currentUser.getUsers();
-                            if(chats.contains(to_user)) {
+                            HashMap<String,Long> chats = currentUser.getUsers();
+                            if(chats.containsKey(to_user)) {
                                 chats.remove(to_user);
                                 currentUser.setUsers(chats);
                                 mDatabaseReference.child(Constant.CHAT_LIST).child(from_user).setValue(currentUser);
