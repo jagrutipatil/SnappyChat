@@ -72,11 +72,11 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
         setContentView(R.layout.activity_user_profile);
 
         buttonDone = (Button) findViewById(R.id.done);
-        editTextNickName = (EditText) findViewById(R.id.tvENickName1);
-        editTextInterests = (EditText) findViewById(R.id.tvEInterest1);
-        editTextProfession = (EditText) findViewById(R.id.tvEProfession1);
-        editTextCity = (EditText) findViewById(R.id.tvELocataion5);
-        editTextAboutMe = (EditText) findViewById(R.id.tvEAboutMe2);
+        editTextNickName = (EditText) findViewById(R.id.nickName);
+        editTextInterests = (EditText) findViewById(R.id.Interest);
+        editTextProfession = (EditText) findViewById(R.id.Profession);
+        editTextCity = (EditText) findViewById(R.id.Location);
+        editTextAboutMe = (EditText) findViewById(R.id.Aboutme);
         imageViewProfilePic = (ImageView) findViewById(R.id.ivEProfilePic);
         advanced = (Button) findViewById(R.id.advanced);
 

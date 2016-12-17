@@ -4,6 +4,7 @@ package edu.sjsu.snappychat.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import edu.sjsu.snappychat.LoginActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.UserCheckActivity;
 import edu.sjsu.snappychat.UserProfileActivity;
+import edu.sjsu.snappychat.ViewProfilePage;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.DatabaseService;
@@ -52,18 +54,31 @@ public class HomeFragment extends Fragment {
     private TextView interests;
     private TextView email;
     private ImageView profilePic;
+    private FloatingActionButton profile;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        nickName = (TextView) view.findViewById(R.id.tvHNickName1);
-        profession = (TextView) view.findViewById(R.id.tvHProfession1);
-        location = (TextView) view.findViewById(R.id.tvHLocataion5);
-        aboutMe = (TextView) view.findViewById(R.id.tvHAboutMe2);
-        interests = (TextView) view.findViewById(R.id.tvHInterest1);
-        email = (TextView) view.findViewById(R.id.tvHEmail3);
-        profilePic = (ImageView) view.findViewById(R.id.ivHProfilePic);
+        /*nickName = (TextView) view.findViewById(R.id.tvHNickName1);
+       profession = (TextView) view.findViewById(R.id.Profession);
+        location = (TextView) view.findViewById(R.id.Location);
+        aboutMe = (TextView) view.findViewById(R.id.Aboutme);
+        interests = (TextView) view.findViewById(R.id.Interest);
+        email = (TextView) view.findViewById(R.id.email);*/
+        profilePic = (ImageView) view.findViewById(R.id.profilepic);
+        profile = (FloatingActionButton) view.findViewById(R.id.floatprofile);
+
+        profile.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent viewProfile = new Intent(getActivity(), ViewProfilePage.class);
+                startActivity(viewProfile);
+            }
+        });
+
+
 
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -72,6 +87,8 @@ public class HomeFragment extends Fragment {
 //        sv.scrollTo(0, sv.getTop());
         return view;
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,12 +106,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void setFields() {
-        nickName.setText(UserService.getInstance().getNickName());
+        /*nickName.setText(UserService.getInstance().getNickName());
         profession.setText(UserService.getInstance().getProfession());
         location.setText(UserService.getInstance().getLocation());
         aboutMe.setText(UserService.getInstance().getAboutMe());
         interests.setText(UserService.getInstance().getInterests());
-        email.setText(UserService.getInstance().getEmail());
+        email.setText(UserService.getInstance().getEmail());*/
         if (UserService.getInstance().getProfilePictureLocation() != null) {
             profilePic.setImageBitmap(Util.decodeImage(UserService.getInstance().getProfilePictureLocation()));
         }
