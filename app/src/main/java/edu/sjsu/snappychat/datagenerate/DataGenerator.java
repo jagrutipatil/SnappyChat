@@ -1,19 +1,10 @@
 package edu.sjsu.snappychat.datagenerate;
 
-import android.util.Log;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-
-import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.AdvancedSettings;
 import edu.sjsu.snappychat.model.TimeLineCard;
-import edu.sjsu.snappychat.model.User;
 import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
@@ -30,12 +21,13 @@ public class DataGenerator {
 
 
     public static void write() {
-      writeAdvancedSettings();
+        writeAdvancedSettings();
     }
 
-    private static void writeInvitations(){
+    private static void writeInvitations() {
 
     }
+
     private static void writeAdvancedSettings() {
         AdvancedSettings advancedSettigArray[] = new AdvancedSettings[5];
         advancedSettigArray[0] = new AdvancedSettings("Public", true, "kamlendrachauhan21@gmail.com");
@@ -50,11 +42,12 @@ public class DataGenerator {
     }
 
 
-    public static void writeDummyTimeLineData(){
-        TimeLineCard timeLineCard = new TimeLineCard(UserService.getInstance().getNickName(),UserService.getInstance().getProfilePictureLocation());
+    public static void writeDummyTimeLineData() {
+        TimeLineCard timeLineCard = new TimeLineCard(UserService.getInstance().getNickName(), UserService.getInstance().getProfilePictureLocation(), UserService.getInstance().getEmail());
         timeLineCard.setUserUpdatedText("This is an uploaded photo by kd please do not delete otherwise you will be in danger :P");
         timeLineCard.addToUploadImageList(UserService.getInstance().getProfilePictureLocation());
         timeLineCard.addToUploadImageList(UserService.getInstance().getProfilePictureLocation());
+
         mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(String.valueOf(System.currentTimeMillis())).setValue(timeLineCard);
       /*  mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(String.valueOf(System.currentTimeMillis())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

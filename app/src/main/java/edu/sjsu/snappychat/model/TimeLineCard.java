@@ -10,12 +10,26 @@ import java.util.List;
 public class TimeLineCard {
     private String nickName;
     private String profilePicture;
+    private String emailAddress;
     private String userUpdatedText;
     private List<String> listOfUploadedImage = new ArrayList<>();
     public TimeLineCard(){}
-    public TimeLineCard(String nickName, String profilePicture) {
+    public TimeLineCard(String nickName, String profilePicture,String emailAddress) {
         this.nickName = nickName;
         this.profilePicture = profilePicture;
+        this.emailAddress = emailAddress;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setListOfUploadedImage(List<String> listOfUploadedImage) {
+        this.listOfUploadedImage = listOfUploadedImage;
     }
 
     public String getNickName() {
