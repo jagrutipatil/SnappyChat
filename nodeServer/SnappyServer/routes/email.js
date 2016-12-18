@@ -11,7 +11,7 @@ exports.sendEmail = function (email, text , callback) {
 	var mailOptions = {
 		    from: 'cmpe277snappychat@gmail.com', 
 		    to: email, 
-		    subject: 'Test Email SnappyChat', 
+		    subject: 'Your friend updated timeline', 
 		    text: text 
 		};
 	
