@@ -11,7 +11,7 @@ exports.sendEmail = function (email, text , callback) {
 	var mailOptions = {
 		    from: 'cmpe277snappychat@gmail.com', 
 		    to: email, 
-		    subject: 'Your friend updated timeline', 
+		    subject: 'Timeline Update of your friend', 
 		    text: text 
 		};
 	

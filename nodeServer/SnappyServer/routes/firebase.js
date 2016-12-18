@@ -9,6 +9,7 @@ var config = {
 
 firebase.initializeApp(config);
 var firebaseRef = firebase.database().ref().child('timelinecontent');
+var cleanPattern = "";
 //var me = "jagpatil22gmailcom";
 
 var getFriendList = function(me, callback) {
@@ -16,10 +17,6 @@ var getFriendList = function(me, callback) {
 		var user = snapshot.child(me).val();
 		var email = user.email;
 		var friendList = user.friends;		
-		
-		console.log("my email:" + email);
-		console.log("myFriends:" + friendList[0]);
-		
 		callback(null, friendList);		
 	  }, function (errorObject) {
 		  console.log("The read failed: " + errorObject.code);
@@ -45,8 +42,11 @@ var getFriendList = function(me, callback) {
 //}
 
 var notify = function(email, callback) {
-	getFriendList(email, function(err, friendList) {
+	var cleanEmail = email;
+	cleanEmail = cleanEmail.replace(/[^A-Za-z0-9]/g, "");
+	getFriendList(cleanEmail, function(err, friendList) {
 		for (i = 0; i < friendList.length; i++) {
+				//TODO add nickname in body
 				emailModule.sendEmail(friendList[i], "Your friend: "+ email + " changed profile", function(err, reply) {
 					console.log("Notify");		
 				});
@@ -65,6 +65,7 @@ var isFriend = function(email, callback) {
 	});
 };
 
+
 exports.onChange = function() {
 	firebaseRef.on('child_changed', function(childsnapshot, prevchildname) {  
 		console.log("Element Changed");	
@@ -72,9 +73,8 @@ exports.onChange = function() {
 		
 		if (Object.keys(userDict).length > 1) {
 			var pEmail = userDict[Object.keys(userDict)[0]].emailAddress;
-			console.log("Original pEmail: " + pEmail);
-			//TODO clean email
-			notify("kamlendrasgsitsgmailcom", function(err, reply) {
+			console.log("Original pEmail: " + pEmail);			
+			notify(pEmail, function(err, reply) {
 				console.log(reply);
 			});						
 		}
