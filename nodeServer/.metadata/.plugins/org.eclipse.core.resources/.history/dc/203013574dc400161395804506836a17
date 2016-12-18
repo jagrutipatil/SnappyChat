@@ -1,0 +1,21 @@
+var Firebase = require('firebase');
+var config = {
+		  apiKey: "AIzaSyCtNKArzdakLuFNib9p9yprAKi1rLx8kZ4",
+		  authDomain: "snappychat-25a5a.firebaseapp.com",
+		  databaseURL: "https://snappychat-25a5a.firebaseio.com/users"
+		};
+
+firebase.initializeApp(config);
+var firebaseRef = firebase.database().ref();
+
+exports.onChange = function() {
+	firebaseRef.on('child_changed',function(childsnapshot,prevchildname){  
+		console.log("Element Changed");	
+	}) ;
+}; 
+	
+
+
+
+
+

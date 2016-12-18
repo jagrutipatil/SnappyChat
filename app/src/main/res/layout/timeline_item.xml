@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".LandingPageActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -10,7 +14,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="88dp"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/post_text"
@@ -23,15 +27,14 @@
             android:layout_height="wrap_content">
 
             <Space
-                android:layout_width="286dp"
+                android:layout_width="239dp"
                 android:layout_height="match_parent" />
 
             <Button
                 android:text="Post"
-                android:layout_width="wrap_content"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/post"
-                android:layout_weight="1"
                 android:textStyle="normal|bold"
                 android:textColor="@color/cardview_light_background"
                 android:background="@color/colorPrimary" />
@@ -45,9 +48,9 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv"
-        />
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rv"
+    />
 </LinearLayout>

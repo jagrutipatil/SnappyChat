@@ -1,0 +1,25 @@
+var firebase = require('firebase');
+var config = {
+		  apiKey: "AIzaSyCtNKArzdakLuFNib9p9yprAKi1rLx8kZ4",
+		  authDomain: "snappychat-25a5a.firebaseapp.com",
+		  databaseURL: "https://snappychat-25a5a.firebaseio.com"
+		};
+
+firebase.initializeApp(config);
+var firebaseRef = firebase.database().ref();
+
+exports.onChange = function() {
+	firebaseRef.on('child_changed',function(childsnapshot,prevchildname){  
+		console.log("Element Changed");	
+		var newPost = childsnapshot.val();
+		console.log("Author: " + newPost.author);
+		  console.log("Title: " + newPost.title);
+		  console.log("Previous Post ID: " + prevChildKey);
+	}) ;
+}; 
+	
+
+
+
+
+
