@@ -1,0 +1,4 @@
+var Firebase = require('firebase');
+var firebaseRef = new Firebase("https://snappychat-25a5a.firebaseio.com/chats");
+
+

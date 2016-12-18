@@ -1,0 +1,11 @@
+var nodemailer = require('nodemailer');
+
+exports.handleSayHello = function (req, res) {
+    // Not the movie transporter!
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'example@gmail.com', // Your email id
+            pass: 'password' // Your password
+        }
+    });
