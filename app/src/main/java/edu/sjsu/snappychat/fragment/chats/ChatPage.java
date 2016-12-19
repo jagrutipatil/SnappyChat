@@ -109,8 +109,7 @@ public class ChatPage extends BaseAppCompatActivity {
             ref_chatchildnode1.push().setValue(m);
             ref_chatchildnode2.push().setValue(m);
             checkUser();
-            count = count +1 ;
-            updateNotification(count);
+            updateNotification(1);
         }
     }
 
