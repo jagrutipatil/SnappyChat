@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.sjsu.snappychat.LoadProfileActivity;
 import edu.sjsu.snappychat.LoginActivity;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.fragment.chats.ChatModel;
@@ -303,7 +304,7 @@ public class HomeTimeLineFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent edit_page = new Intent(getContext(), UserProfileActivity.class);
+                Intent edit_page = new Intent(getContext(), LoadProfileActivity.class);
                 startActivity(edit_page);
                 return true;
             case R.id.action_logout:
