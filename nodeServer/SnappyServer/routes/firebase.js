@@ -41,13 +41,13 @@ var getFriendList = function(me, callback) {
 //	  });
 //}
 
-var notify = function(email, callback) {
+var notify = function(email, nickName, callback) {
 	var cleanEmail = email;
 	cleanEmail = cleanEmail.replace(/[^A-Za-z0-9]/g, "");
 	getFriendList(cleanEmail, function(err, friendList) {
 		for (i = 0; i < friendList.length; i++) {
 				//TODO add nickname in body
-				emailModule.sendEmail(friendList[i], "Your friend: "+ email + " changed profile", function(err, reply) {
+				emailModule.sendEmail(friendList[i], "Your friend: "+ nickName + " changed profile", function(err, reply) {
 					console.log("Notify");		
 				});
 		}
@@ -90,7 +90,7 @@ exports.onChange = function() {
 			isEmailNotificationOn(pEmail, function(err, reply) {
 				if (reply == true) {
 					console.log("Original pEmail: " + pEmail);			
-					notify(pEmail, function(err, reply) {
+					notify(pEmail, nickName, function(err, reply) {
 						console.log(reply);
 					});											
 				}
