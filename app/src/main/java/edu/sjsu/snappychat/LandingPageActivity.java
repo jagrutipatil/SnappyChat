@@ -69,6 +69,11 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, chatFragment).commit();
                     getSupportActionBar().hide();
 
+                } else if(menuItemId == R.id.bottombaritemfive){
+                    //profile
+                    //HomeFragment homeFragment = new HomeFragment();
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+                    //getSupportActionBar().hide();
                 }
             }
 
