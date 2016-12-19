@@ -29,9 +29,11 @@ import android.widget.ImageButton;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -106,6 +108,14 @@ public class HomeTimeLineFragment extends Fragment {
                 String img = Util.encodeImage(myBitmap);
                 imageArray.add(img);
             }
+        }else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ChatModel m = new ChatModel();
+            m.setSender(from_user_nick_name);
+            m.setReceiver(to_user_nick_name);
+            String img = Util.encodeImage(imageBitmap);
+            imageArray.add(img);
         }
     }
 
@@ -114,7 +124,7 @@ public class HomeTimeLineFragment extends Fragment {
         View view = inflater.inflate(R.layout.timeline_item, container, false);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         setHasOptionsMenu(true);
-
+        final List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
         final RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
@@ -129,6 +139,8 @@ public class HomeTimeLineFragment extends Fragment {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Toast.makeText(getActivity(),"Updating Timeline",Toast.LENGTH_SHORT).show();
 
                 if(!postText.getText().toString().equals("") || imageArray.size()!=0){
                     mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -152,6 +164,30 @@ public class HomeTimeLineFragment extends Fragment {
 
                             //Write in database
                             mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
+
+
+                                mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
+                                        Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                                        for (DataSnapshot snapshot : iterable) {
+                                            listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
+                                        }
+                                        //setFields();
+                                        Collections.reverse(listOfTimeLineCard);
+                                        RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
+                                        rv.setAdapter(adapter);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
                         }
 
                         @Override
@@ -168,7 +204,7 @@ public class HomeTimeLineFragment extends Fragment {
             public void onClick(View view) {
 
 
-                final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+                final CharSequence[] items = {"Take Photo","Choose from Library", "Cancel"};
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
                 builder.setTitle("Add Photo!");
                 builder.setIcon(R.drawable.faceicon);
@@ -200,12 +236,12 @@ public class HomeTimeLineFragment extends Fragment {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
                 Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                 for (DataSnapshot snapshot : iterable) {
                     listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
                 }
                 //setFields();
+                Collections.reverse(listOfTimeLineCard);
                 RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
                 rv.setAdapter(adapter);
             }
