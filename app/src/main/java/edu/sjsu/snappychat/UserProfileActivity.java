@@ -213,6 +213,20 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
         return false;
     }
 
+    private void requestCameraPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+    }
+
+    private void requestGalleryPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+        }
+    }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -261,18 +275,24 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
             public void onClick(DialogInterface dialog, int item) {
 
                 if (items[item].equals("Take Photo")) {
-                   // PROFILE_PIC_COUNT = 1;
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                    //TODO Ask for Permissions
-                    requestPermissionForCamera();
-                    startActivityForResult(intent, CAMERA_CODE);
+                    if (ActivityCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED ) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, CAMERA_CODE);
+                    }else {
+                        requestCameraPermissions();
+                    }
+
                 } else if (items[item].equals("Choose from Library")) {
-                    //PROFILE_PIC_COUNT = 1;
-                    Intent intent = new Intent(
-                            Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent,PICK_IMAGE_REQUEST);
+
+                    if (ActivityCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+                        Intent intent = new Intent(
+                                Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent,PICK_IMAGE_REQUEST);
+                    } else {
+                        requestGalleryPermissions();
+                    }
                 } else if (items[item].equals("Cancel")) {
                     //PROFILE_PIC_COUNT = 0;
                     dialog.dismiss();
@@ -282,44 +302,41 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
         builder.show();
     }
 
-    private void requestPermissionForCamera() {
-        if (ContextCompat.checkSelfPermission(UserProfileActivity.this,
-                Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(UserProfileActivity.this,
-                    Manifest.permission.CAMERA)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(UserProfileActivity.this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_CAMERA);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CAMERA: {
+            case 1: {
 
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, CAMERA_CODE);
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
+
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            case 2: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent,PICK_IMAGE_REQUEST);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
 
                 } else {
 
