@@ -126,7 +126,6 @@ public class HomeTimeLineFragment extends Fragment {
         camera = (ImageButton) view.findViewById(R.id.camera);
         post = (Button) view.findViewById(R.id.post);
         postText = (EditText) view.findViewById(R.id.post_text);
-
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

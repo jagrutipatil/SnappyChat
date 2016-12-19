@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -29,7 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import edu.sjsu.snappychat.FriendTimeLineActivity;
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.ViewProfilePage;
 import edu.sjsu.snappychat.fragment.chats.ChatPage;
 import edu.sjsu.snappychat.fragment.chats.FriendList;
 import edu.sjsu.snappychat.model.AvailabilityMap;
@@ -103,6 +106,19 @@ public class FriendListFragment extends Fragment {
                                     FriendListAdapter friendListAdapter = new FriendListAdapter();
                                     friendListView.setAdapter(friendListAdapter);
                                     //friendListAdapter.notifyDataSetChanged();
+                                    friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                                            if (position < friendListView.getCount()) {
+                                                //go to that user's profile
+                                                Intent intent = new Intent(getActivity(), FriendTimeLineActivity.class);
+                                                View view1 = friendListView.getChildAt(position);
+                                                TextView tv = (TextView) view1.findViewById(R.id.email);
+                                                intent.putExtra("USER_EMAIL", tv.getText().toString());
+                                                startActivity(intent);
+                                            }
+                                        }
+                                    });
 
                                 }
 
@@ -161,10 +177,23 @@ public class FriendListFragment extends Fragment {
             v = getActivity().getLayoutInflater().inflate(R.layout.friend_list, null);
             TextView lbl = (TextView) v.findViewById(R.id.name);
             ImageView img = (ImageView) v.findViewById(R.id.status);
-            lbl.setText(friend.getNickname());
-
+            ImageView goToTimeLine = (ImageView) v.findViewById(R.id.friendtimeline);
             final TextView email = (TextView) v.findViewById(R.id.email);
             email.setText(friend.getEmail());
+
+            goToTimeLine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String to_user = Util.cleanEmailID(String.valueOf(email.getText()));
+                    Intent intent = new Intent(getActivity(), FriendTimeLineActivity.class);
+                    intent.putExtra("USER_EMAIL", to_user);
+                    intent.putExtra("NICK_NAME", friend.getNickname());
+
+                    startActivity(intent);
+                }
+            });
+            lbl.setText(friend.getNickname());
+
 
 
             if (friend.isStatus()) {

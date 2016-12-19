@@ -23,7 +23,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
     List<TimeLineCard> listOfTimeLineCard;
 
-    RVAdapter(List<TimeLineCard> listOfTimeLineCard) {
+    public RVAdapter(List<TimeLineCard> listOfTimeLineCard) {
         this.listOfTimeLineCard = listOfTimeLineCard == null ? new ArrayList<TimeLineCard>() : listOfTimeLineCard;
     }
 
