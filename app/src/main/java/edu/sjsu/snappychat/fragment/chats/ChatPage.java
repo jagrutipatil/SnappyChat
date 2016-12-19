@@ -109,8 +109,7 @@ public class ChatPage extends BaseAppCompatActivity {
             ref_chatchildnode1.push().setValue(m);
             ref_chatchildnode2.push().setValue(m);
             checkUser();
-            count = count +1 ;
-            updateNotification(count);
+            updateNotification(1);
         }
     }
 
@@ -384,7 +383,8 @@ public class ChatPage extends BaseAppCompatActivity {
         @Override
         public void onFocusChange(View view, boolean b) {
             if(b){
-                updateNotification(0);
+                Toast.makeText(ChatPage.this,"onFocus",Toast.LENGTH_LONG).show();
+                DatabaseService.clearNotification(from_user,to_user,0);
             }
         }
     };
