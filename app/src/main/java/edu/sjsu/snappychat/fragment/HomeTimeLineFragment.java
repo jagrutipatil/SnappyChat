@@ -146,6 +146,7 @@ public class HomeTimeLineFragment extends Fragment {
                         long timeStamp = System.currentTimeMillis()/1000;
                         String time = Long.toString(timeStamp);
                         imageArray.clear();
+                        postText.setText("");
 
                         //Write in database
                         mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
@@ -156,7 +157,7 @@ public class HomeTimeLineFragment extends Fragment {
 
                     }
                 });
-                postText.setText("");
+
             }
         });
 
