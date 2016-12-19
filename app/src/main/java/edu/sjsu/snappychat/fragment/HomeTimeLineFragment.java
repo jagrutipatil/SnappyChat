@@ -156,7 +156,7 @@ public class HomeTimeLineFragment extends Fragment {
 
                     }
                 });
-
+                postText.setText("");
             }
         });
 
