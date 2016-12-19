@@ -189,6 +189,33 @@ public class DatabaseService {
             }
         });
     }
+
+    public static void clearNotification(final String from_user, final String to_user, final Integer count){
+        mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(from_user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                NotificationModel currentUser = dataSnapshot.getValue(NotificationModel.class);
+                if (currentUser != null) {
+                    HashMap<String,Long> notification = currentUser.getNotification();
+                    {
+                        notification.put(to_user, Long.valueOf(count));
+                        currentUser.setNotification(notification);
+                        mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(from_user).setValue(currentUser);
+                    }
+                } else {
+                    HashMap<String,Long> notification = new HashMap<String, Long>();
+                    notification.put(to_user, Long.valueOf(count));
+                    NotificationModel user = new NotificationModel(notification);
+                    mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(from_user).setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("notification add", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
 }
 
 
