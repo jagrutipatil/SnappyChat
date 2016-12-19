@@ -134,21 +134,21 @@ public class HomeTimeLineFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         TimeLineCard card = new TimeLineCard();
 
-                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                            User user = snap.getValue(User.class);
-                            card.setNickName(user.getNickName());
-                            card.setProfilePicture(user.getProfilePictureLocation());
-                            card.setUserUpdatedText(postText.getText().toString());
-                            card.setEmailAddress(UserService.getInstance().getEmail());
-                            List<String> imageArray1 = card.getListOfUploadedImage();
-                            imageArray1.addAll(imageArray);
+                        User user = dataSnapshot.getValue(User.class);
+                        card.setNickName(user.getNickName());
+                        card.setProfilePicture(user.getProfilePictureLocation());
+                        card.setUserUpdatedText(postText.getText().toString());
+                        card.setEmailAddress(UserService.getInstance().getEmail());
+                        List<String> imageArray1 = card.getListOfUploadedImage();
+                        imageArray1.addAll(imageArray);
+                        card.setListOfUploadedImage(imageArray1);
 
-                            long timeStamp = System.currentTimeMillis()/1000;
-                            String time = Long.toString(timeStamp);
+                        long timeStamp = System.currentTimeMillis()/1000;
+                        String time = Long.toString(timeStamp);
+                        imageArray.clear();
 
-                            //Write in database
-                            mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
-                        }
+                        //Write in database
+                        mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
                     }
 
                     @Override
@@ -276,7 +276,7 @@ public class HomeTimeLineFragment extends Fragment {
                 UserService.getInstance().setProfilePictureLocation(currentUser.getProfilePictureLocation());
                 UserService.getInstance().setDataLoaded(true);
                 //setFields();
-                DataGenerator.writeDummyTimeLineData();
+                //DataGenerator.writeDummyTimeLineData();
 
             }
 
