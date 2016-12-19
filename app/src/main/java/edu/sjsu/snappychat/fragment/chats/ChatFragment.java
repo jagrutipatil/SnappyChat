@@ -29,6 +29,7 @@ import java.util.Map;
 import edu.sjsu.snappychat.R;
 import edu.sjsu.snappychat.model.MapUtil;
 import edu.sjsu.snappychat.model.Mapping;
+import edu.sjsu.snappychat.service.DatabaseService;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.Util;
@@ -116,6 +117,7 @@ public class ChatFragment extends Fragment {
                     intent.putExtra("LOG_IN_USER", LoggedInUser);
                     intent.putExtra("TO_USER_NICK_NAME", friend.getNickName());
                     intent.putExtra("FROM_USER_NICK_NAME", emailmap.getNickName(Util.cleanEmailID(UserService.getInstance().getEmail())));
+                    DatabaseService.clearNotification(from_user,to_user,0);
                     startActivity(intent);
                 }
             });
