@@ -410,7 +410,6 @@ public class ChatPage extends BaseAppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Toast.makeText(ChatPage.this,"destroy",Toast.LENGTH_LONG).show();
         DatabaseService.clearNotification(from_user,to_user,0);
         super.onDestroy();
     }
