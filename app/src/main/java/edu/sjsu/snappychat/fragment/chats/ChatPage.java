@@ -62,7 +62,7 @@ public class ChatPage extends BaseAppCompatActivity {
     Firebase ref_chatchildnode1 = null;
     Firebase ref_chatchildnode2 = null;
     String from_user, to_user, newmsg, LoggedInUser, ImageDecode, from_user_nick_name, to_user_nick_name;
-    Bitmap myBitmap;;
+    Bitmap myBitmap;
     DatabaseReference mDatabaseReference;
 
     @Override

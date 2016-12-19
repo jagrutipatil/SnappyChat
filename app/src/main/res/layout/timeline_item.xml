@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".LandingPageActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv"
-        />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/post_text"
+            android:hint="Write Post..."
+            android:textAlignment="textStart" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_width="239dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:text="Post"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/post"
+                android:textStyle="normal|bold"
+                android:textColor="@color/cardview_light_background"
+                android:background="@color/colorPrimary" />
+
+            <ImageButton
+                android:layout_height="match_parent"
+                android:id="@+id/camera"
+                android:layout_width="60dp"
+                android:background="@android:drawable/ic_menu_camera" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rv"
+    />
 </LinearLayout>

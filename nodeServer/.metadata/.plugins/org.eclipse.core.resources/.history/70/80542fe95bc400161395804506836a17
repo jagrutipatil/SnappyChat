@@ -1,0 +1,58 @@
+var firebase = require('firebase');
+var config = {
+		  apiKey: "AIzaSyCtNKArzdakLuFNib9p9yprAKi1rLx8kZ4",
+		  authDomain: "snappychat-25a5a.firebaseapp.com",
+		  databaseURL: "https://snappychat-25a5a.firebaseio.com"
+		};
+
+firebase.initializeApp(config);
+var firebaseRef = firebase.database().ref().child('users');
+var me = "jagpatil22gmailcom";
+
+var getFriendList = function() {
+	firebase.database().ref('/friends').on("value", function(snapshot) {
+		var user = snapshot.child(me).val();
+		var email = user.email;
+		var friendList = user.friends;
+		
+		console.log(email);
+		console.log(friendList[0]);
+		return friendList;
+		
+	  },function (errorObject) {
+	    console.log("The read failed: " + errorObject.code);
+	  });
+}; 		
+
+
+var isFriend = function(email) {
+	var regex = "[^A-Za-z0-9]";
+    email =  email.replace(regex, "");
+    
+	getFriendList( function(friendList) {
+		if (friendList.indexOf(email) > -1)  {
+			return true;
+		}	else {
+			return false;
+		}
+	});
+};
+
+exports.onChange = function() {
+	firebaseRef.on('child_changed',function(childsnapshot,prevchildname){  
+		console.log("Element Changed");	
+		var newPost = childsnapshot.val();
+		console.log("About Me: " + newPost.aboutMe);
+		console.log("Email: " + newPost.email);
+		isFriend(newPost.email, function(returnType) {
+			//notify
+			console.log("Notify");
+		}); 
+	}) ;
+}; 
+	
+
+
+
+
+
