@@ -143,7 +143,6 @@ public class ChatFragment extends Fragment {
         final ListView chatList = (ListView) getView().findViewById(R.id.conversation);
 
         final String cleanEmailAddress = Util.cleanEmailID(UserService.getInstance().getEmail());
-        final ChatListAdapter chatAdapter = new ChatListAdapter();
 
         mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHAT_USERS).orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -162,6 +161,8 @@ public class ChatFragment extends Fragment {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     HashMap<String,Long> msg = (HashMap<String, Long>) dataSnapshot.getValue();
+                                    ChatListAdapter chatAdapter = new ChatListAdapter();
+
                                     if(msg!=null && !msg.isEmpty()){
                                         for (String user : finalListOfChatUsers.keySet()) {
                                             ChatUserListItem item = new ChatUserListItem();
@@ -171,6 +172,7 @@ public class ChatFragment extends Fragment {
                                             item.setNotification(value);
                                             chatUserList.add(item);
                                             chatList.setAdapter(chatAdapter);
+
                                         }
 
                                     }else{

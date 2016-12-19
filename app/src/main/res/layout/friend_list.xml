@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
 
     <RelativeLayout
@@ -11,65 +11,77 @@
         android:layout_height="43dp">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="nickname"
-            android:ems="10"
             android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.04"
+            android:background="@null"
             android:clickable="false"
+            android:ems="10"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:textSize="24sp"
-            android:background="@null"
-            android:layout_weight="0.04"
+            android:inputType="textPersonName"
             android:paddingStart="5dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true" />
+            android:text="nickname"
+            android:textSize="24sp" />
 
         <ImageButton
+            android:id="@+id/status"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:srcCompat="@drawable/offline"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="352dp"
-            android:id="@+id/status"
+            android:layout_marginEnd="10dp"
             android:background="@color/transparent"
             android:scaleType="fitCenter"
-            android:layout_marginEnd="10dp"/>
+            app:srcCompat="@drawable/offline" />
+        <ImageButton
+            android:id="@+id/startChat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/status"
+            android:layout_marginEnd="10dp"
+            android:layout_toLeftOf="@+id/status"
+            android:background="@color/transparent"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/chat" />
+
+        <ImageButton
+            android:id="@+id/friendtimeline"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/status"
+            android:layout_toLeftOf="@id/startChat"
+            android:layout_marginEnd="10dp"
+            android:background="@color/transparent"
+            android:focusable="false"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_news_black_18dp" />
+
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:inputType="textPersonName"
-            android:text="email"
-            android:ems="10"
-            android:id="@+id/email"
+            android:layout_alignParentStart="true"
             android:background="@null"
             android:clickable="false"
+            android:ems="10"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:inputType="textPersonName"
             android:paddingLeft="5dp"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/startChat" />
+            android:text="email" />
 
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/chat"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
-            android:id="@+id/startChat"
-            android:scaleType="centerInside"
-            android:background="@color/transparent" />
 
     </RelativeLayout>
 </LinearLayout>

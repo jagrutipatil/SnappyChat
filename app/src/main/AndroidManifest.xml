@@ -38,6 +38,8 @@
         <activity android:name=".LandingPageActivity"></activity>
         <activity android:name=".fragment.chats.ChatPage" />
         <activity android:name=".ViewProfilePage"></activity>
+        <activity android:name=".FriendTimeLineActivity" android:parentActivityName=".LandingPageActivity"></activity>
+
     </application>
 
 </manifest>
