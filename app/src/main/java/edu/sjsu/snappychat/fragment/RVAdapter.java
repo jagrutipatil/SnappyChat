@@ -51,6 +51,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
             if (listOfUploadedImageLocation.get(j) != null)
                 personViewHolder.uploadImages.get(j).setImageBitmap(Util.decodeImage(listOfUploadedImageLocation.get(j)));
         }
+
     }
 
     @Override
@@ -75,7 +76,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
             personPhoto = (ImageView) itemView.findViewById(R.id.person_photo);
             uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage1));
             uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage2));
-            //TODO add all the upload image
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage3));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage4));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage5));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage6));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage7));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage8));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage9));
+            uploadImages.add((ImageView) itemView.findViewById(R.id.uploadedImage10));
+
         }
     }
+
+
 }

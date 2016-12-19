@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -138,11 +139,15 @@ public class HomeTimeLineFragment extends Fragment {
                             card.setNickName(user.getNickName());
                             card.setProfilePicture(user.getProfilePictureLocation());
                             card.setUserUpdatedText(postText.getText().toString());
+                            card.setEmailAddress(UserService.getInstance().getEmail());
                             List<String> imageArray1 = card.getListOfUploadedImage();
                             imageArray1.addAll(imageArray);
 
+                            long timeStamp = System.currentTimeMillis()/1000;
+                            String time = Long.toString(timeStamp);
 
-
+                            //Write in database
+                            mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
                         }
                     }
 
@@ -208,32 +213,32 @@ public class HomeTimeLineFragment extends Fragment {
             }
         });
 
-        /*mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).orderByKey().addChildEventListener(new ChildEventListener() {
+/*        mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).orderByKey().addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            *//*    List<TimeLineCard> listOfTimeLineCard = new ArrayList<TimeLineCard>();
+              List<TimeLineCard> listOfTimeLineCard = new ArrayList<TimeLineCard>();
                 Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                 for (DataSnapshot snapshot : iterable) {
                     listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
                 }
                 //setFields();
                 RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
-                rv.setAdapter(adapter);*//*
+                rv.setAdapter(adapter);
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-              *//*  List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
+                List<TimeLineCard> listOfTimeLineCard = new ArrayList<>();
                 Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                 for (DataSnapshot snapshot : iterable) {
                     listOfTimeLineCard.add(snapshot.getValue(TimeLineCard.class));
                 }
                 //setFields();
                 RVAdapter adapter = new RVAdapter(listOfTimeLineCard);
-                rv.setAdapter(adapter);*//*
+                rv.setAdapter(adapter);
             }
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
@@ -254,7 +259,6 @@ public class HomeTimeLineFragment extends Fragment {
         super.onStart();
         if (!UserService.getInstance().isDataLoaded()) {
             loadDataFromServer();
-            DataGenerator.writeDummyTimeLineData();
 
         }
     }
@@ -272,6 +276,8 @@ public class HomeTimeLineFragment extends Fragment {
                 UserService.getInstance().setProfilePictureLocation(currentUser.getProfilePictureLocation());
                 UserService.getInstance().setDataLoaded(true);
                 //setFields();
+                DataGenerator.writeDummyTimeLineData();
+
             }
 
             @Override
