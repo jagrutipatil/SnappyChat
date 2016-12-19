@@ -129,35 +129,37 @@ public class HomeTimeLineFragment extends Fragment {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        TimeLineCard card = new TimeLineCard();
 
-                        User user = dataSnapshot.getValue(User.class);
-                        card.setNickName(user.getNickName());
-                        card.setProfilePicture(user.getProfilePictureLocation());
-                        card.setUserUpdatedText(postText.getText().toString());
-                        card.setEmailAddress(UserService.getInstance().getEmail());
-                        List<String> imageArray1 = card.getListOfUploadedImage();
-                        imageArray1.addAll(imageArray);
-                        card.setListOfUploadedImage(imageArray1);
+                if(!postText.getText().toString().equals("") || imageArray.size()!=0){
+                    mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            TimeLineCard card = new TimeLineCard();
 
-                        long timeStamp = System.currentTimeMillis()/1000;
-                        String time = Long.toString(timeStamp);
-                        imageArray.clear();
-                        postText.setText("");
+                            User user = dataSnapshot.getValue(User.class);
+                            card.setNickName(user.getNickName());
+                            card.setProfilePicture(user.getProfilePictureLocation());
+                            card.setUserUpdatedText(postText.getText().toString());
+                            card.setEmailAddress(UserService.getInstance().getEmail());
+                            List<String> imageArray1 = card.getListOfUploadedImage();
+                            imageArray1.addAll(imageArray);
+                            card.setListOfUploadedImage(imageArray1);
 
-                        //Write in database
-                        mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
-                    }
+                            long timeStamp = System.currentTimeMillis()/1000;
+                            String time = Long.toString(timeStamp);
+                            imageArray.clear();
+                            postText.setText("");
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                            //Write in database
+                            mDatabaseReference.child(Constant.TIMELINE_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).child(time).setValue(card);
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
+                        }
+                    });
+                }
             }
         });
 
