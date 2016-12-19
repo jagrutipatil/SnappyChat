@@ -133,7 +133,6 @@ public class ChatPage extends BaseAppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         editText = (EditText) findViewById(R.id.editText);
-        editText.setOnFocusChangeListener(textViewFocus);
 
         sendbutton = (ImageButton) findViewById(R.id.sendButton);
         imagebutton = (ImageButton) findViewById(R.id.imageButton) ;
@@ -379,15 +378,13 @@ public class ChatPage extends BaseAppCompatActivity {
 
     }
 
-    private View.OnFocusChangeListener textViewFocus = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View view, boolean b) {
-            if(b){
-                Toast.makeText(ChatPage.this,"onFocus",Toast.LENGTH_LONG).show();
-                DatabaseService.clearNotification(from_user,to_user,0);
-            }
-        }
-    };
+
+    @Override
+    protected void onDestroy() {
+        Toast.makeText(ChatPage.this,"destroy",Toast.LENGTH_LONG).show();
+        DatabaseService.clearNotification(from_user,to_user,0);
+        super.onDestroy();
+    }
 }
 
 
