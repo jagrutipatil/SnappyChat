@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +26,8 @@ import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
 import edu.sjsu.snappychat.util.FriendInvitationAdapter;
 import edu.sjsu.snappychat.util.Util;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class RequestSentFragment extends Fragment {
@@ -71,7 +74,9 @@ public class RequestSentFragment extends Fragment {
                             }
 
                             ListView searchList = (ListView) view.findViewById(R.id.sentrequestlist);
-
+                            if (emailIds.size() == 0) {
+                                Toast.makeText(getApplicationContext(), "No Friend Request Sent.", Toast.LENGTH_SHORT).show();
+                            }
                             FriendInvitationAdapter adapter = new FriendInvitationAdapter(getContext(), emailIds, nickNames, true);
                             searchList.setAdapter(adapter);
 

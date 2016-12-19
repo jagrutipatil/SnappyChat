@@ -51,7 +51,6 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
 
     public CustomSearchListAdapter(Activity activity, Context context, List<String> email, ArrayList<String> userFriends, HashMap<String, String> interestMap, Mapping mapObject) {
         super(context, R.layout.search_listview, email);
-        // TODO Auto-generated constructor stub
 
         this.activity = activity;
         this.context = context;
