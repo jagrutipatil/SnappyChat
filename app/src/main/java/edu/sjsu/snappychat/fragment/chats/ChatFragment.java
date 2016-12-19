@@ -132,7 +132,6 @@ public class ChatFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toast.makeText(getContext(), "OnViewCreated", Toast.LENGTH_SHORT).show();
 
     }
 
