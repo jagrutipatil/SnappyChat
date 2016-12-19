@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -86,6 +87,10 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         settings = UserService.getInstance().getAdvancedSettings();
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Profile Settings");
+        actionbar.setDefaultDisplayHomeAsUpEnabled(true);
 
         advanced.setOnClickListener(new View.OnClickListener() {
             @Override

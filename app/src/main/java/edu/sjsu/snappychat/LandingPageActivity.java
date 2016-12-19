@@ -48,8 +48,8 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
                 if (menuItemId == R.id.bottombaritemone) {
                     //Home
                     //HomeFragment homeFragment = new HomeFragment();
-                    HomeTimeLineFragment homeFragment = new HomeTimeLineFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+                    HomeTimeLineFragment homeTimeLineFragment = new HomeTimeLineFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeTimeLineFragment).commit();
                     getSupportActionBar().show();
 
                 } else if (menuItemId == R.id.bottombaritemtwo) {
@@ -71,9 +71,9 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
 
                 } else if(menuItemId == R.id.bottombaritemfive){
                     //profile
-                    //HomeFragment homeFragment = new HomeFragment();
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
-                    //getSupportActionBar().hide();
+                  /*  HomeFragment homeFragment = new HomeFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+                    getSupportActionBar().hide();*/
                 }
             }
 
