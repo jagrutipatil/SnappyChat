@@ -41,18 +41,30 @@ var getFriendList = function(me, callback) {
 //	  });
 //}
 
-var notify = function(email, callback) {
+var notify = function(email, nickName, callback) {
 	var cleanEmail = email;
 	cleanEmail = cleanEmail.replace(/[^A-Za-z0-9]/g, "");
 	getFriendList(cleanEmail, function(err, friendList) {
 		for (i = 0; i < friendList.length; i++) {
 				//TODO add nickname in body
-				emailModule.sendEmail(friendList[i], "Your friend: "+ email + " changed profile", function(err, reply) {
+				emailModule.sendEmail(friendList[i], "Your friend: "+ nickName + " changed profile", function(err, reply) {
 					console.log("Notify");		
 				});
 		}
 		callback(null, "Email sent to all friends of " + email);
 	});	
+};
+
+var isEmailNotificationOn = function(email, callback) {
+	var cleanedEmail = email;
+	cleanedEmail = cleanedEmail.replace(/[^A-Za-z0-9]/g, "");
+	firebase.database().ref('/advanced_settings').on("value", function(snapshot) {
+		var user = snapshot.child(cleanedEmail).val();
+		callback(null, user.email_notification);
+	  }, function (errorObject) {
+		  console.log("The read failed: " + errorObject.code);
+		  callback(errorObject, null);
+	  });
 };
 
 var isFriend = function(email, callback) {  
@@ -73,10 +85,16 @@ exports.onChange = function() {
 		
 		if (Object.keys(userDict).length > 1) {
 			var pEmail = userDict[Object.keys(userDict)[0]].emailAddress;
-			console.log("Original pEmail: " + pEmail);			
-			notify(pEmail, function(err, reply) {
-				console.log(reply);
-			});						
+			var nickName = userDict[Object.keys(userDict)[0]].nickName;
+			//TODO if visibility on
+			isEmailNotificationOn(pEmail, function(err, reply) {
+				if (reply == true) {
+					console.log("Original pEmail: " + pEmail);			
+					notify(pEmail, nickName, function(err, reply) {
+						console.log(reply);
+					});											
+				}
+			});			
 		}
 	}) ;
 }; 
