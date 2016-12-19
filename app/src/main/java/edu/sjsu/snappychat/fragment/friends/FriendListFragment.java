@@ -6,16 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,11 +28,9 @@ import java.util.ArrayList;
 
 import edu.sjsu.snappychat.FriendTimeLineActivity;
 import edu.sjsu.snappychat.R;
-import edu.sjsu.snappychat.ViewProfilePage;
 import edu.sjsu.snappychat.fragment.chats.ChatPage;
 import edu.sjsu.snappychat.fragment.chats.FriendList;
 import edu.sjsu.snappychat.model.AvailabilityMap;
-import edu.sjsu.snappychat.model.Friend;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.service.UserService;
@@ -48,10 +42,10 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FriendListFragment extends Fragment {
     ArrayList<String> friendsEmailList = null;
+    String LoggedInUser;
     private DatabaseReference mDatabaseReference;
     private Mapping emailmap;
     private ArrayList<FriendList> friendsList;
-    String LoggedInUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +97,7 @@ public class FriendListFragment extends Fragment {
                                         friendsList.add(friend);
 
                                     }
+
                                     FriendListAdapter friendListAdapter = new FriendListAdapter();
                                     friendListView.setAdapter(friendListAdapter);
                                     //friendListAdapter.notifyDataSetChanged();
@@ -193,7 +188,6 @@ public class FriendListFragment extends Fragment {
                 }
             });
             lbl.setText(friend.getNickname());
-
 
 
             if (friend.isStatus()) {
