@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import edu.sjsu.snappychat.model.AvailabilityMap;
 import edu.sjsu.snappychat.model.Invitations;
+import edu.sjsu.snappychat.model.NotificationModel;
 import edu.sjsu.snappychat.model.UserChatList;
 import edu.sjsu.snappychat.model.UserFriend;
 import edu.sjsu.snappychat.util.Constant;
@@ -160,47 +161,34 @@ public class DatabaseService {
             }
         });
     }
-   /* public static String getFriendlist(String userEmail){
 
-        final String[] friendList = new String[1];
 
-        mDatabaseReference.child(Constant.FRIENDS_NODE).child(Util.cleanEmailID(userEmail)).addListenerForSingleValueEvent(new ValueEventListener() {
+    public static void updateNotification(final String from_user, final String to_user, final Integer count){
+        mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(to_user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UserFriend currentUser = dataSnapshot.getValue(UserFriend.class);
-                friendList[0] = currentUser.getFriends();
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                NotificationModel currentUser = dataSnapshot.getValue(NotificationModel.class);
+                if (currentUser != null) {
+                    HashMap<String,Long> notification = currentUser.getNotification();
+                    {
+                        notification.put(from_user, notification.get(from_user) + count);
+                        currentUser.setNotification(notification);
+                        mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(to_user).setValue(currentUser);
+                    }
+                } else {
+                    HashMap<String,Long> notification = new HashMap<String, Long>();
+                    notification.put(from_user, Long.valueOf(count));
+                    NotificationModel user = new NotificationModel(notification);
+                    mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(to_user).setValue(user);
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //Log.w("UserProfileActivity", "loadPost:onCancelled", databaseError.toException());
-            }
-        });
-
-
-        return friendList[0];
-    }
-
-    //IMPORTANT NOTE: Following function requires "cleanedEmail"
-    public static void getUserRecord(String cleanedEmail){
-
-        mDatabaseReference.child(Constant.USER_NODE).child(cleanedEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //user = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+                Log.w("notification add", "loadPost:onCancelled", databaseError.toException());
             }
         });
     }
-
-    //IMPORTANT NOTE -- Following function returns ArrayList of all "CLEANED Email ids"
-    public static List<String> getAllPublicUsers(){
-        List<String> publicUsers = new ArrayList<String>();
-
-        mDatabaseReference.child(Constant.ADVANCED_SETTINGS).orderByKey()
-    }*/
 }
+
+

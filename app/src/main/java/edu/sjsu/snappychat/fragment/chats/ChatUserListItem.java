@@ -8,7 +8,7 @@ public class ChatUserListItem {
     String nickName;
     String msg;
     String email;
-    Boolean isNotification;
+    Long notification;
 
 
     public String getMsg() {
@@ -19,12 +19,12 @@ public class ChatUserListItem {
         this.msg = msg;
     }
 
-    public Boolean getNotification() {
-        return isNotification;
+    public Long getNotification() {
+        return notification;
     }
 
-    public void setNotification(Boolean notification) {
-        isNotification = notification;
+    public void setNotification(Long notification) {
+        this.notification = notification;
     }
 
     public String getEmail() {

@@ -9,7 +9,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="43dp">
+        android:layout_height="43dp"
+        android:layout_weight="0.07">
 
         <EditText
             android:layout_width="match_parent"
@@ -41,26 +42,24 @@
             android:scaleType="fitCenter"
             android:layout_marginEnd="10dp"/>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:id="@+id/numberbgd"
+            android:layout_alignTop="@+id/openChat"
+            android:layout_alignEnd="@+id/openChat"
+            android:layout_marginEnd="49dp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/msg"
-            android:background="@null"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:paddingLeft="5dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true" />
+            android:layout_width="40dp"
+            android:layout_alignStart="@+id/numberbgd"
+            android:id="@+id/msgnumber"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textStyle="normal|bold"
+            android:layout_alignBottom="@+id/numberbgd"
+            android:layout_height="25dp" />
 
     </RelativeLayout>
+
 </LinearLayout>
