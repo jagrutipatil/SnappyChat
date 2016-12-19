@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".LandingPageActivity">
+    tools:context=".LandingPageActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:orientation="vertical"
