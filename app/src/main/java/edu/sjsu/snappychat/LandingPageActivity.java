@@ -50,6 +50,9 @@ public class LandingPageActivity extends AppCompatActivity implements FriendsFra
                     //HomeFragment homeFragment = new HomeFragment();
                     HomeTimeLineFragment homeTimeLineFragment = new HomeTimeLineFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeTimeLineFragment).commit();
+                    if(UserService.getInstance() != null) {
+                        getSupportActionBar().setTitle(UserService.getInstance().getNickName() + "'s Timeline");
+                    }
                     getSupportActionBar().show();
 
                 } else if (menuItemId == R.id.bottombaritemtwo) {
