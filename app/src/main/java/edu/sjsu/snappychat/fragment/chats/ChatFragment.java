@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,11 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.sjsu.snappychat.R;
+import edu.sjsu.snappychat.model.MapUtil;
 import edu.sjsu.snappychat.model.Mapping;
 import edu.sjsu.snappychat.service.UserService;
 import edu.sjsu.snappychat.util.Constant;
@@ -48,47 +47,6 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.conversation_list, container, false);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        final ListView chatList = (ListView) view.findViewById(R.id.conversation);
-
-        final String cleanEmailAddress = Util.cleanEmailID(UserService.getInstance().getEmail());
-        final ChatListAdapter chatAdapter = new ChatListAdapter();
-
-        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHAT_USERS).orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final Map<String,Long> listOfChatUsers = (HashMap<String, Long>) dataSnapshot.getValue();
-
-                if (listOfChatUsers != null && !listOfChatUsers.isEmpty()) {
-                    mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            emailmap = dataSnapshot.getValue(Mapping.class);
-                            for (String user : listOfChatUsers.keySet()) {
-                                ChatUserListItem item = new ChatUserListItem();
-                                item.setEmail(user);
-                                item.setNickName(emailmap.getNickName(user));
-                                chatUserList.add(item);
-                                chatList.setAdapter(chatAdapter);
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         return view;
     }
@@ -117,27 +75,33 @@ public class ChatFragment extends Fragment {
             final ChatUserListItem friend = getItem(pos);
 
 
-
-
             v = getActivity().getLayoutInflater().inflate(R.layout.conversation_list_item, null);
             TextView lbl = (TextView) v.findViewById(R.id.name);
             lbl.setText(friend.getNickName());
             ImageButton img = (ImageButton) v.findViewById(R.id.openChat);
 
 
-            if(friend.getMsg()!=null) {
+            if (friend.getMsg() != null) {
                 final TextView email = (TextView) v.findViewById(R.id.email);
                 email.setText(friend.getMsg());
             }
 
 
-           if(friend.getNotification()!= null) {
-               if (friend.getNotification()) {
-                   img.setImageResource(R.drawable.star);
-               } else {
-                   img.setImageResource(R.color.transparent);
-               }
-           }
+            ImageView notify = (ImageView) v.findViewById(R.id.numberbgd);
+            TextView number = (TextView)  v.findViewById(R.id.msgnumber);
+            if(friend.getNotification() != null) {
+                if (friend.getNotification() > 0 ) {
+                    notify.setImageResource(R.drawable.green_ball);
+                    number.setText(String.valueOf(friend.getNotification()));
+                } else {
+                    notify.setImageResource(R.color.transparent);
+                    number.setText("");
+                }
+            }else{
+                notify.setImageResource(R.color.transparent);
+                number.setText("");
+            }
+
 
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -157,12 +121,95 @@ public class ChatFragment extends Fragment {
             });
 
 
-
-
-
             return v;
 
 
         }
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Toast.makeText(getContext(), "OnViewCreated", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(chatUserList != null && !chatUserList.isEmpty()){
+            chatUserList.clear();
+        }
+        final ListView chatList = (ListView) getView().findViewById(R.id.conversation);
+
+        final String cleanEmailAddress = Util.cleanEmailID(UserService.getInstance().getEmail());
+        final ChatListAdapter chatAdapter = new ChatListAdapter();
+
+        mDatabaseReference.child(Constant.CHAT_LIST).child(cleanEmailAddress).child(Constant.CHAT_USERS).orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Long> listOfChatUsers = (HashMap<String, Long>) dataSnapshot.getValue();
+                if (listOfChatUsers != null && !listOfChatUsers.isEmpty()) {
+                    listOfChatUsers = MapUtil.sortByValue(listOfChatUsers);
+                }
+                if (listOfChatUsers != null && !listOfChatUsers.isEmpty()) {
+                    final Map<String, Long> finalListOfChatUsers = listOfChatUsers;
+                    mDatabaseReference.child(Constant.MAPPING).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            emailmap = dataSnapshot.getValue(Mapping.class);
+                            mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(cleanEmailAddress).child(Constant.NOTIFICATION).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    HashMap<String,Long> msg = (HashMap<String, Long>) dataSnapshot.getValue();
+                                    if(msg!=null && !msg.isEmpty()){
+                                        for (String user : finalListOfChatUsers.keySet()) {
+                                            ChatUserListItem item = new ChatUserListItem();
+                                            item.setEmail(user);
+                                            item.setNickName(emailmap.getNickName(user));
+                                            Long value = msg.get(user);
+                                            item.setNotification(value);
+                                            chatUserList.add(item);
+                                            chatList.setAdapter(chatAdapter);
+                                        }
+
+                                    }else{
+                                        for (String user : finalListOfChatUsers.keySet()) {
+                                            ChatUserListItem item = new ChatUserListItem();
+                                            item.setEmail(user);
+                                            item.setNickName(emailmap.getNickName(user));
+                                            chatUserList.add(item);
+                                            chatList.setAdapter(chatAdapter);
+                                        }
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

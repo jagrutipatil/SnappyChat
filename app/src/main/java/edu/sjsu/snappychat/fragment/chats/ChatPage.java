@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -87,38 +88,39 @@ public class ChatPage extends BaseAppCompatActivity {
                 myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             }
 
-            //imageViewLoad.setImageBitmap(BitmapFactory.decodeFile(ImageDecode));
-
-            /*Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");*/
             ChatModel m = new ChatModel();
-            Intent startingintent = getIntent();
-            LoggedInUser = startingintent.getStringExtra("LOG_IN_USER");
-            m.setSender(LoggedInUser);
+            m.setSender(from_user_nick_name);
+            m.setReceiver(to_user_nick_name);
             String img = Util.encodeImage(myBitmap);
             m.setImagemessage(img);
             ref_chatchildnode1.push().setValue(m);
             ref_chatchildnode2.push().setValue(m);
             checkUser();
+            updateNotification(1);
 
         } else if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ChatModel m = new ChatModel();
-            Intent startingintent = getIntent();
-            LoggedInUser = startingintent.getStringExtra("LOG_IN_USER");
-            m.setSender(LoggedInUser);
+            m.setSender(from_user_nick_name);
+            m.setReceiver(to_user_nick_name);
             String img = Util.encodeImage(imageBitmap);
             m.setImagemessage(img);
             ref_chatchildnode1.push().setValue(m);
             ref_chatchildnode2.push().setValue(m);
             checkUser();
+            count = count +1 ;
+            updateNotification(count);
         }
     }
 
     private void checkUser() {
         DatabaseService.updateChatList(from_user,to_user,getTime());
         DatabaseService.updateChatList(to_user,from_user,getTime());
+    }
+
+    private void updateNotification(int count){
+        DatabaseService.updateNotification(from_user,to_user,count);
     }
 
     @Override
@@ -132,6 +134,7 @@ public class ChatPage extends BaseAppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         editText = (EditText) findViewById(R.id.editText);
+        editText.setOnFocusChangeListener(textViewFocus);
 
         sendbutton = (ImageButton) findViewById(R.id.sendButton);
         imagebutton = (ImageButton) findViewById(R.id.imageButton) ;
@@ -182,6 +185,7 @@ public class ChatPage extends BaseAppCompatActivity {
                 ref_chatchildnode1.push().setValue(m);
                 ref_chatchildnode2.push().setValue(m);
                 checkUser();
+                updateNotification(1);
                 editText.setText("");
 
 
@@ -260,6 +264,8 @@ public class ChatPage extends BaseAppCompatActivity {
         //String ts = tsLong.toString();
         return tsLong;
     }
+
+
 
 
     private class ChatAdapter extends BaseAdapter {
@@ -373,6 +379,15 @@ public class ChatPage extends BaseAppCompatActivity {
         dialogue.show();
 
     }
+
+    private View.OnFocusChangeListener textViewFocus = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean b) {
+            if(b){
+                updateNotification(0);
+            }
+        }
+    };
 }
 
 

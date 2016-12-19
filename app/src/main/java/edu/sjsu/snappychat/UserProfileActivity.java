@@ -116,7 +116,7 @@ public class UserProfileActivity extends BaseAppCompatActivity implements View.O
                         imageViewProfilePic.setImageBitmap(Util.decodeImage(currentUser.getProfilePictureLocation()));
                     }
 
-                    //Use picaso to load the profile pic. This should be async
+
                 }else{
                     editTextNickName.setText(UserService.getInstance().getNickName());
                     editTextProfession.setText(UserService.getInstance().getProfession());

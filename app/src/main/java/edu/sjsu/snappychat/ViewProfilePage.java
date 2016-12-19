@@ -51,8 +51,8 @@ public class ViewProfilePage extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         Intent intent = this.getIntent();
-        userEmail = UserService.getInstance().getEmail();
-        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(UserService.getInstance().getEmail())).addListenerForSingleValueEvent(new ValueEventListener() {
+        userEmail = intent.getStringExtra("USER_EMAIL");
+        mDatabaseReference.child(Constant.USER_NODE).child(Util.cleanEmailID(userEmail)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);
