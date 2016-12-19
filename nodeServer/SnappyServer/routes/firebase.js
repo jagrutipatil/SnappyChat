@@ -55,6 +55,18 @@ var notify = function(email, callback) {
 	});	
 };
 
+var isEmailNotificationOn = function(email, callback) {
+	var cleanedEmail = email;
+	cleanedEmail = cleanedEmail.replace(/[^A-Za-z0-9]/g, "");
+	firebase.database().ref('/advanced_settings').on("value", function(snapshot) {
+		var user = snapshot.child(cleanedEmail).val();
+		callback(null, user.email_notification);
+	  }, function (errorObject) {
+		  console.log("The read failed: " + errorObject.code);
+		  callback(errorObject, null);
+	  });
+};
+
 var isFriend = function(email, callback) {  
 	getFriendList( function(err, friendList) {
 		if (friendList.indexOf(email) > -1)  {
@@ -73,10 +85,16 @@ exports.onChange = function() {
 		
 		if (Object.keys(userDict).length > 1) {
 			var pEmail = userDict[Object.keys(userDict)[0]].emailAddress;
-			console.log("Original pEmail: " + pEmail);			
-			notify(pEmail, function(err, reply) {
-				console.log(reply);
-			});						
+			var nickName = userDict[Object.keys(userDict)[0]].nickName;
+			//TODO if visibility on
+			isEmailNotificationOn(pEmail, function(err, reply) {
+				if (reply == true) {
+					console.log("Original pEmail: " + pEmail);			
+					notify(pEmail, function(err, reply) {
+						console.log(reply);
+					});											
+				}
+			});			
 		}
 	}) ;
 }; 
