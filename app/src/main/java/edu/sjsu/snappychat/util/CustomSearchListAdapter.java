@@ -7,6 +7,7 @@ package edu.sjsu.snappychat.util;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,20 +104,24 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Invitations invitations = dataSnapshot.getValue(Invitations.class);
 
-                if(invitations!=null)
+                if (invitations != null)
                     sendInvitationsOfLoggedUser = invitations.getInvitationSent();
 
-                if (friendList != null && friendList.contains(filteredEmail.get(position))) {
-                    friendTag.setText("Friend");
-                    friendTag.setVisibility(rowView.VISIBLE);
-                    addFriend.setVisibility(rowView.INVISIBLE);
-                } else if(sendInvitationsOfLoggedUser!= null && sendInvitationsOfLoggedUser.contains(filteredEmail.get(position))){
-                    friendTag.setText("Pending");
-                    friendTag.setVisibility(rowView.VISIBLE);
-                    addFriend.setVisibility(rowView.INVISIBLE);
-                } else{
-                    friendTag.setVisibility(rowView.INVISIBLE);
-                    addFriend.setVisibility(rowView.VISIBLE);
+                try {
+                    if (friendList != null && friendList.contains(filteredEmail.get(position))) {
+                        friendTag.setText("Friend");
+                        friendTag.setVisibility(rowView.VISIBLE);
+                        addFriend.setVisibility(rowView.INVISIBLE);
+                    } else if (sendInvitationsOfLoggedUser != null && sendInvitationsOfLoggedUser.contains(filteredEmail.get(position))) {
+                        friendTag.setText("Pending");
+                        friendTag.setVisibility(rowView.VISIBLE);
+                        addFriend.setVisibility(rowView.INVISIBLE);
+                    } else {
+                        friendTag.setVisibility(rowView.INVISIBLE);
+                        addFriend.setVisibility(rowView.VISIBLE);
+                    }
+                } catch (Exception exception) {
+                    Log.d("CustomSearchListAdapter","Exception occured");
                 }
             }
 
@@ -147,7 +152,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
                             senderList.add(receiver);
                             invitationsOfUser.setInvitationSent(senderList);
                         } else {
-                            if(invitationsOfUser.getInvitationSent()==null){
+                            if (invitationsOfUser.getInvitationSent() == null) {
                                 ArrayList<String> senderList = new ArrayList<String>();
                                 invitationsOfUser.setInvitationSent(senderList);
                             }
@@ -178,7 +183,7 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> implements Fil
                             invitationsOfUser.setInvitationReceived(receiverList);
                         } else {
 
-                            if(invitationsOfUser.getInvitationReceived()==null){
+                            if (invitationsOfUser.getInvitationReceived() == null) {
                                 ArrayList<String> invitationReceived = new ArrayList<String>();
                                 invitationsOfUser.setInvitationReceived(invitationReceived);
                             }
