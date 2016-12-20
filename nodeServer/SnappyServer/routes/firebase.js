@@ -79,6 +79,7 @@ var isFriend = function(email, callback) {
 
 
 exports.onChange = function() {
+	console.log("Started Monitoring timeline");
 	firebaseRef.on('child_changed', function(childsnapshot, prevchildname) {  
 		console.log("Element Changed");	
 		var userDict = childsnapshot.val();
