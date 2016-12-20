@@ -98,7 +98,7 @@ public class SearchFragment extends Fragment {
 
                         if (friendList != null) {
                             for (String emailIDString : friendList) {
-                                if (friendList.contains(emailIDString))
+                                if (emailID.contains(emailIDString))
                                     continue;
                                 emailID.add(emailIDString);
                             }
