@@ -170,8 +170,9 @@ public class DatabaseService {
                 NotificationModel currentUser = dataSnapshot.getValue(NotificationModel.class);
                 if (currentUser != null) {
                     HashMap<String,Long> notification = currentUser.getNotification();
+                    if(notification != null)
                     {
-                        notification.put(from_user, notification.get(from_user) + count);
+                        notification.put(from_user, notification.get(from_user) == null ? 0 : Long.valueOf(notification.get(from_user)) + count);
                         currentUser.setNotification(notification);
                         mDatabaseReference.child(Constant.NOTIFICATION_LIST).child(to_user).setValue(currentUser);
                     }
