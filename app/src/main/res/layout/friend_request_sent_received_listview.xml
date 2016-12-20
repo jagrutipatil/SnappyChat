@@ -27,7 +27,7 @@
         android:layout_weight="0.03">
 
         <EditText
-            android:layout_width="159dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:inputType="textPersonName"
             android:text="Email"
